@@ -1,0 +1,6 @@
+/* Additional styles can go here */
+.project-card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+}
