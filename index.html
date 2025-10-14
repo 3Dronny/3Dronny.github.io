@@ -69,6 +69,19 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
+        /* Fix voor browser navigatiebalk */
+        @supports(padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+        
+        .hero-section {
+            position: relative;
+            padding-top: max(5rem, env(safe-area-inset-top, 5rem));
+        }
+        
         /* Skip link voor accessibility */
         .skip-link {
             position: absolute;
@@ -344,7 +357,7 @@
         <!-- Main Content -->
         <main id="main-content">
             <!-- Hero Section -->
-            <section class="relative py-20 px-4">
+            <section class="relative px-4 hero-section" style="padding-bottom: 5rem;">
                 <div class="max-w-7xl mx-auto">
                     <div class="grid lg:grid-cols-2 gap-12 items-center">
                         <div class="space-y-8">
