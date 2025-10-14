@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materialen Uitzetting | 3DRonny</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+        }
+        
+        body {
+            background-color: #1f2937;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            color: #f3f4f6;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* NAVIGATIE - zoals in je originele pagina */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* BUTTONS - zoals in je originele pagina */
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* CONTENT SECTIES - DONKER GEMAAKT */
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .content-section:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* MATERIALEN GRID */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .material-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .material-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .material-header {
+            padding: 1rem;
+            color: white;
+            text-align: center;
+        }
+        
+        .pla { background-color: #3498db; }
+        .abs { background-color: #9b59b6; }
+        .petg { background-color: #2ecc71; }
+        .nylon { background-color: #e67e22; }
+        .pc { background-color: #e74c3c; }
+        .pp { background-color: #f39c12; }
+        .peek { background-color: #2c3e50; }
+        
+        .material-content {
+            padding: 1.5rem;
+        }
+        
+        .property {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .property-name {
+            font-weight: 600;
+            color: #d1d5db;
+        }
+        
+        /* CHART EN TABEL - DONKER GEMAAKT */
+        .chart-container {
+            height: 400px;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* TEMPERATUUR SLIDER - DONKER GEMAAKT */
+        .temp-slider {
+            margin: 2rem 0;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .slider-value {
+            font-weight: bold;
+            min-width: 60px;
+            color: #10b981;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #374151;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #10b981;
+            cursor: pointer;
+            border: 2px solid #1f2937;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .expansion-display {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .expansion-value {
+            font-family: 'Courier New', monospace;
+            background: rgba(52, 152, 219, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            color: #60a5fa;
+        }
+        
+        .property-bar {
+            height: 8px;
+            background: #374151;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .property-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .material-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        /* FOOTER STYLING */
+        .page-footer {
+            background-color: #1f2937;
+            color: white;
+            margin-top: auto;
+            padding: 2rem 0;
+        }
+        
+        /* TEKST KLEUREN AANGEPAST */
+        h1, h2, h3, h4, h5, h6 {
+            color: #f9fafb;
+        }
+        
+        p {
+            color: #d1d5db;
+        }
+        
+        @media (max-width: 768px) {
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-outline {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+    <div class="relative z-10">
+        <!-- Navigation -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3">
+                                <svg width="48" height="48" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                    <g transform="translate(60, 60) scale(0.8)">
+                                        <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                        <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    </g>
+                                    <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                    <g transform="translate(160, 125)">
+                                        <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                        <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                    </g>
+                                </svg>
+                                <span class="text-xl font-bold text-white">3DRonny</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-emerald-400 font-medium">Materialen uiteenzetting</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium">Qidi X-Max 3</a>
+							<a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+            <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container flex-grow">
+            <!-- INTRODUCTIE -->
+            <section class="content-section">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
+                    <i class="fas fa-thermometer-half"></i>
+                    Materialen Analyse
+                </div>
+                <h1 class="text-4xl font-bold mb-4">Materialen Uitzetting: PLA tot PEEK</h1>
+                <p class="text-lg mb-6">Thermische uitzetting is een fundamentele eigenschap van materialen die beschrijft hoe ze uitzetten of krimpen bij temperatuurveranderingen. Deze pagina vergelijkt de thermische uitzetting en andere belangrijke eigenschappen van polymeren, van het veelgebruikte PLA tot de hoogwaardige technische kunststof PEEK.</p>
+                <p>De lineaire uitzettingscoëfficiënt (α) geeft aan hoeveel een materiaal per graad temperatuurverandering uitzet. Deze wordt uitgedrukt in mm/(m·°C) ou 10⁻⁶/°C.</p>
+                
+                <div class="hero-buttons flex flex-col sm:flex-row gap-4 mt-8">
+                    <a href="projecten.html" class="btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Bekijk Projecten
+                    </a>
+                    <a href="qidi-x-max3.html" class="btn-outline">
+                        <i class="fas fa-print"></i>
+                        Onze Printer
+                    </a>
+                    <a href="contact.html" class="btn-outline">
+                        <i class="fas fa-comments"></i>
+                        Vraag Advies
+                    </a>
+                </div>
+            </section>
+            
+            <!-- THERMISCHE UITZETTING -->
+            <section class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Thermische Uitzetting bij Verschillende Temperaturen</h2>
+                <div class="temp-slider">
+                    <div class="slider-container">
+                        <span class="text-lg font-medium">Temperatuur:</span>
+                        <input type="range" id="tempSlider" min="20" max="200" value="20" step="10">
+                        <span class="slider-value text-xl font-bold" id="tempValue">20°C</span>
+                    </div>
+                </div>
+                
+                <div class="expansion-display">
+                    <h3 class="text-xl font-semibold mb-3">Uitzetting bij <span id="displayTemp" class="text-emerald-400">20°C</span></h3>
+                    <p class="mb-4">De relatieve uitzetting voor een staaf van 1 meter:</p>
+                    <div id="expansionResults" class="space-y-3">
+                        <!-- Hier komen de resultaten -->
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="expansionChart"></canvas>
+                </div>
+                
+                <div class="text-center mt-6">
+                    <a href="gallery.html" class="btn-outline">
+                        <i class="fas fa-images"></i>
+                        Bekijk Materialen in Actie
+                    </a>
+                </div>
+            </section>
+            
+            <!-- MATERIALEN OVERZICHT -->
+            <section class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Materialen Overzicht</h2>
+                <div class="materials-grid">
+                    <!-- PLA Card -->
+                    <div class="material-card">
+                        <div class="material-header pla">
+                            <h3 class="text-xl font-bold">PLA</h3>
+                            <p class="opacity-90">Polylactidezuur</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">68 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 72%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Smeltpunt:</span>
+                                <span class="text-gray-300">150-160°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">50-70 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">3.5 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.24 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Makkelijk printen</span>
+                                <span class="material-badge">Scherpe details</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ABS Card -->
+                    <div class="material-card">
+                        <div class="material-header abs">
+                            <h3 class="text-xl font-bold">ABS</h3>
+                            <p class="opacity-90">Acrylonitril-butadieen-styreen</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">72 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 76%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Glasovergang:</span>
+                                <span class="text-gray-300">105°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">40 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">2.0-2.7 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.05 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Hittebestendig</span>
+                                <span class="material-badge">Slagvast</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PETG Card -->
+                    <div class="material-card">
+                        <div class="material-header petg">
+                            <h3 class="text-xl font-bold">PETG</h3>
+                            <p class="opacity-90">Polyethyleentereftalaat glycol</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">60 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 63%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Smeltpunt:</span>
+                                <span class="text-gray-300">260°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">50 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">2.0 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.27 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Sterk & taai</span>
+                                <span class="material-badge">Weerbestendig</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nylon Card -->
+                    <div class="material-card">
+                        <div class="material-header nylon">
+                            <h3 class="text-xl font-bold">Nylon (PA6)</h3>
+                            <p class="opacity-90">Polyamide 6</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">80 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 85%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Smeltpunt:</span>
+                                <span class="text-gray-300">220°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">45-90 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">2-4 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.13 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Duurzaam</span>
+                                <span class="material-badge">Slijtvast</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Polycarbonaat Card -->
+                    <div class="material-card">
+                        <div class="material-header pc">
+                            <h3 class="text-xl font-bold">Polycarbonaat</h3>
+                            <p class="opacity-90">PC</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">65 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 69%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Glasovergang:</span>
+                                <span class="text-gray-300">155°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">55-75 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">2.4 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.20 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Transparant</span>
+                                <span class="material-badge">Hoge sterkte</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PP Card -->
+                    <div class="material-card">
+                        <div class="material-header pp">
+                            <h3 class="text-xl font-bold">Polypropyleen</h3>
+                            <p class="opacity-90">PP</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">110 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 100%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Smeltpunt:</span>
+                                <span class="text-gray-300">160-170°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">25-40 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">1.5-2.0 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">0.90-0.91 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Flexibel</span>
+                                <span class="material-badge">Chemisch resistent</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PEEK Card -->
+                    <div class="material-card">
+                        <div class="material-header peek">
+                            <h3 class="text-xl font-bold">PEEK</h3>
+                            <p class="opacity-90">Polyetheretherketon</p>
+                        </div>
+                        <div class="material-content">
+                            <div class="property">
+                                <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                <span class="expansion-value">47 × 10⁻⁶/°C</span>
+                            </div>
+                            <div class="property-bar">
+                                <div class="property-fill" style="width: 50%"></div>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Smeltpunt:</span>
+                                <span class="text-gray-300">343°C</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Treksterkte:</span>
+                                <span class="text-gray-300">90-100 MPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Elasticiteitsmodulus:</span>
+                                <span class="text-gray-300">3.6 GPa</span>
+                            </div>
+                            <div class="property">
+                                <span class="property-name">Dichtheid:</span>
+                                <span class="text-gray-300">1.32 g/cm³</span>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <span class="material-badge">Hoge temperatuur</span>
+                                <span class="material-badge">Extreem sterk</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8">
+                    <a href="contact.html" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Vraag Materiaal Advies
+                    </a>
+                </div>
+            </section>
+            
+            <!-- VERGELIJKINGSTABEL -->
+            <section class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Vergelijkingstabel</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Materiaal</th>
+                            <th>Uitzettingscoëfficiënt (10⁻⁶/°C)</th>
+                            <th>Max. gebruikstemperatuur (°C)</th>
+                            <th>Treksterkte (MPa)</th>
+                            <th>Elasticiteitsmodulus (GPa)</th>
+                            <th>Dichtheid (g/cm³)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold text-gray-300">PLA</td>
+                            <td class="text-gray-300">68</td>
+                            <td class="text-gray-300">50-60</td>
+                            <td class="text-gray-300">50-70</td>
+                            <td class="text-gray-300">3.5</td>
+                            <td class="text-gray-300">1.24</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">ABS</td>
+                            <td class="text-gray-300">72</td>
+                            <td class="text-gray-300">80-85</td>
+                            <td class="text-gray-300">40</td>
+                            <td class="text-gray-300">2.0-2.7</td>
+                            <td class="text-gray-300">1.05</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">PETG</td>
+                            <td class="text-gray-300">60</td>
+                            <td class="text-gray-300">70-75</td>
+                            <td class="text-gray-300">50</td>
+                            <td class="text-gray-300">2.0</td>
+                            <td class="text-gray-300">1.27</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">Nylon (PA6)</td>
+                            <td class="text-gray-300">80</td>
+                            <td class="text-gray-300">80-100</td>
+                            <td class="text-gray-300">45-90</td>
+                            <td class="text-gray-300">2-4</td>
+                            <td class="text-gray-300">1.13</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">Polycarbonaat</td>
+                            <td class="text-gray-300">65</td>
+                            <td class="text-gray-300">115-130</td>
+                            <td class="text-gray-300">55-75</td>
+                            <td class="text-gray-300">2.4</td>
+                            <td class="text-gray-300">1.20</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">Polypropyleen (PP)</td>
+                            <td class="text-gray-300">110</td>
+                            <td class="text-gray-300">100-120</td>
+                            <td class="text-gray-300">25-40</td>
+                            <td class="text-gray-300">1.5-2.0</td>
+                            <td class="text-gray-300">0.90-0.91</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-300">PEEK</td>
+                            <td class="text-gray-300">47</td>
+                            <td class="text-gray-300">250</td>
+                            <td class="text-gray-300">90-100</td>
+                            <td class="text-gray-300">3.6</td>
+                            <td class="text-gray-300">1.32</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="text-center mt-6">
+                    <a href="qidi-x-max3.html" class="btn-outline">
+                        <i class="fas fa-print"></i>
+                        Bekijk Onze Printer Specificaties
+                    </a>
+                </div>
+            </section>
+            
+            <!-- CONCLUSIE -->
+            <section class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Conclusie</h2>
+                <div class="space-y-4">
+                    <p>Uit de gegevens blijkt dat PEEK de laagste thermische uitzettingscoëfficiënt heeft van de onderzochte materialen, gevolgd door PETG en polycarbonaat. Dit betekent dat PEEK het minst uitzet bij temperatuurveranderingen, wat een belangrijk voordeel is in precisietoepassingen.</p>
+                    <p>Polypropyleen (PP) heeft met 110 × 10⁻⁶/°C de hoogste uitzettingscoëfficiënt, wat betekent dat het relatief veel uitzet bij temperatuurveranderingen. Dit is belangrijk om rekening mee te houden bij ontwerpen met PP.</p>
+                    <p>Daarnaast heeft PEEK ook de hoogste gebruikstemperatuur en treksterkte, wat het geschikt maakt voor veeleisende technische toepassingen. PLA, hoewel het een hogere uitzettingscoëfficiënt heeft, blijft populair vanwege de lage kosten en eenvoudige verwerkbaarheid, vooral in 3D-printtoepassingen.</p>
+                    <p>De keuze van materiaal hangt dus af van de specifieke toepassing, de verwachte temperatuurvariatie, de vereiste mechanische eigenschappen en budgettaire overwegingen.</p>
+                </div>
+                
+                <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                    <a href="contact.html" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Neem Contact Op
+                    </a>
+                    <a href="projecten.html" class="btn-outline">
+                        <i class="fas fa-rocket"></i>
+                        Bekijk Onze Projecten
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg width="32" height="32" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                <g transform="translate(60, 60) scale(0.8)">
+                                    <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                </g>
+                                <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                <g transform="translate(160, 125)">
+                                    <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                    <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                </g>
+                            </svg>
+                            <span class="text-xl font-bold text-white">3DRonny</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors">Qidi X-Max 3</a></li>
+							<li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors">geschiedenis</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Services</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Prototyping</a></li>
+                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Functionele Prints</a></li>
+                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Materiaal Advies</a></li>
+                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Creatieve Projecten</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                       <h3 class="font-semibold text-white mb-4">Contact</h3>
+    <ul class="space-y-2 text-gray-400 text-sm">
+        <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+        <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contactformulier</a></li>
+        <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+    </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="#" class="hover:text-emerald-400 transition-colors">Privacy</a>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">Voorwaarden</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Material data - nu met PP toegevoegd
+        const materials = [
+            { name: 'PLA', coefficient: 68, color: '#3498db' },
+            { name: 'ABS', coefficient: 72, color: '#9b59b6' },
+            { name: 'PETG', coefficient: 60, color: '#2ecc71' },
+            { name: 'Nylon', coefficient: 80, color: '#e67e22' },
+            { name: 'Polycarbonaat', coefficient: 65, color: '#e74c3c' },
+            { name: 'Polypropyleen', coefficient: 110, color: '#f39c12' },
+            { name: 'PEEK', coefficient: 47, color: '#2c3e50' }
+        ];
+        
+        // Temperature slider functionality
+        const tempSlider = document.getElementById('tempSlider');
+        const tempValue = document.getElementById('tempValue');
+        const displayTemp = document.getElementById('displayTemp');
+        const expansionResults = document.getElementById('expansionResults');
+        
+        // Initialize the display
+        updateExpansionDisplay(20);
+        
+        tempSlider.addEventListener('input', function() {
+            const temp = parseInt(this.value);
+            tempValue.textContent = `${temp}°C`;
+            displayTemp.textContent = `${temp}°C`;
+            updateExpansionDisplay(temp);
+        });
+        
+        function updateExpansionDisplay(temp) {
+            let html = '';
+            const deltaTemp = temp - 20; // Reference temperature is 20°C
+            
+            materials.forEach(material => {
+                const expansion = (material.coefficient * deltaTemp / 1000).toFixed(2); // mm per meter
+                const expansionClass = expansion >= 0 ? 'text-green-400' : 'text-red-400';
+                const sign = expansion >= 0 ? '+' : '';
+                
+                html += `
+                    <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg border border-gray-700">
+                        <span class="font-semibold text-gray-300">${material.name}</span>
+                        <span class="${expansionClass} font-mono font-bold">${sign}${expansion} mm</span>
+                    </div>
+                `;
+            });
+            
+            expansionResults.innerHTML = html;
+        }
+        
+        // Chart initialization
+        const ctx = document.getElementById('expansionChart').getContext('2d');
+        const expansionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: materials.map(m => m.name),
+                datasets: [{
+                    label: 'Thermische uitzettingscoëfficiënt (10⁻⁶/°C)',
+                    data: materials.map(m => m.coefficient),
+                    backgroundColor: materials.map(m => m.color),
+                    borderColor: materials.map(m => m.color),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Uitzettingscoëfficiënt (10⁻⁶/°C)',
+                            color: '#d1d5db'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#d1d5db'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#d1d5db'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Vergelijking van thermische uitzettingscoëfficiënten',
+                        color: '#f9fafb'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

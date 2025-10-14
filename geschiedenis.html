@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Geschiedenis van 3D printing - Van de eerste prototypes tot moderne technologie. Soorten 3D-printers, voor- en nadelen, en toekomstvisie">
+    <meta name="keywords" content="geschiedenis 3D printing, soorten 3D-printers, FDM, SLA, SLS, voordelen 3D printen, nadelen 3D printen, toekomst 3D printing, additive manufacturing, Chuck Hull, stereolithografie">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="3DRonny - Geschiedenis van 3D Printing | Technologie & Toekomst">
+    <meta property="og:description" content="Ontdek de geschiedenis, soorten printers, voor- en nadelen en toekomst van 3D printing technologie">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+    <meta property="og:url" content="https://3dronny.github.io/geschiedenis-3d-printen.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="3DRonny">
+    <meta property="og:locale" content="nl_NL">
+
+    <!-- Preconnect voor betere performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <title>3DRonny - Geschiedenis 3D Printing | Technologie & Toekomst</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+        }
+        
+        body {
+            background-color: #1f2937;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--accent-color);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 3px solid #1f2937;
+        }
+        
+        .tech-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .pros-cons-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+        
+        .pros-item {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .cons-item {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body class="text-gray-200 min-h-screen">
+    <div class="relative z-10">
+        <!-- Navigation -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3">
+                                <!-- Logo SVG -->
+                                <span class="text-xl font-bold text-white">3DRonny</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium">Materialen</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+            <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero Section -->
+            <section class="py-16 px-4">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                        Geschiedenis van <span class="text-emerald-400">3D Printing</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Van revolutionaire uitvinding tot huiskamer technologie. Ontdek de reis van additive manufacturing.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Timeline Section -->
+            <section class="py-16 px-4">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-4xl font-bold text-white mb-12 text-center">De Reis van 3D Printing</h2>
+                    
+                    <div class="timeline-container">
+                        <!-- 1980s -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">1984</span>
+                                    <h3 class="text-2xl font-bold text-white">Uitvinding Stereolithografie</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    Chuck Hull vindt stereolithografie (SLA) uit - de eerste 3D printing technologie. 
+                                    Hij patenteert het proces waarbij UV-licht wordt gebruikt om fotopolymeer hars laag voor laag te harden.
+                                </p>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-lightbulb text-emerald-400 mr-2"></i>
+                                    <span>Geboorte van additive manufacturing</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1990s -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">1992</span>
+                                    <h3 class="text-2xl font-bold text-white">Eerste FDM Patent</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    Scott Crump ontwikkelt Fused Deposition Modeling (FDM) en richt Stratasys op. 
+                                    Dit wordt later de basis voor de meeste consumenten 3D-printers.
+                                </p>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-industry text-emerald-400 mr-2"></i>
+                                    <span>Start van commerciële 3D printing</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2000s -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">2005</span>
+                                    <h3 class="text-2xl font-bold text-white">RepRap Project</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    Dr. Adrian Bowyer start het RepRap (Replicating Rapid Prototyper) project aan de Universiteit van Bath. 
+                                    Het doel: een 3D-printer ontwikkelen die zijn eigen onderdelen kan printen.
+                                </p>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-code-branch text-emerald-400 mr-2"></i>
+                                    <span>Open-source 3D printing revolutie begint</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2009 -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">2009</span>
+                                    <h3 class="text-2xl font-bold text-white">Eerste Betaalbare Printers</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    De eerste commercieel beschikbare RepRap-kits komen op de markt. 
+                                    Prijzen dalen van tienduizenden dollars naar enkele duizenden, waardoor 3D printing toegankelijker wordt.
+                                </p>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-home text-emerald-400 mr-2"></i>
+                                    <span>3D printing komt naar de huiskamer</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2010s -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">2012</span>
+                                    <h3 class="text-2xl font-bold text-white">Desktop 3D Printing Explosie</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    Formlabs lanceert de eerste betaalbare SLA printer via Kickstarter. 
+                                    Tegelijkertijd komen Chinese fabrikanten zoals Creality en Anycubic met betaalbare FDM printers.
+                                </p>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-rocket text-emerald-400 mr-2"></i>
+                                    <span>Massa-adoptie begint</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Heden -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="card p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <span class="tech-badge">Heden</span>
+                                    <h3 class="text-2xl font-bold text-white">Volwassen Technologie</h3>
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    3D printing is uitgegroeid tot een volwassen technologie met toepassingen in:
+                                    prototyping, productie, medische sector, lucht- en ruimtevaart, en consumentenproducten.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="tech-badge">Multi-material</span>
+                                    <span class="tech-badge">Hoge Snelheid</span>
+                                    <span class="tech-badge">Industrieel Gebruik</span>
+                                    <span class="tech-badge">Bioprinting</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Printer Types Section -->
+            <section class="py-16 px-4 bg-gray-800/50">
+                <div class="max-w-7xl mx-auto">
+                    <h2 class="text-4xl font-bold text-white mb-12 text-center">Soorten 3D-Printers</h2>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- FDM -->
+                        <div class="card p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-layer-group text-white"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">FDM/FFF</h3>
+                            </div>
+                            <p class="text-gray-300 mb-4">
+                                Fused Deposition Modeling - Smelt plastic filament en deponeert het laag voor laag. 
+                                Meest voorkomende type voor consumenten.
+                            </p>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Kosten:</span>
+                                    <span class="text-emerald-400">Laag</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Details:</span>
+                                    <span class="text-gray-400">Matig</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Materialen:</span>
+                                    <span class="text-gray-400">PLA, PETG, ABS, TPU</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SLA -->
+                        <div class="card p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-vial text-white"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">SLA</h3>
+                            </div>
+                            <p class="text-gray-300 mb-4">
+                                Stereolithografie - UV-licht hardt vloeibare hars uit. 
+                                Uitstekende details en gladde oppervlakken.
+                            </p>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Kosten:</span>
+                                    <span class="text-blue-400">Medium</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Details:</span>
+                                    <span class="text-blue-400">Zeer Hoog</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Materialen:</span>
+                                    <span class="text-gray-400">Harsen</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SLS -->
+                        <div class="card p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-fire text-white"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">SLS</h3>
+                            </div>
+                            <p class="text-gray-300 mb-4">
+                                Selective Laser Sintering - Laser smelt poederdeeltjes samen. 
+                                Geen ondersteuning nodig, sterke onderdelen.
+                            </p>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Kosten:</span>
+                                    <span class="text-purple-400">Hoog</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Details:</span>
+                                    <span class="text-purple-400">Hoog</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Materialen:</span>
+                                    <span class="text-gray-400">Nylon, Metaal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pros & Cons Section -->
+            <section class="py-16 px-4">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-4xl font-bold text-white mb-12 text-center">Voor- en Nadelen van 3D Printing</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Voordelen -->
+                        <div class="card p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6 text-emerald-400">
+                                <i class="fas fa-thumbs-up mr-2"></i>Voordelen
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="pros-cons-item pros-item">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Rapid Prototyping</div>
+                                        <div class="text-gray-300 text-sm">Snel ontwerpen testen en itereren</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item pros-item">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Maatwerk</div>
+                                        <div class="text-gray-300 text-sm">Perfecte personalisatie mogelijk</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item pros-item">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Complexe Geometrie</div>
+                                        <div class="text-gray-300 text-sm">Ontwerpen die onmogelijk zijn met traditionele methoden</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item pros-item">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Minimaal Afval</div>
+                                        <div class="text-gray-300 text-sm">Alleen gebruiken wat nodig is</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item pros-item">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Lage Opstartkosten</div>
+                                        <div class="text-gray-300 text-sm">Geen dure mallen nodig</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nadelen -->
+                        <div class="card p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6 text-red-400">
+                                <i class="fas fa-thumbs-down mr-2"></i>Nadelen
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="pros-cons-item cons-item">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Langzame Productie</div>
+                                        <div class="text-gray-300 text-sm">Niet geschikt voor massaproductie</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item cons-item">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Beperkte Sterkte</div>
+                                        <div class="text-gray-300 text-sm">Anisotropische materiaaleigenschappen</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item cons-item">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Oppervlaktekwaliteit</div>
+                                        <div class="text-gray-300 text-sm">Zichtbare lagen (tenzij nabehandeld)</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item cons-item">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Beperkte Materialen</div>
+                                        <div class="text-gray-300 text-sm">Minder keuze dan traditionele fabricage</div>
+                                    </div>
+                                </div>
+                                <div class="pros-cons-item cons-item">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <div>
+                                        <div class="font-semibold text-white">Kennis Vereist</div>
+                                        <div class="text-gray-300 text-sm">Leercurve voor optimale resultaten</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Future Section -->
+            <section class="py-16 px-4 bg-gray-800/50">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-4xl font-bold text-white mb-12 text-center">Toekomst van 3D Printing</h2>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-industry text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-3">Mass Customization</h3>
+                            <p class="text-gray-300 text-sm">Op maat gemaakte producten tegen massaproductie prijzen</p>
+                        </div>
+                        
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-biohazard text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-3">Bioprinting</h3>
+                            <p class="text-gray-300 text-sm">Weefsels en organen printen voor medische toepassingen</p>
+                        </div>
+                        
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-home text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-3">Bouwprinters</h3>
+                            <p class="text-gray-300 text-sm">Complete huizen en gebouwen printen met beton</p>
+                        </div>
+                        
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-space-shuttle text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-3">Ruimtevaart</h3>
+                            <p class="text-gray-300 text-sm">Onderdelen printen in de ruimte met lokale materialen</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 card p-8">
+                        <h3 class="text-2xl font-bold text-white mb-4">De Volgende Revolutie</h3>
+                        <p class="text-gray-300 mb-4">
+                            De toekomst van 3D printing ligt in de integratie met andere technologieën zoals AI, 
+                            IoT en robotics. Zelflerende printers die zich automatisch aanpassen, 
+                            gedistribueerde productienetwerken en circulaire economie modellen zullen 
+                            de manier waarop we producten maken fundamenteel veranderen.
+                        </p>
+                        <div class="flex items-center text-sm text-emerald-400">
+                            <i class="fas fa-quote-left mr-2"></i>
+                            <span>3D printing is niet langer alleen een prototyping tool - het wordt een fundamentele productietechnologie</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="py-16 px-4">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="card p-12">
+                        <h2 class="text-4xl font-bold text-white mb-6">Zelf 3D Printen Ontdekken?</h2>
+                        <p class="text-xl text-gray-300 mb-8">
+                            Laat je inspireren door de mogelijkheden en start vandaag nog met je eigen project!
+                        </p>
+                        <a href="contact.html" class="btn-primary">
+                            <i class="fas fa-lightbulb"></i>
+                            Start Jouw Project
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 border-t border-gray-800 py-12">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <!-- Logo -->
+                            <span class="text-xl font-bold text-white">3DRonny</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
+							
+							<li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">materialen</a></li>
+							<li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis-3d-printen.html" class="hover:text-emerald-400 transition-colors">Geschiedenis</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Technologie</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">Materialen</a></li>
+                            
+                            <li><a href="geschiedenis-3d-printen.html" class="hover:text-emerald-400 transition-colors">Soorten Printers</a></li>
+                            <li><a href="geschiedenis-3d-printen.html" class="hover:text-emerald-400 transition-colors">Toekomstvisie</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Contact</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i>3Dronny@gmail.com</li>
+                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Stuur bericht</a></li>
+                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="#" class="hover:text-emerald-400 transition-colors">Privacy</a>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">Voorwaarden</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
