@@ -130,6 +130,7 @@
             font-size: 1.1rem;
             text-decoration: none;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            margin: 0; /* Reset alle margins */
         }
         
         .btn-primary:hover {
@@ -149,6 +150,15 @@
             min-height: 60px;
             font-size: 1.2rem;
             border-radius: 14px;
+        }
+        
+        /* Button container voor consistente spacing - TOEGEVOEGD */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
         }
         
         .card {
@@ -592,7 +602,7 @@
                 </div>
             </section>
 
-            <!-- CTA Section -->
+            <!-- CTA Section - AANGEPAST -->
             <section class="py-16 px-4 cta-section" aria-labelledby="cta-title">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
@@ -600,10 +610,12 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
-                        <a href="contact.html" class="btn-primary">
-                            <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                            Project Bespreken
-                        </a>
+                        <div class="button-group justify-center">
+                            <a href="contact.html" class="btn-primary">
+                                <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                                Project Bespreken
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
