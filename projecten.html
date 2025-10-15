@@ -114,7 +114,7 @@
             width: 100%;
         }
         
-        /* ===== CONSISTENT BUTTON STYLING ===== */
+        /* ===== EXACT DEZELFDE BUTTON STYLING ALS CONTACT PAGINA ===== */
         .btn-primary {
             background: var(--accent-color);
             color: white;
@@ -125,13 +125,12 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            border: none;
-            cursor: pointer;
+            text-decoration: none;
             min-height: 56px;
             font-size: 1.1rem;
-            text-decoration: none;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-            margin: 0;
+            border: none;
+            cursor: pointer;
         }
         
         .btn-primary:hover {
@@ -139,50 +138,13 @@
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
         }
-        
+
         .btn-primary:focus {
             outline: 3px solid white;
             outline-offset: 3px;
         }
 
-        /* Secundaire button variant */
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            min-height: 48px;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            justify-content: center;
-            text-align: center;
-            margin: 0;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Kleine button variant */
-        .btn-sm {
-            padding: 10px 20px;
-            min-height: 42px;
-            font-size: 0.9rem;
-            border-radius: 8px;
-        }
-
-        /* CTA section buttons specifiek groter maken */
+        /* CTA section buttons specifiek groter maken - PRECIES ZELFDE ALS CONTACT */
         .cta-section .btn-primary {
             padding: 18px 36px;
             min-height: 60px;
@@ -312,37 +274,21 @@
             }
         }
         
-        /* ===== CONSISTENT BUTTON SPACING ===== */
-        /* Reset margins voor button containers */
-        .project-card .flex.justify-between.items-center {
-            margin-top: 0.75rem !important;
-            gap: 0.75rem;
-        }
-
-        .project-progress .mt-3 {
-            margin-top: 0.75rem !important;
-        }
-
-        /* Zorg dat buttons dezelfde spacing hebben als contactpagina */
-        .btn-primary, .btn-secondary {
-            margin: 0;
-            flex-shrink: 0;
-        }
-
-        /* Specifieke aanpassingen voor project cards */
+        /* ===== CONSISTENT BUTTON SPACING - ZELFDE ALS CONTACT ===== */
+        /* Gebruik exact dezelfde spacing als contactpagina */
         .project-card {
-            padding: 1.25rem !important;
+            padding: 1.5rem !important;
         }
 
-        .project-card .aspect-square {
-            margin-bottom: 0.75rem !important;
+        .project-card .flex.justify-between.items-center {
+            margin-top: 1rem !important;
         }
 
-        .project-card p.text-gray-400 {
-            margin-bottom: 0.75rem !important;
+        .project-progress .btn-primary {
+            margin-top: 1rem !important;
         }
-        
-        /* Responsive improvements */
+
+        /* Responsive aanpassingen voor kleinere schermen - ZELFDE ALS CONTACT */
         @media (max-width: 768px) {
             .project-stats {
                 grid-template-columns: 1fr;
@@ -365,26 +311,10 @@
                 font-size: 1rem;
             }
             
-            .btn-secondary {
-                padding: 10px 20px;
-                min-height: 44px;
-                font-size: 0.9rem;
-            }
-            
             .cta-section .btn-primary {
                 padding: 16px 32px;
                 min-height: 56px;
                 font-size: 1.1rem;
-            }
-
-            .project-card .flex.justify-between.items-center {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.5rem;
-            }
-
-            .project-card .flex.justify-between.items-center .text-xs {
-                justify-content: space-between;
             }
         }
 
@@ -394,12 +324,6 @@
                 max-width: 320px;
                 justify-content: center;
                 text-align: center;
-            }
-            
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                max-width: 320px;
             }
         }
         
@@ -526,7 +450,7 @@
                     <h2 id="active-projects-title" class="text-3xl font-bold text-white mb-8">Actieve Projecten</h2>
                     <div class="space-y-6">
                         <!-- Project 1 -->
-                        <div class="card p-5 project-card">
+                        <div class="card p-6 project-card">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -554,18 +478,17 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
-                                    <div class="mt-3">
-                                        <button class="btn-secondary">
-                                            <i class="fas fa-code-branch"></i>
-                                            Volg Project
-                                        </button>
-                                    </div>
+                                    <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                                    <a href="#" class="btn-primary w-full justify-center mt-4">
+                                        <i class="fas fa-code-branch"></i>
+                                        Volg Project
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Project 2 -->
-                        <div class="card p-5 project-card">
+                        <div class="card p-6 project-card">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -593,12 +516,11 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
-                                    <div class="mt-3">
-                                        <button class="btn-secondary">
-                                            <i class="fas fa-code-branch"></i>
-                                            Volg Project
-                                        </button>
-                                    </div>
+                                    <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                                    <a href="#" class="btn-primary w-full justify-center mt-4">
+                                        <i class="fas fa-code-branch"></i>
+                                        Volg Project
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -612,8 +534,8 @@
                     <h2 id="completed-projects-title" class="text-3xl font-bold text-white mb-8">Voltooide Projecten</h2>
                     <div class="project-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Voltooide projecten">
                         <!-- Completed Project 1 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -629,24 +551,19 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-3">
+                            <p class="text-gray-400 text-sm mb-4">
                                 Wandmontage systeem voor gereedschapsorganisatie met magnetische tool holders.
                             </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mei 2025</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>18 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
+                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <a href="#" class="btn-primary w-full justify-center">
+                                <i class="fas fa-info-circle"></i>
+                                Bekijk Details
+                            </a>
                         </div>
 
                         <!-- Completed Project 2 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -662,24 +579,19 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-3">
+                            <p class="text-gray-400 text-sm mb-4">
                                 Stofdichte behuizing voor Arduino project met kabelmanagement.
                             </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Apr 2025</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>12 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
+                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <a href="#" class="btn-primary w-full justify-center">
+                                <i class="fas fa-info-circle"></i>
+                                Bekijk Details
+                            </a>
                         </div>
 
                         <!-- Completed Project 3 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -695,118 +607,14 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-3">
+                            <p class="text-gray-400 text-sm mb-4">
                                 Uitdagende mechanische puzzel met 12 bewegende onderdelen.
                             </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mrt 2025</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>28 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Completed Project 4 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
-                                <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-                                </div>
-                                <img src="fotos/camera-mount.jpg" 
-                                     alt="Camera mount systeem - 3D geprinte camera mount voor vloeiende bewegingen"
-                                     class="w-full h-full object-cover rounded-lg image-loaded"
-                                     loading="lazy"
-                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
-                            </div>
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="font-semibold text-white">Camera Mount Systeem</h3>
-                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
-                                    Voltooid
-                                </span>
-                            </div>
-                            <p class="text-gray-400 text-sm mb-3">
-                                Camera mount voor vloeiende bewegingen met aangepaste balhoofden.
-                            </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Feb 2025</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>22 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Completed Project 5 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
-                                <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-                                </div>
-                                <img src="fotos/plant-hangers.jpg" 
-                                     alt="Plant hangers - 3D geprinte moderne plantenhangers voor binnen"
-                                     class="w-full h-full object-cover rounded-lg image-loaded"
-                                     loading="lazy"
-                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
-                            </div>
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="font-semibold text-white">Moderne Plant Hangers</h3>
-                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
-                                    Voltooid
-                                </span>
-                            </div>
-                            <p class="text-gray-400 text-sm mb-3">
-                                Moderne plantenhangers met verstelbare hoogtes voor binnen.
-                            </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Jan 2025</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>15 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Completed Project 6 -->
-                        <div class="card p-5 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
-                                <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-                                </div>
-                                <img src="fotos/desk-organizer.jpg" 
-                                     alt="Desk organizer - 3D geprinte bureaublad organizer met USB hub"
-                                     class="w-full h-full object-cover rounded-lg image-loaded"
-                                     loading="lazy"
-                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
-                            </div>
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="font-semibold text-white">Bureaublad Organizer</h3>
-                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
-                                    Voltooid
-                                </span>
-                            </div>
-                            <p class="text-gray-400 text-sm mb-3">
-                                Bureaublad organizer met geïntegreerde USB hub en pennenhouder.
-                            </p>
-                            <div class="flex justify-between items-center mt-3 gap-3">
-                                <div class="text-xs text-gray-500 flex gap-3">
-                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Dec 2024</span>
-                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>20 uur</span>
-                                </div>
-                                <button class="btn-secondary btn-sm">
-                                    <i class="fas fa-info-circle"></i>
-                                    Details
-                                </button>
-                            </div>
+                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <a href="#" class="btn-primary w-full justify-center">
+                                <i class="fas fa-info-circle"></i>
+                                Bekijk Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -820,6 +628,7 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
+                        <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
                         <a href="contact.html" class="btn-primary">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Project Bespreken
@@ -943,11 +752,14 @@
             });
 
             // Button click handlers voor demonstratie
-            document.querySelectorAll('.btn-secondary').forEach(button => {
-                button.addEventListener('click', function() {
-                    const projectTitle = this.closest('.card').querySelector('h3').textContent;
-                    alert(`Details voor: ${projectTitle}\n\nDeze functionaliteit kan worden uitgebreid met een project detail pagina.`);
-                });
+            document.querySelectorAll('.btn-primary').forEach(button => {
+                if (button.textContent.includes('Details') || button.textContent.includes('Volg')) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const projectTitle = this.closest('.card').querySelector('h3').textContent;
+                        alert(`Details voor: ${projectTitle}\n\nDeze functionaliteit kan worden uitgebreid met een project detail pagina.`);
+                    });
+                }
             });
         });
     </script>
