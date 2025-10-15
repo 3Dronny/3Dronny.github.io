@@ -132,7 +132,6 @@
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
             border: none;
             cursor: pointer;
-            margin: 8px 0;
         }
         
         .btn-primary:hover {
@@ -153,7 +152,6 @@
             font-size: 1.1rem;
             border-radius: 12px;
             gap: 12px;
-            margin: 8px 0;
         }
         
         .card {
@@ -277,19 +275,6 @@
                 display: none !important;
             }
         }
-        
-        /* ===== CONSISTENT BUTTON SPACING - ZELFDE ALS CONTACT ===== */
-        .project-card {
-            padding: 1.5rem !important;
-        }
-
-        .project-card .flex.justify-between.items-center {
-            margin-top: 1rem !important;
-        }
-
-        .project-progress .btn-primary {
-            margin-top: 1rem !important;
-        }
 
         /* Responsive aanpassingen voor kleinere schermen - ZELFDE ALS CONTACT */
         @media (max-width: 768px) {
@@ -313,7 +298,6 @@
                 min-height: 52px;
                 font-size: 1rem;
                 gap: 10px;
-                margin: 6px 0;
             }
             
             .cta-section .btn-primary {
@@ -321,7 +305,6 @@
                 min-height: 52px;
                 font-size: 1rem;
                 gap: 10px;
-                margin: 6px 0;
             }
         }
 
@@ -332,38 +315,8 @@
                 max-width: 320px;
                 justify-content: center;
                 text-align: center;
-                margin: 6px auto;
             }
         }
-        
-        /* Animation for project cards */
-        .project-card {
-            view-timeline-name: --project;
-            view-timeline-axis: block;
-            animation-timeline: --project;
-            animation-name: slideIn;
-            animation-range: entry 25% cover 40%;
-            animation-fill-mode: both;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* Stagger animation for project grid */
-        .project-grid > *:nth-child(1) { animation-delay: 0.1s; }
-        .project-grid > *:nth-child(2) { animation-delay: 0.2s; }
-        .project-grid > *:nth-child(3) { animation-delay: 0.3s; }
-        .project-grid > *:nth-child(4) { animation-delay: 0.4s; }
-        .project-grid > *:nth-child(5) { animation-delay: 0.5s; }
-        .project-grid > *:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
@@ -438,6 +391,7 @@
                     <h2 id="stats-title" class="sr-only">Project Statistieken</h2>
                     <div class="project-stats grid md:grid-cols-3 gap-8 mb-12">
                         <div class="card p-6 text-center">
+
                             <div class="text-3xl font-bold text-emerald-400 mb-2" aria-label="24 voltooide projecten">24</div>
                             <div class="text-gray-300">Voltooide Projecten</div>
                         </div>
@@ -459,7 +413,7 @@
                     <h2 id="active-projects-title" class="text-3xl font-bold text-white mb-8">Actieve Projecten</h2>
                     <div class="space-y-6">
                         <!-- Project 1 -->
-                        <div class="card p-6 project-card">
+                        <div class="card p-6">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -487,7 +441,7 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
-                                    <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                                    <!-- BUTTON ZONDER EXTRA MARGIN -->
                                     <a href="#" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
@@ -497,7 +451,7 @@
                         </div>
 
                         <!-- Project 2 -->
-                        <div class="card p-6 project-card">
+                        <div class="card p-6">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -525,7 +479,7 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
-                                    <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                                    <!-- BUTTON ZONDER EXTRA MARGIN -->
                                     <a href="#" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
@@ -541,9 +495,9 @@
             <section class="py-16 px-4" aria-labelledby="completed-projects-title">
                 <div class="max-w-7xl mx-auto">
                     <h2 id="completed-projects-title" class="text-3xl font-bold text-white mb-8">Voltooide Projecten</h2>
-                    <div class="project-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Voltooide projecten">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Voltooide projecten">
                         <!-- Completed Project 1 -->
-                        <div class="card p-6 project-card" role="listitem">
+                        <div class="card p-6" role="listitem">
                             <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
@@ -563,7 +517,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Wandmontage systeem voor gereedschapsorganisatie met magnetische tool holders.
                             </p>
-                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <!-- BUTTON ZONDER EXTRA MARGIN -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -571,7 +525,7 @@
                         </div>
 
                         <!-- Completed Project 2 -->
-                        <div class="card p-6 project-card" role="listitem">
+                        <div class="card p-6" role="listitem">
                             <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
@@ -591,7 +545,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Stofdichte behuizing voor Arduino project met kabelmanagement.
                             </p>
-                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <!-- BUTTON ZONDER EXTRA MARGIN -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -599,7 +553,7 @@
                         </div>
 
                         <!-- Completed Project 3 -->
-                        <div class="card p-6 project-card" role="listitem">
+                        <div class="card p-6" role="listitem">
                             <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
@@ -619,7 +573,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Uitdagende mechanische puzzel met 12 bewegende onderdelen.
                             </p>
-                            <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                            <!-- BUTTON ZONDER EXTRA MARGIN -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -637,7 +591,7 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
-                        <!-- BUTTON EXACT ZELFDE ALS CONTACT PAGINA -->
+                        <!-- BUTTON ZONDER EXTRA MARGIN -->
                         <a href="contact.html" class="btn-primary">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Project Bespreken
