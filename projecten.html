@@ -152,15 +152,6 @@
             border-radius: 14px;
         }
         
-        /* Button container voor consistente spacing - TOEGEVOEGD */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-        }
-        
         .card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -602,7 +593,7 @@
                 </div>
             </section>
 
-            <!-- CTA Section - AANGEPAST -->
+            <!-- CTA Section - GECORRIGEERD -->
             <section class="py-16 px-4 cta-section" aria-labelledby="cta-title">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
@@ -610,12 +601,11 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
-                        <div class="button-group justify-center">
-                            <a href="contact.html" class="btn-primary">
-                                <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                                Project Bespreken
-                            </a>
-                        </div>
+                        <!-- Button zonder container, precies zoals op contactpagina -->
+                        <a href="contact.html" class="btn-primary">
+                            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                            Project Bespreken
+                        </a>
                     </div>
                 </div>
             </section>
