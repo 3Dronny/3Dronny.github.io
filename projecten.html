@@ -117,28 +117,38 @@
         .btn-primary {
             background: var(--accent-color);
             color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 16px 32px;
+            border-radius: 12px;
             font-weight: 600;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             border: none;
             cursor: pointer;
-            min-height: 44px;
+            min-height: 56px;
+            font-size: 1.1rem;
             text-decoration: none;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
         }
         
         .btn-primary:hover {
             background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
         }
         
         .btn-primary:focus {
-            outline: 2px solid white;
-            outline-offset: 2px;
+            outline: 3px solid white;
+            outline-offset: 3px;
+        }
+
+        /* CTA section buttons specifiek groter maken */
+        .cta-section .btn-primary {
+            padding: 18px 36px;
+            min-height: 60px;
+            font-size: 1.2rem;
+            border-radius: 14px;
         }
         
         .card {
@@ -279,6 +289,27 @@
             
             .project-progress {
                 width: 100% !important;
+            }
+
+            .btn-primary {
+                padding: 14px 28px;
+                min-height: 52px;
+                font-size: 1rem;
+            }
+            
+            .cta-section .btn-primary {
+                padding: 16px 32px;
+                min-height: 56px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .cta-section .btn-primary {
+                width: 100%;
+                max-width: 320px;
+                justify-content: center;
+                text-align: center;
             }
         }
         
@@ -562,7 +593,7 @@
             </section>
 
             <!-- CTA Section -->
-            <section class="py-16 px-4" aria-labelledby="cta-title">
+            <section class="py-16 px-4 cta-section" aria-labelledby="cta-title">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
                         <h2 id="cta-title" class="text-4xl font-bold text-white mb-6">Eigen Project Voorstellen?</h2>

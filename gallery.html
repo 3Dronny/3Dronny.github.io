@@ -71,6 +71,19 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
+        /* Fix voor browser navigatiebalk */
+        @supports(padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+        
+        .hero-section {
+            position: relative;
+            padding-top: max(5rem, env(safe-area-inset-top, 5rem));
+        }
+        
         /* Skip link voor accessibility */
         .skip-link {
             position: absolute;
@@ -135,6 +148,33 @@
         }
         
         .btn-primary:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            cursor: pointer;
+            min-height: 44px;
+            text-decoration: none;
+        }
+        
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline:focus {
             outline: 2px solid white;
             outline-offset: 2px;
         }
@@ -217,6 +257,21 @@
             outline-offset: 2px;
         }
         
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .filter-buttons {
+                display: none !important;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        
         /* Responsive improvements */
         @media (max-width: 768px) {
             .filter-buttons {
@@ -246,45 +301,9 @@
                 padding: 8px 16px;
             }
         }
-        
-        /* Print styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            .filter-buttons {
-                display: none !important;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-        
-        /* Smooth animations */
-        .gallery-item {
-            view-timeline-name: --item;
-            view-timeline-axis: block;
-            animation-timeline: --item;
-            animation-name: show;
-            animation-range: entry 25% cover 40%;
-            animation-fill-mode: both;
-        }
-        
-        @keyframes show {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
-<body class="text-gray-200 min-h-screen">
+<body class="text-gray-200 min-h-screen relative overflow-x-hidden">
     <!-- Skip link voor keyboard users -->
     <a href="#main-content" class="skip-link">Direct naar hoofdinhoud</a>
 
@@ -326,8 +345,9 @@
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen uiteenzetting</a>
                             <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
-							<a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
-            <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            </a>
                             <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
                         </div>
                     </div>
@@ -338,9 +358,9 @@
         <!-- Main Content -->
         <main id="main-content">
             <!-- Hero Section -->
-            <section class="py-16 px-4" aria-labelledby="gallery-title">
+            <section class="relative px-4 hero-section" style="padding-bottom: 5rem;" aria-labelledby="gallery-title">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h1 id="gallery-title" class="hero-title text-5xl lg:text-6xl font-bold text-white mb-6">
+                    <h1 id="gallery-title" class="text-5xl lg:text-6xl font-bold text-white mb-6">
                         Print <span class="text-emerald-400">Gallerij</span>
                     </h1>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -406,7 +426,7 @@
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/33333.jpg" 
-                                     alt="desktop balpen organizer
+                                     alt="desktop balpen organizer"
                                      class="w-full h-full object-cover rounded-lg image-loaded"
                                      loading="lazy"
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
@@ -535,7 +555,7 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een eigen idee voor een 3D print? Laat het me weten en we bespreken de mogelijkheden!
                         </p>
-                        <a href="contact.html" class="btn-primary">
+                        <a href="contact.html" class="btn-primary no-underline">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Bespreek Jouw Idee
                         </a>
@@ -583,7 +603,7 @@
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
                             <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
                             <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
-							<li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors">geschiedenis</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis 3D printen</a></li>
                             <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
                         </ul>
                     </div>
@@ -688,25 +708,7 @@
                     initialButton.click();
                 }
             }
-            
-            // Add intersection observer for animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animationPlayState = 'running';
-                    }
-                });
-            }, observerOptions);
-            
-            galleryItems.forEach(item => {
-                observer.observe(item);
-            });
         });
     </script>
 </body>
-</html> 
+</html>

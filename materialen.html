@@ -26,6 +26,40 @@
             flex-direction: column;
         }
         
+        /* Fix voor browser navigatiebalk */
+        @supports(padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+        
+        .hero-section {
+            position: relative;
+            padding-top: max(5rem, env(safe-area-inset-top, 5rem));
+        }
+        
+        /* Skip link voor accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--accent-color);
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: top 0.3s ease;
+        }
+        
+        .skip-link:focus {
+            top: 6px;
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -67,12 +101,18 @@
             text-decoration: none;
             border: none;
             cursor: pointer;
+            min-height: 44px;
         }
         
         .btn-primary:hover {
             background: var(--accent-hover);
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
         }
         
         .btn-outline {
@@ -88,12 +128,18 @@
             text-decoration: none;
             background: transparent;
             cursor: pointer;
+            min-height: 44px;
         }
         
         .btn-outline:hover {
             background: var(--accent-color);
             color: white;
             transform: translateY(-2px);
+        }
+        
+        .btn-outline:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
         }
         
         /* CONTENT SECTIES - DONKER GEMAAKT */
@@ -225,6 +271,7 @@
             border-radius: 4px;
             background: #374151;
             outline: none;
+
         }
         
         input[type="range"]::-webkit-slider-thumb {
@@ -280,12 +327,27 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* FOOTER STYLING */
-        .page-footer {
-            background-color: #1f2937;
-            color: white;
-            margin-top: auto;
-            padding: 2rem 0;
+        /* Focus styles voor accessibility */
+        a:focus, button:focus {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Print styles voor betere afdrukken */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .content-section, .material-card {
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
         }
         
         /* TEKST KLEUREN AANGEPAST */
@@ -316,15 +378,18 @@
     </style>
 </head>
 <body class="min-h-screen relative overflow-x-hidden">
+    <!-- Skip link voor keyboard users -->
+    <a href="#main-content" class="skip-link">Direct naar hoofdinhoud</a>
+
     <div class="relative z-10">
         <!-- Navigation -->
-        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center gap-3">
-                            <a href="index.html" class="flex items-center gap-3">
-                                <svg width="48" height="48" viewBox="0 0 200 200">
+                            <a href="index.html" class="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded">
+                                <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
                                     <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
                                     <g transform="translate(60, 60) scale(0.8)">
                                         <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
@@ -349,15 +414,15 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-8">
-
-                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium">Home</a>
-                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium">Gallerij</a>
-                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium">Projecten</a>
-                            <a href="materialen.html" class="nav-link text-emerald-400 font-medium">Materialen uiteenzetting</a>
-                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium">Qidi X-Max 3</a>
-							<a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
-            <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
-                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium">Contact</a>
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-emerald-400 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen uiteenzetting</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            </a>
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -369,7 +434,7 @@
             <!-- INTRODUCTIE -->
             <section class="content-section">
                 <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
-                    <i class="fas fa-thermometer-half"></i>
+                    <i class="fas fa-thermometer-half" aria-hidden="true"></i>
                     Materialen Analyse
                 </div>
                 <h1 class="text-4xl font-bold mb-4">Materialen Uitzetting: PLA tot PEEK</h1>
@@ -377,16 +442,16 @@
                 <p>De lineaire uitzettingscoëfficiënt (α) geeft aan hoeveel een materiaal per graad temperatuurverandering uitzet. Deze wordt uitgedrukt in mm/(m·°C) ou 10⁻⁶/°C.</p>
                 
                 <div class="hero-buttons flex flex-col sm:flex-row gap-4 mt-8">
-                    <a href="projecten.html" class="btn-primary">
-                        <i class="fas fa-rocket"></i>
+                    <a href="projecten.html" class="btn-primary no-underline">
+                        <i class="fas fa-rocket" aria-hidden="true"></i>
                         Bekijk Projecten
                     </a>
-                    <a href="qidi-x-max3.html" class="btn-outline">
-                        <i class="fas fa-print"></i>
+                    <a href="qidi-x-max3.html" class="btn-outline no-underline">
+                        <i class="fas fa-print" aria-hidden="true"></i>
                         Onze Printer
                     </a>
-                    <a href="contact.html" class="btn-outline">
-                        <i class="fas fa-comments"></i>
+                    <a href="contact.html" class="btn-outline no-underline">
+                        <i class="fas fa-comments" aria-hidden="true"></i>
                         Vraag Advies
                     </a>
                 </div>
@@ -416,8 +481,8 @@
                 </div>
                 
                 <div class="text-center mt-6">
-                    <a href="gallery.html" class="btn-outline">
-                        <i class="fas fa-images"></i>
+                    <a href="gallery.html" class="btn-outline no-underline">
+                        <i class="fas fa-images" aria-hidden="true"></i>
                         Bekijk Materialen in Actie
                     </a>
                 </div>
@@ -688,8 +753,8 @@
                 </div>
                 
                 <div class="text-center mt-8">
-                    <a href="contact.html" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i>
+                    <a href="contact.html" class="btn-primary no-underline">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
                         Vraag Materiaal Advies
                     </a>
                 </div>
@@ -770,8 +835,8 @@
                 </table>
                 
                 <div class="text-center mt-6">
-                    <a href="qidi-x-max3.html" class="btn-outline">
-                        <i class="fas fa-print"></i>
+                    <a href="qidi-x-max3.html" class="btn-outline no-underline">
+                        <i class="fas fa-print" aria-hidden="true"></i>
                         Bekijk Onze Printer Specificaties
                     </a>
                 </div>
@@ -788,12 +853,12 @@
                 </div>
                 
                 <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                    <a href="contact.html" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i>
+                    <a href="contact.html" class="btn-primary no-underline">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
                         Neem Contact Op
                     </a>
-                    <a href="projecten.html" class="btn-outline">
-                        <i class="fas fa-rocket"></i>
+                    <a href="projecten.html" class="btn-outline no-underline">
+                        <i class="fas fa-rocket" aria-hidden="true"></i>
                         Bekijk Onze Projecten
                     </a>
                 </div>
@@ -801,12 +866,12 @@
         </div>
 
         <!-- Footer -->
-        <footer class="page-footer">
+        <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid md:grid-cols-4 gap-8">
                     <div>
                         <div class="flex items-center gap-3 mb-4">
-                            <svg width="32" height="32" viewBox="0 0 200 200">
+                            <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
                                 <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
                                 <g transform="translate(60, 60) scale(0.8)">
                                     <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
@@ -834,22 +899,22 @@
                     <div>
                         <h3 class="font-semibold text-white mb-4">Pagina's</h3>
                         <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Home</a></li>
-                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors">Gallerij</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
-                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">Materialen</a></li>
-                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors">Qidi X-Max 3</a></li>
-							<li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors">geschiedenis</a></li>
-                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contact</a></li>
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis 3D printen</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="font-semibold text-white mb-4">Services</h3>
                         <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Prototyping</a></li>
-                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Functionele Prints</a></li>
-                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Materiaal Advies</a></li>
-                            <li><a href="#" class="hover:text-emerald-400 transition-colors">Creatieve Projecten</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materiaal Advies</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
                         </ul>
                     </div>
                     <div>
@@ -865,8 +930,8 @@
                     <div class="flex flex-col md:flex-row justify-between items-center">
                         <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
                         <div class="flex gap-6 mt-4 md:mt-0">
-                            <a href="#" class="hover:text-emerald-400 transition-colors">Privacy</a>
-                            <a href="#" class="hover:text-emerald-400 transition-colors">Voorwaarden</a>
+                            <a href="#" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Privacy</a>
+                            <a href="#" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Voorwaarden</a>
                         </div>
                     </div>
                 </div>
