@@ -164,6 +164,7 @@
             cursor: pointer;
             justify-content: center;
             text-align: center;
+            margin: 0;
         }
 
         .btn-secondary:hover {
@@ -226,7 +227,6 @@
             transition: width 0.3s ease;
             position: relative;
         }
-
         
         .progress-fill::after {
             content: '';
@@ -312,6 +312,36 @@
             }
         }
         
+        /* ===== CONSISTENT BUTTON SPACING ===== */
+        /* Reset margins voor button containers */
+        .project-card .flex.justify-between.items-center {
+            margin-top: 0.75rem !important;
+            gap: 0.75rem;
+        }
+
+        .project-progress .mt-3 {
+            margin-top: 0.75rem !important;
+        }
+
+        /* Zorg dat buttons dezelfde spacing hebben als contactpagina */
+        .btn-primary, .btn-secondary {
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        /* Specifieke aanpassingen voor project cards */
+        .project-card {
+            padding: 1.25rem !important;
+        }
+
+        .project-card .aspect-square {
+            margin-bottom: 0.75rem !important;
+        }
+
+        .project-card p.text-gray-400 {
+            margin-bottom: 0.75rem !important;
+        }
+        
         /* Responsive improvements */
         @media (max-width: 768px) {
             .project-stats {
@@ -345,6 +375,16 @@
                 padding: 16px 32px;
                 min-height: 56px;
                 font-size: 1.1rem;
+            }
+
+            .project-card .flex.justify-between.items-center {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .project-card .flex.justify-between.items-center .text-xs {
+                justify-content: space-between;
             }
         }
 
@@ -486,7 +526,7 @@
                     <h2 id="active-projects-title" class="text-3xl font-bold text-white mb-8">Actieve Projecten</h2>
                     <div class="space-y-6">
                         <!-- Project 1 -->
-                        <div class="card p-6 project-card">
+                        <div class="card p-5 project-card">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -514,7 +554,7 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
-                                    <div class="mt-4">
+                                    <div class="mt-3">
                                         <button class="btn-secondary">
                                             <i class="fas fa-code-branch"></i>
                                             Volg Project
@@ -525,7 +565,7 @@
                         </div>
 
                         <!-- Project 2 -->
-                        <div class="card p-6 project-card">
+                        <div class="card p-5 project-card">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
@@ -553,7 +593,7 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
-                                    <div class="mt-4">
+                                    <div class="mt-3">
                                         <button class="btn-secondary">
                                             <i class="fas fa-code-branch"></i>
                                             Volg Project
@@ -572,8 +612,8 @@
                     <h2 id="completed-projects-title" class="text-3xl font-bold text-white mb-8">Voltooide Projecten</h2>
                     <div class="project-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Voltooide projecten">
                         <!-- Completed Project 1 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -589,13 +629,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Wandmontage systeem voor gereedschapsorganisatie met magnetische tool holders.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mei 2025</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>18 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>18 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -605,8 +645,8 @@
                         </div>
 
                         <!-- Completed Project 2 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -622,13 +662,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Stofdichte behuizing voor Arduino project met kabelmanagement.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Apr 2025</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>12 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>12 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -638,8 +678,8 @@
                         </div>
 
                         <!-- Completed Project 3 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -655,13 +695,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Uitdagende mechanische puzzel met 12 bewegende onderdelen.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mrt 2025</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>28 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>28 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -671,8 +711,8 @@
                         </div>
 
                         <!-- Completed Project 4 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -688,13 +728,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Camera mount voor vloeiende bewegingen met aangepaste balhoofden.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Feb 2025</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>22 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>22 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -704,8 +744,8 @@
                         </div>
 
                         <!-- Completed Project 5 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -721,13 +761,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Moderne plantenhangers met verstelbare hoogtes voor binnen.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Jan 2025</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>15 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>15 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -737,8 +777,8 @@
                         </div>
 
                         <!-- Completed Project 6 -->
-                        <div class="card p-6 project-card" role="listitem">
-                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                        <div class="card p-5 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-3 image-container">
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
@@ -754,13 +794,13 @@
                                     Voltooid
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">
+                            <p class="text-gray-400 text-sm mb-3">
                                 Bureaublad organizer met geïntegreerde USB hub en pennenhouder.
                             </p>
-                            <div class="flex justify-between items-center mt-4">
-                                <div class="text-xs text-gray-500">
+                            <div class="flex justify-between items-center mt-3 gap-3">
+                                <div class="text-xs text-gray-500 flex gap-3">
                                     <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Dec 2024</span>
-                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>20 uur</span>
+                                    <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>20 uur</span>
                                 </div>
                                 <button class="btn-secondary btn-sm">
                                     <i class="fas fa-info-circle"></i>
