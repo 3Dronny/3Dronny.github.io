@@ -124,13 +124,15 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
             text-decoration: none;
             min-height: 56px;
             font-size: 1.1rem;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
             border: none;
             cursor: pointer;
+            margin: 8px 0;
         }
         
         .btn-primary:hover {
@@ -144,12 +146,14 @@
             outline-offset: 3px;
         }
 
-        /* CTA section buttons specifiek groter maken - PRECIES ZELFDE ALS CONTACT */
+        /* CTA section buttons - ZELFDE SPACING ALS ANDERE BUTTONS */
         .cta-section .btn-primary {
-            padding: 18px 36px;
-            min-height: 60px;
-            font-size: 1.2rem;
-            border-radius: 14px;
+            padding: 16px 32px;
+            min-height: 56px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            gap: 12px;
+            margin: 8px 0;
         }
         
         .card {
@@ -275,7 +279,6 @@
         }
         
         /* ===== CONSISTENT BUTTON SPACING - ZELFDE ALS CONTACT ===== */
-        /* Gebruik exact dezelfde spacing als contactpagina */
         .project-card {
             padding: 1.5rem !important;
         }
@@ -309,21 +312,27 @@
                 padding: 14px 28px;
                 min-height: 52px;
                 font-size: 1rem;
+                gap: 10px;
+                margin: 6px 0;
             }
             
             .cta-section .btn-primary {
-                padding: 16px 32px;
-                min-height: 56px;
-                font-size: 1.1rem;
+                padding: 14px 28px;
+                min-height: 52px;
+                font-size: 1rem;
+                gap: 10px;
+                margin: 6px 0;
             }
         }
 
         @media (max-width: 640px) {
+            .btn-primary,
             .cta-section .btn-primary {
                 width: 100%;
                 max-width: 320px;
                 justify-content: center;
                 text-align: center;
+                margin: 6px auto;
             }
         }
         
