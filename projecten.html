@@ -73,27 +73,6 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
-        /* Skip link voor accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: var(--accent-color);
-            color: white;
-            padding: 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            z-index: 1000;
-            transition: top 0.3s ease;
-        }
-        
-        .skip-link:focus {
-            top: 6px;
-            outline: 2px solid white;
-            outline-offset: 2px;
-        }
-        
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -320,9 +299,6 @@
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
-    <!-- Skip link voor keyboard users -->
-   
-
     <div class="relative z-10">
         <!-- Navigation -->
         <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print" aria-label="Hoofdnavigatie">
@@ -391,7 +367,6 @@
                     <h2 id="stats-title" class="sr-only">Project Statistieken</h2>
                     <div class="project-stats grid md:grid-cols-3 gap-8 mb-12">
                         <div class="card p-6 text-center">
-
                             <div class="text-3xl font-bold text-emerald-400 mb-2" aria-label="24 voltooide projecten">24</div>
                             <div class="text-gray-300">Voltooide Projecten</div>
                         </div>
@@ -441,7 +416,7 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
-                                    <!-- BUTTON ZONDER EXTRA MARGIN -->
+                                    <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                                     <a href="#" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
@@ -479,7 +454,7 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
-                                    <!-- BUTTON ZONDER EXTRA MARGIN -->
+                                    <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                                     <a href="#" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
@@ -517,7 +492,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Wandmontage systeem voor gereedschapsorganisatie met magnetische tool holders.
                             </p>
-                            <!-- BUTTON ZONDER EXTRA MARGIN -->
+                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -545,7 +520,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Stofdichte behuizing voor Arduino project met kabelmanagement.
                             </p>
-                            <!-- BUTTON ZONDER EXTRA MARGIN -->
+                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -573,7 +548,7 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Uitdagende mechanische puzzel met 12 bewegende onderdelen.
                             </p>
-                            <!-- BUTTON ZONDER EXTRA MARGIN -->
+                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                             <a href="#" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
                                 Bekijk Details
@@ -591,7 +566,7 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
-                        <!-- BUTTON ZONDER EXTRA MARGIN -->
+                        <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                         <a href="contact.html" class="btn-primary">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Project Bespreken
