@@ -114,6 +114,7 @@
             width: 100%;
         }
         
+        /* ===== CONSISTENT BUTTON STYLING ===== */
         .btn-primary {
             background: var(--accent-color);
             color: white;
@@ -130,7 +131,7 @@
             font-size: 1.1rem;
             text-decoration: none;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-            margin: 0; /* Reset alle margins */
+            margin: 0;
         }
         
         .btn-primary:hover {
@@ -142,6 +143,42 @@
         .btn-primary:focus {
             outline: 3px solid white;
             outline-offset: 3px;
+        }
+
+        /* Secundaire button variant */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            min-height: 48px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Kleine button variant */
+        .btn-sm {
+            padding: 10px 20px;
+            min-height: 42px;
+            font-size: 0.9rem;
+            border-radius: 8px;
         }
 
         /* CTA section buttons specifiek groter maken */
@@ -189,6 +226,7 @@
             transition: width 0.3s ease;
             position: relative;
         }
+
         
         .progress-fill::after {
             content: '';
@@ -297,6 +335,12 @@
                 font-size: 1rem;
             }
             
+            .btn-secondary {
+                padding: 10px 20px;
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
+            
             .cta-section .btn-primary {
                 padding: 16px 32px;
                 min-height: 56px;
@@ -310,6 +354,12 @@
                 max-width: 320px;
                 justify-content: center;
                 text-align: center;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 320px;
             }
         }
         
@@ -354,7 +404,7 @@
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center gap-3">
-    <a href="index.html" class="flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3">
                                 <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
                                     <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
                                     <g transform="translate(60, 60) scale(0.8)">
@@ -464,6 +514,12 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
+                                    <div class="mt-4">
+                                        <button class="btn-secondary">
+                                            <i class="fas fa-code-branch"></i>
+                                            Volg Project
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -497,6 +553,12 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
+                                    <div class="mt-4">
+                                        <button class="btn-secondary">
+                                            <i class="fas fa-code-branch"></i>
+                                            Volg Project
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -530,9 +592,15 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Wandmontage systeem voor gereedschapsorganisatie met magnetische tool holders.
                             </p>
-                            <div class="flex justify-between text-xs text-gray-500">
-                                <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mei 2025</span>
-                                <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>18 uur</span>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mei 2025</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>18 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
                             </div>
                         </div>
 
@@ -557,9 +625,15 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Stofdichte behuizing voor Arduino project met kabelmanagement.
                             </p>
-                            <div class="flex justify-between text-xs text-gray-500">
-                                <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Apr 2025</span>
-                                <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>12 uur</span>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Apr 2025</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>12 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
                             </div>
                         </div>
 
@@ -584,16 +658,121 @@
                             <p class="text-gray-400 text-sm mb-4">
                                 Uitdagende mechanische puzzel met 12 bewegende onderdelen.
                             </p>
-                            <div class="flex justify-between text-xs text-gray-500">
-                                <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mrt 2025</span>
-                                <span><i class="fas fa-clock mr-1" aria-hidden="true"></i>28 uur</span>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Mrt 2025</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>28 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Completed Project 4 -->
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/camera-mount.jpg" 
+                                     alt="Camera mount systeem - 3D geprinte camera mount voor vloeiende bewegingen"
+                                     class="w-full h-full object-cover rounded-lg image-loaded"
+                                     loading="lazy"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-white">Camera Mount Systeem</h3>
+                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
+                                    Voltooid
+                                </span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Camera mount voor vloeiende bewegingen met aangepaste balhoofden.
+                            </p>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Feb 2025</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>22 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Completed Project 5 -->
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/plant-hangers.jpg" 
+                                     alt="Plant hangers - 3D geprinte moderne plantenhangers voor binnen"
+                                     class="w-full h-full object-cover rounded-lg image-loaded"
+                                     loading="lazy"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-white">Moderne Plant Hangers</h3>
+                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
+                                    Voltooid
+                                </span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Moderne plantenhangers met verstelbare hoogtes voor binnen.
+                            </p>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Jan 2025</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>15 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Completed Project 6 -->
+                        <div class="card p-6 project-card" role="listitem">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-500/20 to-gray-800 rounded-lg flex items-center justify-center mb-4 image-container">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/desk-organizer.jpg" 
+                                     alt="Desk organizer - 3D geprinte bureaublad organizer met USB hub"
+                                     class="w-full h-full object-cover rounded-lg image-loaded"
+                                     loading="lazy"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-white">Bureaublad Organizer</h3>
+                                <span class="status-completed px-2 py-1 rounded-full text-xs font-medium">
+                                    Voltooid
+                                </span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Bureaublad organizer met geïntegreerde USB hub en pennenhouder.
+                            </p>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-xs text-gray-500">
+                                    <span><i class="fas fa-calendar mr-1" aria-hidden="true"></i>Dec 2024</span>
+                                    <span class="ml-3"><i class="fas fa-clock mr-1" aria-hidden="true"></i>20 uur</span>
+                                </div>
+                                <button class="btn-secondary btn-sm">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- CTA Section - GECORRIGEERD -->
+            <!-- CTA Section -->
             <section class="py-16 px-4 cta-section" aria-labelledby="cta-title">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
@@ -601,7 +780,6 @@
                         <p class="text-xl text-gray-300 mb-8">
                             Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
                         </p>
-                        <!-- Button zonder container, precies zoals op contactpagina -->
                         <a href="contact.html" class="btn-primary">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Project Bespreken
@@ -650,7 +828,7 @@
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1" aria-current="page">Projecten</a></li>
                             <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
                             <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
-							<li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis</a></li>
                             <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
                         </ul>
                     </div>
@@ -665,11 +843,11 @@
                     </div>
                     <div>
                         <h3 class="font-semibold text-white mb-4">Contact</h3>
-    <ul class="space-y-2 text-gray-400 text-sm">
-        <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
-        <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Project bespreken</a></li>
-        <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
-    </ul>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Project bespreken</a></li>
+                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
@@ -721,6 +899,14 @@
                             block: 'start'
                         });
                     }
+                });
+            });
+
+            // Button click handlers voor demonstratie
+            document.querySelectorAll('.btn-secondary').forEach(button => {
+                button.addEventListener('click', function() {
+                    const projectTitle = this.closest('.card').querySelector('h3').textContent;
+                    alert(`Details voor: ${projectTitle}\n\nDeze functionaliteit kan worden uitgebreid met een project detail pagina.`);
                 });
             });
         });
