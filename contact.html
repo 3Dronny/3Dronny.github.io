@@ -55,11 +55,6 @@
         .nav-link:hover::after {
             width: 100%;
         }
-
-        /* Zorgt voor permanente onderstreping bij de actieve link */
-        .active-link::after {
-            width: 100% !important; 
-        }
         
         .btn-primary {
             background: var(--accent-color);
@@ -166,12 +161,13 @@
 <body class="text-gray-200 min-h-screen">
     <div class="relative z-10">
         
-        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
+        <!-- Navigation - 100% IDENTIEK AAN HOOFDPAGINA -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center gap-3">
-                            <a href="index.html" class="flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded">
                                 <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
                                     <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
                                     <g transform="translate(60, 60) scale(0.8)">
@@ -189,6 +185,7 @@
                                     <g transform="translate(160, 125)">
                                         <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
                                         <circle cx="0" cy="20" r="3" fill="#10b981"/>
+
                                     </g>
                                 </svg>
                                 <span class="text-xl font-bold text-white">3DRonny</span>
@@ -196,25 +193,22 @@
                         </div>
                     </div>
                     <div class="hidden md:block">
-                        <div class="flex items-baseline space-x-[2.75rem]"> 
-                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium">Home</a>
-                            
-                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium">Gallerij</a>
-                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium">Projecten</a>
-                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium">Materialen</a>
-                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium">Qidi X-Max 3</a>
-                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
                                 <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
                             </a>
-                            
-                            <a href="contact.html" class="nav-link active-link text-emerald-400 font-medium">
-                                Contact
-                            </a>
+                            <a href="contact.html" class="nav-link text-emerald-400 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
+
         <main>
             <section class="py-16 px-4">
                 <div class="max-w-7xl mx-auto text-center">
