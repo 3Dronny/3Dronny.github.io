@@ -4,11 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
-    <!-- SEO Meta Tags -->
     <meta name="description" content="Neem contact op met 3DRonny - 3D print expert in Nederland. Vraag offerte aan, advies voor je project, custom prints, prototyping, CAD ontwerp">
     <meta name="keywords" content="contact 3D print, offerte aanvragen, prijsopgave, project bespreking, 3D print advies, custom print aanvraag">
     
-    <!-- Open Graph voor Contact -->
     <meta property="og:title" content="3DRonny - Contact | 3D Print Offerte & Advies">
     <meta property="og:description" content="Vraag offerte aan voor je 3D print project. Advies voor prototypes, functionele prints en custom ontwerpen in Nederland">
     <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
@@ -17,7 +15,6 @@
     <meta property="og:site_name" content="3DRonny">
     <meta property="og:locale" content="nl_NL">
 
-    <!-- Preconnect voor betere performance -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
@@ -57,6 +54,11 @@
         
         .nav-link:hover::after {
             width: 100%;
+        }
+
+        /* NIEUWE REGEL: Zorgt voor permanente onderstreping bij de actieve link */
+        .active-link::after {
+            width: 100% !important; 
         }
         
         .btn-primary {
@@ -163,7 +165,6 @@
 </head>
 <body class="text-gray-200 min-h-screen">
     <div class="relative z-10">
-        <!-- Navigation -->
         <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -194,25 +195,23 @@
                         </div>
                     </div>
                     <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-8">
+                        <div class="ml-10 flex items-baseline space-x-12"> 
                             <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium">Home</a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium">Gallerij</a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium">Materialen</a>
                             <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium">Qidi X-Max 3</a>
-							<a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium">
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium">
                                 <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
                             </a>
-                            <a href="contact.html" class="nav-link text-emerald-400 font-medium">Contact</a>
+                            <a href="contact.html" class="nav-link active-link text-emerald-400 font-medium">Contact</a>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <main>
-            <!-- Hero Section -->
             <section class="py-16 px-4">
                 <div class="max-w-7xl mx-auto text-center">
                     <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
@@ -224,11 +223,9 @@
                 </div>
             </section>
 
-            <!-- Contact Section -->
             <section class="py-8 px-4">
                 <div class="max-w-4xl mx-auto">
                     <div class="grid lg:grid-cols-2 gap-12">
-                        <!-- Contact Information -->
                         <div class="card p-8">
                             <h2 class="text-3xl font-bold text-white mb-6">Direct Contact</h2>
                             <p class="text-gray-300 mb-8">
@@ -236,9 +233,8 @@
                             </p>
                             
                             <div class="space-y-6">
-                                <!-- E-mail -->
                                 <a href="mailto:3Dronny@gmail.com?subject=3D%20Print%20Offerte%20Aanvraag&body=Beste%20Ronny,%0A%0AIk%20ben%20geïnteresseerd%20in%20een%203D%20print%20project.%20Kun%20je%20me%20meer%20informatie%20sturen?" 
-                                   class="contact-info-item block">
+                                    class="contact-info-item block">
                                     <div class="contact-icon">
                                         <i class="fas fa-envelope text-white"></i>
                                     </div>
@@ -248,7 +244,6 @@
                                     </div>
                                 </a>
                                 
-                                <!-- Reactie tijd -->
                                 <div class="contact-info-item">
                                     <div class="contact-icon">
                                         <i class="fas fa-clock text-white"></i>
@@ -259,7 +254,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Servicegebied -->
                                 <div class="contact-info-item">
                                     <div class="contact-icon">
                                         <i class="fas fa-map-marker-alt text-white"></i>
@@ -271,17 +265,15 @@
                                 </div>
                             </div>
                             
-                            <!-- Directe actie knop -->
                             <div class="mt-8">
                                 <a href="mailto:3Dronny@gmail.com?subject=3D%20Print%20Offerte%20Aanvraag&body=Beste%20Ronny,%0A%0AIk%20ben%20geïnteresseerd%20in%20een%203D%20print%20project.%20Kun%20je%20me%20meer%20informatie%20sturen?" 
-                                   class="btn-primary w-full justify-center">
+                                    class="btn-primary w-full justify-center">
                                     <i class="fas fa-paper-plane"></i>
                                     Stuur Direct E-mail
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Project Info -->
                         <div class="card p-8">
                             <h2 class="text-3xl font-bold text-white mb-6">Project Informatie</h2>
                             <p class="text-gray-300 mb-6">
@@ -326,7 +318,6 @@
                 </div>
             </section>
 
-            <!-- CTA Section -->
             <section class="py-16 px-4 cta-section">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
@@ -343,7 +334,6 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="bg-gray-900 border-t border-gray-800 py-12">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid md:grid-cols-4 gap-8">
@@ -380,9 +370,9 @@
                             <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Home</a></li>
                             <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors">Gallerij</a></li>
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
-							<li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">Materialen</a></li>
-							<li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors">Qidi X-Max 3</a></li>
-							<li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors">Geschiedenis</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors">Geschiedenis</a></li>
                             <li><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contact</a></li>
                         </ul>
                     </div>
