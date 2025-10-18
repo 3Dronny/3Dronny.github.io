@@ -1,336 +1,502 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacybeleid - 3DRonny</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <!-- 3D Printing Meta Tags - Geoptimaliseerd -->
+    <meta name="description" content="Privacybeleid van 3DRonny - Hoe wij omgaan met uw gegevens en privacy bij onze 3D print services.">
+    <meta name="keywords" content="privacy, 3D printen, gegevensbescherming, privacybeleid, 3D print service, belgie">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Privacybeleid - 3DRonny Hobby 3D Print Services">
+    <meta property="og:description" content="Privacybeleid van 3DRonny - Hoe wij omgaan met uw gegevens en privacy bij onze 3D print services.">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+    <meta property="og:url" content="https://3dronny.github.io/privacy.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="3DRonny">
+    <meta property="og:locale" content="nl_NL">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacybeleid - 3DRonny Hobby 3D Print Services">
+    <meta name="twitter:description" content="Privacybeleid van 3DRonny - Hoe wij omgaan met uw gegevens en privacy.">
+    <meta name="twitter:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+
+    <!-- Additional Meta Tags -->
+    <meta name="author" content="Ronny - Hobbyist 3D Print">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="NL">
+
+    <!-- Preconnect voor betere performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <title>Privacybeleid - 3DRonny Hobby 3D Print Services</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Structured Data voor SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Privacybeleid - 3DRonny",
+      "description": "Privacybeleid van 3DRonny - Hoe wij omgaan met uw gegevens en privacy",
+      "url": "https://3dronny.github.io/privacy.html"
+    }
+    </script>
+    
     <style>
-        /* Algemene stijlen */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --accent-color: #10b981;
+            --accent-hover: #059669;
         }
         
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #1f2937;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+        
+        .hero-section {
+            position: relative;
+            padding-top: max(5rem, env(safe-area-inset-top, 5rem));
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .material-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .print-element {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 2rem;
+            z-index: 0;
+        }
+        
+        /* Focus styles voor accessibility */
+        a:focus, button:focus {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Print styles voor betere afdrukken */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .card {
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+        
+        /* Privacy-specifieke stijlen */
+        .privacy-section {
+            margin-bottom: 2rem;
+        }
+        
+        .privacy-section h3 {
+            color: #10b981;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .privacy-section p {
+            margin-bottom: 1rem;
             line-height: 1.6;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .privacy-section ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
         }
         
-        /* Navigatie */
-        nav {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #007bff;
-        }
-        
-        /* Hoofdinhoud */
-        .main-content {
-            padding: 60px 0;
-            background-color: #fff;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        h1 {
-            font-size: 36px;
-            margin-bottom: 30px;
-            color: #222;
-            text-align: center;
-        }
-        
-        h2 {
-            font-size: 24px;
-            margin: 30px 0 15px;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        
-        h3 {
-            font-size: 20px;
-            margin: 20px 0 10px;
-            color: #444;
-        }
-        
-        p {
-            margin-bottom: 15px;
-        }
-        
-        ul, ol {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-        
-        li {
-            margin-bottom: 8px;
-        }
-        
-        .section {
-            margin-bottom: 40px;
+        .privacy-section li {
+            margin-bottom: 0.5rem;
         }
         
         .last-updated {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 300px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #ccc;
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: #fff;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            margin-top: 20px;
-            color: #999;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-            }
-            
-            .nav-links {
-                margin-top: 15px;
-            }
-            
-            .nav-links li {
-                margin: 0 15px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
-            
-            .footer-section {
-                min-width: 100%;
-            }
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
         }
     </style>
 </head>
-<body>
-    <!-- Navigatie -->
-    <nav>
-        <div class="container nav-container">
-            <a href="https://3dronny.github.io/index.html" class="logo">3DRonny</a>
-            <ul class="nav-links">
-                <li><a href="https://3dronny.github.io/index.html">Home</a></li>
-                <li><a href="https://3dronny.github.io/index.html#services">Diensten</a></li>
-                <li><a href="https://3dronny.github.io/index.html#portfolio">Portfolio</a></li>
-                <li><a href="https://3dronny.github.io/index.html#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<body class="text-gray-200 min-h-screen relative overflow-x-hidden">
+    <!-- 3D Print Decoratie Elementen -->
+    <div class="print-element" style="top: 10%; left: 5%;">⎙</div>
+    <div class="print-element" style="top: 20%; right: 10%;">⧉</div>
+    <div class="print-element" style="bottom: 30%; left: 15%;">◷</div>
+    <div class="print-element" style="bottom: 20%; right: 5%;">◰</div>
+    <div class="print-element" style="top: 50%; left: 8%;">◫</div>
 
-    <!-- Hoofdinhoud -->
-    <div class="container">
-        <div class="main-content">
-            <h1>Privacybeleid</h1>
-            <p class="last-updated">Laatst bijgewerkt: 1 januari 2023</p>
-            
-            <div class="section">
-                <h2>Inleiding</h2>
-                <p>Bij 3DRonny hechten we veel waarde aan uw privacy. Dit privacybeleid legt uit hoe we omgaan met uw persoonlijke gegevens wanneer u onze website bezoekt en onze diensten gebruikt.</p>
+    <div class="relative z-10">
+        <!-- Navigation - Zelfde als indexpagina -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded">
+                                <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
+                                    <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                    <g transform="translate(60, 60) scale(0.8)">
+                                        <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                        <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    </g>
+                                    <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                    <g transform="translate(160, 125)">
+                                        <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                        <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                    </g>
+                                </svg>
+                                <span class="text-xl font-bold text-white">3DRonny</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            </a>
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="section">
-                <h2>Welke gegevens verzamelen we?</h2>
-                <p>We verzamelen alleen persoonlijke gegevens die u vrijwillig verstrekt, zoals:</p>
-                <ul>
-                    <li>Naam en contactgegevens (wanneer u contact met ons opneemt)</li>
-                    <li>E-mailadres (wanneer u zich abonneert op onze nieuwsbrief)</li>
-                    <li>Informatie over uw project (wanneer u een offerte aanvraagt)</li>
-                    <li>Technische gegevens zoals IP-adres, browsertype en bezochte pagina's (via cookies)</li>
-                </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Hero Section -->
+            <section class="relative px-4 hero-section" style="padding-bottom: 3rem;">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center space-y-8">
+                        <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            Privacy & Gegevensbescherming
+                        </div>
+                        <h1 class="hero-title text-5xl lg:text-6xl font-bold text-white leading-tight">
+                            Privacy<span class="text-emerald-400">beleid</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+                            Bij 3DRonny nemen we uw privacy serieus. Lees hier hoe we omgaan met uw persoonlijke gegevens en wat uw rechten zijn.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Content -->
+            <section class="py-16 px-4" aria-labelledby="privacy-titel">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card p-8">
+                        <div class="last-updated">
+                            <p><strong>Laatst bijgewerkt:</strong> Januari 2025</p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h2 id="privacy-titel" class="text-3xl font-bold text-white mb-6">Privacybeleid 3DRonny</h2>
+                            <p>
+                                Bij 3DRonny, bereikbaar via <a href="mailto:3Dronny@gmail.com" class="text-emerald-400 hover:text-emerald-300">3Dronny@gmail.com</a>, hechten we veel waarde aan de bescherming van uw persoonsgegevens. In dit privacybeleid leggen we uit welke gegevens we verzamelen en waarvoor we deze gebruiken. We adviseren u dit zorgvuldig te lezen.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Welke gegevens verzamelen we?</h3>
+                            <p>Wij verzamelen de volgende gegevens:</p>
+                            <ul>
+                                <li>Naam en contactgegevens (e-mailadres, telefoonnummer)</li>
+                                <li>Informatie over uw 3D print project (bestanden, specificaties, wensen)</li>
+                                <li>Communicatiegeschiedenis (e-mails, berichten)</li>
+                                <li>Technische gegevens (IP-adres, browsertype)</li>
+                            </ul>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Waarom verzamelen we uw gegevens?</h3>
+                            <p>3DRonny verzamelt uw gegevens voor de volgende doeleinden:</p>
+                            <ul>
+                                <li>Uitvoeren van onze diensten (3D printen, ontwerp, advies)</li>
+                                <li>Communicatie over uw projecten</li>
+                                <li>Facturering en administratie</li>
+                                <li>Verbeteren van onze dienstverlening</li>
+                                <li>Voldoen aan wettelijke verplichtingen</li>
+                            </ul>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>3D Model Bestanden</h3>
+                            <p>
+                                Uw 3D model bestanden worden uitsluitend gebruikt voor het uitvoeren van de gevraagde printopdracht. 
+                                Wij behandelen deze bestanden vertrouwelijk en verwijderen ze na voltooiing van de opdracht, tenzij u 
+                                uitdrukkelijk toestemming geeft voor archivering voor toekomstige prints.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Bewaartermijnen</h3>
+                            <p>
+                                Wij bewaren uw gegevens niet langer dan strikt nodig is om de doelen te realiseren waarvoor uw gegevens worden verzameld. 
+                                Factuurgegevens bewaren we in overeenstemming met de fiscale bewaarplicht (7 jaar).
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Delen met derden</h3>
+                            <p>
+                                3DRonny verkoopt uw gegevens niet aan derden en verstrekt deze uitsluitend aan derden indien dit nodig is 
+                                voor de uitvoering van onze overeenkomst met u of om te voldoen aan een wettelijke verplichting.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Cookies</h3>
+                            <p>
+                                Onze website gebruikt alleen functionele en analytische cookies. Deze cookies zijn noodzakelijk voor de 
+                                technische werking van de website en uw gebruiksgemak. Ze zorgen ervoor dat de website naar behoren werkt.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Uw rechten</h3>
+                            <p>U heeft het recht om:</p>
+                            <ul>
+                                <li>Inzage te vragen in uw persoonsgegevens</li>
+                                <li>Uw persoonsgegevens te laten corrigeren</li>
+                                <li>Uw persoonsgegevens te laten verwijderen</li>
+                                <li>Bezwaar te maken tegen de verwerking van uw gegevens</li>
+                                <li>Gegevensoverdraagbaarheid te vragen</li>
+                            </ul>
+                            <p class="mt-4">
+                                U kunt een verzoek tot inzage, correctie, verwijdering, gegevensoverdraging van uw persoonsgegevens 
+                                of verzoek tot intrekking van uw toestemming of bezwaar op de verwerking van uw persoonsgegevens 
+                                sturen naar <a href="mailto:3Dronny@gmail.com" class="text-emerald-400 hover:text-emerald-300">3Dronny@gmail.com</a>.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Beveiliging</h3>
+                            <p>
+                                3DRonny neemt de bescherming van uw gegevens serieus en neemt passende maatregelen om misbruik, 
+                                verlies, onbevoegde toegang, ongewenste openbaarmaking en ongeoorloofde wijziging tegen te gaan.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Wijzigingen</h3>
+                            <p>
+                                3DRonny behoudt zich het recht voor om wijzigingen aan te brengen in dit privacybeleid. 
+                                Het verdient aanbeveling om deze privacyverklaring regelmatig te raadplegen, zodat u van deze wijzigingen op de hoogte bent.
+                            </p>
+                        </div>
+
+                        <div class="privacy-section">
+                            <h3>Toestemming</h3>
+                            <p>
+                                Door gebruik te maken van onze diensten gaat u akkoord met dit privacybeleid. 
+                                Als u vragen heeft over hoe 3DRonny met uw gegevens omgaat, neem dan contact met ons op.
+                            </p>
+                        </div>
+
+                        <div class="mt-8 p-6 bg-gray-800/50 rounded-lg">
+                            <h3 class="text-xl font-semibold text-white mb-4">Contactgegevens</h3>
+                            <p class="mb-2"><strong>3DRonny</strong></p>
+                            <p class="mb-2">E-mail: <a href="mailto:3Dronny@gmail.com" class="text-emerald-400 hover:text-emerald-300">3Dronny@gmail.com</a></p>
+                            <p>Website: <a href="https://3dronny.github.io" class="text-emerald-400 hover:text-emerald-300">https://3dronny.github.io</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="py-16 px-4" aria-labelledby="cta-titel">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="card p-12">
+                        <h2 id="cta-titel" class="text-4xl font-bold text-white mb-6">Vragen over privacy?</h2>
+                        <p class="text-xl text-gray-300 mb-8">
+                            Heeft u vragen over ons privacybeleid of hoe we met uw gegevens omgaan? 
+                            Neem gerust contact met ons op.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="contact.html" class="btn-primary no-underline">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                                Neem Contact Op
+                            </a>
+                            <a href="index.html" class="btn-outline no-underline">
+                                <i class="fas fa-home" aria-hidden="true"></i>
+                                Terug naar Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer - Zelfde als indexpagina -->
+        <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="footer-grid grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
+                                <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                <g transform="translate(60, 60) scale(0.8)">
+                                    <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                </g>
+                                <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                <g transform="translate(160, 125)">
+                                    <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                    <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                </g>
+                            </svg>
+                            <span class="text-xl font-bold text-white">3DRonny</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis 3D printen</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Services</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Advies & Consult</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Contact</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contactformulier</a></li>
+                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="privacy.html" class="text-emerald-400 font-medium">Privacy</a>
+                            <a href="voorwaarden.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Voorwaarden</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="section">
-                <h2>Hoe gebruiken we uw gegevens?</h2>
-                <p>We gebruiken uw gegevens voor de volgende doeleinden:</p>
-                <ul>
-                    <li>Het verlenen van onze 3D-printdiensten</li>
-                    <li>Communicatie over uw projecten</li>
-                    <li>Het verbeteren van onze diensten en website</li>
-                    <li>Het versturen van relevante informatie (alleen met uw toestemming)</li>
-                    <li>Het analyseren van websitegebruik voor optimalisatie</li>
-                </ul>
-            </div>
-            
-            <div class="section">
-                <h2>Gegevensbescherming</h2>
-                <p>We nemen passende beveiligingsmaatregelen om misbruik van en ongeautoriseerde toegang tot uw persoonlijke gegevens te voorkomen. Uw gegevens worden opgeslagen op beveiligde servers en alleen toegankelijk voor geautoriseerd personeel.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Cookies</h2>
-                <p>Onze website gebruikt cookies om uw gebruikerservaring te verbeteren. Cookies zijn kleine tekstbestanden die op uw apparaat worden opgeslagen. We gebruiken cookies voor:</p>
-                <ul>
-                    <li>Het functioneren van essentiële websitefuncties</li>
-                    <li>Het analyseren van websitebezoek</li>
-                    <li>Het personaliseren van inhoud</li>
-                </ul>
-                <p>U kunt cookies uitschakelen via uw browserinstellingen, maar dit kan de functionaliteit van onze website beperken.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Delen met derden</h2>
-                <p>We verkopen uw gegevens niet aan derden. We delen uw gegevens alleen met derden wanneer dit noodzakelijk is voor de uitvoering van onze diensten of wanneer we hiertoe wettelijk verplicht zijn.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Uw rechten</h2>
-                <p>U heeft de volgende rechten met betrekking tot uw persoonsgegevens:</p>
-                <ul>
-                    <li>Recht op inzage in uw gegevens</li>
-                    <li>Recht op correctie van onjuiste gegevens</li>
-                    <li>Recht op verwijdering van uw gegevens</li>
-                    <li>Recht op beperking van de verwerking</li>
-                    <li>Recht op overdraagbaarheid van gegevens</li>
-                    <li>Recht van bezwaar</li>
-                </ul>
-                <p>Neem voor het uitoefenen van deze rechten contact met ons op via de contactgegevens op onze website.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Bewaartermijn</h2>
-                <p>We bewaren uw gegevens niet langer dan noodzakelijk voor de doeleinden waarvoor ze zijn verzameld, tenzij we wettelijk verplicht zijn ze langer te bewaren.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Wijzigingen in dit privacybeleid</h2>
-                <p>We behouden ons het recht voor om dit privacybeleid te wijzigen. Belangrijke wijzigingen zullen we op onze website communiceren. We raden u aan regelmatig dit privacybeleid te controleren.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Contact</h2>
-                <p>Heeft u vragen over ons privacybeleid? Neem dan contact met ons op via de contactgegevens op onze website.</p>
-            </div>
-            
-            <a href="https://3dronny.github.io/index.html" class="back-link">← Terug naar homepage</a>
-        </div>
+        </footer>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>3DRonny</h3>
-                    <p>Uw partner voor hoogwaardige 3D-print oplossingen. Van prototype tot eindproduct.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Navigatie</h3>
-                    <a href="https://3dronny.github.io/index.html">Home</a>
-                    <a href="https://3dronny.github.io/index.html#services">Diensten</a>
-                    <a href="https://3dronny.github.io/index.html#portfolio">Portfolio</a>
-                    <a href="https://3dronny.github.io/index.html#contact">Contact</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Juridisch</h3>
-                    <a href="file:///C|/Users/ronal/Downloads/privacy.html">Privacybeleid</a>
-                    <a href="file:///C|/Users/ronal/Downloads/voorwaarden.html">Algemene Voorwaarden</a>
-                    <a href="https://3dronny.github.io/index.html#contact">Contact</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 3DRonny. Alle rechten voorbehouden.</p>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
