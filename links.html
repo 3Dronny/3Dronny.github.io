@@ -6,7 +6,7 @@
     
     <!-- 3D Printing Meta Tags - Geoptimaliseerd -->
     <meta name="description" content="3DRonny - Aanbevolen leveranciers voor 3D printers, filament, resin en accessoires. Betrouwbare webshops voor al uw 3D print benodigdheden.">
-    <meta name="keywords" content="3D print filament, 3D printers kopen, filament webshops, 3D print materiaal, resin, 3D printer accessoires, bambu lab, creality, prusa, anycubic">
+    <meta name="keywords" content="3D print filament, 3D printers kopen, filament webshops, 3D print materiaal, resin, 3D printer accessoires, bambu lab, creality, prusa, anycubic, qidi">
     
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Aanbevolen Leveranciers - 3DRonny Hobby 3D Print Services">
@@ -254,6 +254,24 @@
             color: white;
             border-color: var(--accent-color);
         }
+        
+        .speciale-aanbieding {
+            border: 2px solid #f59e0b;
+            position: relative;
+        }
+        
+        .speciale-aanbieding::before {
+            content: '🔥 AANBIEDING';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen relative overflow-x-hidden">
@@ -358,741 +376,285 @@
                             <button class="filter-btn" data-category="belgie">
                                 <i class="fas fa-flag mr-2" aria-hidden="true"></i>België/NL
                             </button>
+                            <button class="filter-btn" data-category="aanbieding">
+                                <i class="fas fa-fire mr-2" aria-hidden="true"></i>Aanbiedingen
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Leveranciers Section -->
-            <section class="py-16 px-4" aria-labelledby="leveranciers-titel">
+            <!-- Qidi Printers Sectie -->
+            <section class="py-16 px-4" aria-labelledby="qidi-titel">
                 <div class="max-w-7xl mx-auto">
-                    <h2 id="leveranciers-titel" class="sr-only">Aanbevolen Leveranciers</h2>
-                    
-                    <!-- Filament Leveranciers -->
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-                            <i class="fas fa-spool text-emerald-400" aria-hidden="true"></i>
-                            Filament Webshops
-                        </h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- 3DJake -->
-                            <div class="card p-6 leverancier-card" data-categories="filament belgie accessoires">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-white">3DJake</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">3DJake Europa</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Filament</span>
-                                    <span class="categorie-badge">Printers</span>
-                                    <span class="categorie-badge">Accessoires</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Een van de grootste 3D print webshops in Europa. Uitgebreid assortiment filament, 
-                                    printers en accessoires. Snelle levering in België.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star-half-alt" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.5/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Snel leveren</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">2-3 dagen</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">€4.95</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.3djake.nl" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Amazon -->
-                            <div class="card p-6 leverancier-card" data-categories="filament printers resin accessories">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-orange-400">Amazon</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Amazon DE/NL</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Alles</span>
-                                    <span class="categorie-badge">Prime</span>
-                                    <span class="categorie-badge">Snel</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Uitgebreid assortiment van alle merken. Vaak de beste prijzen en snelle Prime levering. 
-                                    Let op kwaliteitsverschillen tussen verkopers.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.8/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Prime</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">1-2 dagen</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">Gratis (Prime)</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.amazon.de" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- FormFutura -->
-                            <div class="card p-6 leverancier-card" data-categories="filament">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-blue-400">FormFutura</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">FormFutura</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Premium</span>
-                                    <span class="categorie-badge">Kwaliteit</span>
-                                    <span class="categorie-badge">Specialiteiten</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Nederlandse producent van hoogwaardige filamenten. Specialiteiten zoals 
-                                    TitanX, ApolloX en EasyFil. Uitstekende kwaliteit en consistentie.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">5.0/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Premium</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">2-4 dagen</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">€6.95</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.formfutura.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Printer Merken -->
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-                            <i class="fas fa-print text-emerald-400" aria-hidden="true"></i>
-                            Printer Merken & Dealers
-                        </h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- Bambu Lab -->
-                            <div class="card p-6 leverancier-card" data-categories="printers filament accessories">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-green-400">Bambu Lab</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Bambu Lab Official</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">CoreXY</span>
-                                    <span class="categorie-badge">Multi-color</span>
-                                    <span class="categorie-badge">Snel</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Revolutionaire printers met AMS systeem voor multi-color printing. 
-                                    Uitstekende printkwaliteit en snelheid. Officiële webshop voor garantie.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.9/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Innovatief</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">1-3 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Garantie:</span>
-                                        <span class="text-emerald-400">1 jaar</span>
-                                    </div>
-                                </div>
-                                <a href="https://eu.store.bambulab.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Creality -->
-                            <div class="card p-6 leverancier-card" data-categories="printers filament resin">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-red-400">Creality</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Creality Official</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Budget</span>
-                                    <span class="categorie-badge">FDM</span>
-                                    <span class="categorie-badge">Resin</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Wereldwijd bekend om betaalbare en betrouwbare printers. 
-                                    Uitgebreid assortiment van Ender series tot professionele modellen. 
-                                    Goede prijs/kwaliteit verhouding.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star-half-alt" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.3/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Budget</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">2-4 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Garantie:</span>
-                                        <span class="text-emerald-400">1 jaar</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.creality.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Prusa -->
-                            <div class="card p-6 leverancier-card" data-categories="printers filament">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-orange-400">Prusa</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Prusa Research</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Kwaliteit</span>
-                                    <span class="categorie-badge">Betrouwbaar</span>
-                                    <span class="categorie-badge">Open Source</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Tsjechische fabrikant bekend om betrouwbare printers en uitstekende 
-                                    klantenondersteuning. Original Prusa i3 MK4 en Prusa XL zijn topmodellen.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.9/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Top kwaliteit</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">3-6 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Garantie:</span>
-                                        <span class="text-emerald-400">1 jaar</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.prusa3d.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Resin & Specialiteiten -->
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-                            <i class="fas fa-vial text-emerald-400" aria-hidden="true"></i>
-                            Resin & Specialiteiten
-                        </h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- Anycubic -->
-                            <div class="card p-6 leverancier-card" data-categories="resin printers">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-purple-400">Anycubic</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Anycubic</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Resin</span>
-                                    <span class="categorie-badge">SLA</span>
-                                    <span class="categorie-badge">DLP</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Specialist in resin printers en materialen. Photon series is zeer populair 
-                                    voor gedetailleerde prints. Goede prijs/kwaliteit voor resin printing.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.7/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Resin expert</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">2-3 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Garantie:</span>
-                                        <span class="text-emerald-400">1 jaar</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.anycubic.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Siraya Tech -->
-                            <div class="card p-6 leverancier-card" data-categories="resin">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-blue-300">Siraya Tech</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Siraya Tech</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Engineering</span>
-                                    <span class="categorie-badge">Specialiteiten</span>
-                                    <span class="categorie-badge">Kwaliteit</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Gespecialiseerd in engineering resins met verbeterde mechanische eigenschappen. 
-                                    Blu, Tenacious en Build series zijn zeer gewaardeerd in de community.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">5.0/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Engineering</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">3-5 dagen</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Beschikbaar:</span>
-                                        <span class="text-emerald-400">Meerdere shops</span>
-                                    </div>
-                                </div>
-                                <a href="https://siraya.tech" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- MatterHackers -->
-                            <div class="card p-6 leverancier-card" data-categories="filament resin accessories">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-cyan-400">MatterHackers</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">MatterHackers</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">USA Import</span>
-                                    <span class="categorie-badge">Exclusief</span>
-                                    <span class="categorie-badge">Kwaliteit</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Amerikaanse webshop met exclusieve materialen zoals PRO Series filament. 
-                                    Hoge kwaliteit materialen die moeilijk elders te vinden zijn.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.9/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Exclusief</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">1-2 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">€15+</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.matterhackers.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Accessoires & Tools -->
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
-                            <i class="fas fa-tools text-emerald-400" aria-hidden="true"></i>
-                            Accessoires & Tools
-                        </h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- Aliexpress -->
-                            <div class="card p-6 leverancier-card" data-categories="accessories">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-orange-500">Aliexpress</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Aliexpress</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Goedkoop</span>
-                                    <span class="categorie-badge">Onderdelen</span>
-                                    <span class="categorie-badge">Tools</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Voor goedkope accessoires, vervangende onderdelen en tools. 
-                                    Let op langere levertijden en kwaliteitsverschillen tussen verkopers.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star-half-alt" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.2/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Budget</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">2-6 weken</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">Vaak gratis</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.aliexpress.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Fabory -->
-                            <div class="card p-6 leverancier-card" data-categories="accessories belgie">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-yellow-400">Fabory</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Fabory</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Hardware</span>
-                                    <span class="categorie-badge">Bouten</span>
-                                    <span class="categorie-badge">Moeren</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Specialist in bevestigingsmaterialen. Uitstekend voor bouten, moeren, 
-                                    ringen en andere hardware voor 3D print projecten.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.8/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Hardware</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">1-2 dagen</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">€6.95</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.fabory.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-
-                            <!-- Toolstation -->
-                            <div class="card p-6 leverancier-card" data-categories="accessories belgie">
-                                <div class="leverancier-logo">
-                                    <div class="w-full text-center font-bold text-xl text-blue-500">Toolstation</div>
-                                </div>
-                                <h4 class="font-semibold text-white text-lg mb-2">Toolstation</h4>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="categorie-badge">Tools</span>
-                                    <span class="categorie-badge">Lokale winkel</span>
-                                    <span class="categorie-badge">Hardware</span>
-                                </div>
-                                <p class="text-gray-300 text-sm mb-4 flex-grow">
-                                    Grote keten met fysieke winkels in België. Perfect voor tools, 
-                                    afwerkingsmaterialen en hardware. Ook online bestellen mogelijk.
-                                </p>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="rating-stars">
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                        <span class="text-gray-400 text-sm ml-1">4.7/5</span>
-                                    </div>
-                                    <span class="voordeel-badge">Lokaal</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Levertijd:</span>
-                                        <span class="text-emerald-400">Direct (winkel)</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-400">Verzendkosten:</span>
-                                        <span class="text-emerald-400">€4.95</span>
-                                    </div>
-                                </div>
-                                <a href="https://www.toolstation.nl" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                                    Bezoek Website
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Tips Section -->
-            <section class="py-16 px-4" aria-labelledby="tips-titel">
-                <div class="max-w-4xl mx-auto">
-                    <div class="card p-8">
-                        <h2 id="tips-titel" class="text-3xl font-bold text-white mb-6">Tips voor het Kopen</h2>
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div>
-                                <h3 class="text-xl font-semibold text-emerald-400 mb-4">Algemene Tips</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Vergelijk altijd prijzen tussen verschillende webshops</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Lees reviews van andere gebruikers</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Check verzendkosten en levertijden</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Let op garantievoorwaarden bij printers</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-emerald-400 mb-4">Filament Tips</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Koop eerst kleine hoeveelheden om te testen</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Bewaar filament droog en beschermd tegen licht</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Let op productiedatum voor optimale kwaliteit</span>
-                                    </li>
-                                    <li class="flex items-start gap-2">
-                                        <i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i>
-                                        <span>Kies materiaal geschikt voor jouw toepassing</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA Section -->
-            <section class="py-16 px-4" aria-labelledby="cta-titel">
-                <div class="max-w-4xl mx-auto text-center">
-                    <div class="card p-12">
-                        <h2 id="cta-titel" class="text-4xl font-bold text-white mb-6">Meer Vragen?</h2>
-                        <p class="text-xl text-gray-300 mb-8">
-                            Heeft u vragen over specifieke materialen of leveranciers? 
-                            Ik help u graag met advies op maat voor uw 3D print projecten.
+                    <div class="text-center mb-12">
+                        <h2 id="qidi-titel" class="text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3">
+                            <i class="fas fa-cube text-emerald-400" aria-hidden="true"></i>
+                            Qidi Printers
+                        </h2>
+                        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                            Professionele 3D printers bekend om hun robuuste bouw, grote bouwvolumes en uitstekende 
+                            ondersteuning voor engineering materialen. Mijn persoonlijke keuze voor betrouwbare prints.
                         </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="contact.html" class="btn-primary no-underline">
-                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                                Vraag Advies
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Qidi X-Max 3 -->
+                        <div class="card p-6 leverancier-card" data-categories="printers">
+                            <div class="leverancier-logo">
+                                <div class="w-full text-center font-bold text-xl text-blue-400">QIDI X-MAX 3</div>
+                            </div>
+                            <h4 class="font-semibold text-white text-lg mb-2">Qidi Tech X-Max 3</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="categorie-badge">Large Volume</span>
+                                <span class="categorie-badge">Engineering</span>
+                                <span class="categorie-badge">CoreXY</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-4 flex-grow">
+                                Mijn huidige werkpaard! Groot bouwvolume (325×325×325mm), dubbele extruder, 
+                                verwarmde kamer tot 90°C. Perfect voor ABS, Nylon, PC en andere engineering materialen.
+                            </p>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <span class="text-gray-400 text-sm ml-1">5.0/5</span>
+                                </div>
+                                <span class="voordeel-badge">Aanrader!</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Bouwvolume:</span>
+                                    <span class="text-emerald-400">325³ mm</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Materialen:</span>
+                                    <span class="text-emerald-400">ABS, PC, Nylon</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Prijs:</span>
+                                    <span class="text-emerald-400">€1.399</span>
+                                </div>
+                            </div>
+                            <a href="qidi-x-max3.html" class="btn-primary no-underline w-full justify-center mt-4">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                Bekijk Review
                             </a>
-                            <a href="materialen.html" class="btn-outline no-underline">
-                                <i class="fas fa-layer-group" aria-hidden="true"></i>
-                                Bekijk Materialen
+                        </div>
+
+                        <!-- Qidi X-Plus 3 -->
+                        <div class="card p-6 leverancier-card" data-categories="printers">
+                            <div class="leverancier-logo">
+                                <div class="w-full text-center font-bold text-xl text-green-400">QIDI X-PLUS 3</div>
+                            </div>
+                            <h4 class="font-semibold text-white text-lg mb-2">Qidi Tech X-Plus 3</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="categorie-badge">All-round</span>
+                                <span class="categorie-badge">Compact</span>
+                                <span class="categorie-badge">Stil</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-4 flex-grow">
+                                Compacte versie van de X-Max 3 metzelfde functies. Bouwvolume 270×270×270mm, 
+                                perfect voor thuisgebruik. Zeer stil en energiezuinig.
+                            </p>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+                                    <span class="text-gray-400 text-sm ml-1">4.7/5</span>
+                                </div>
+                                <span class="voordeel-badge">Compact</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Bouwvolume:</span>
+                                    <span class="text-emerald-400">270³ mm</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Materialen:</span>
+                                    <span class="text-emerald-400">ABS, PETG, PLA</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Prijs:</span>
+                                    <span class="text-emerald-400">€999</span>
+                                </div>
+                            </div>
+                            <a href="https://www.qd3dprinter.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                Officiële Website
+                            </a>
+                        </div>
+
+                        <!-- Qidi Official Store -->
+                        <div class="card p-6 leverancier-card speciale-aanbieding" data-categories="printers aanbieding">
+                            <div class="leverancier-logo">
+                                <div class="w-full text-center font-bold text-xl text-red-400">QIDI STORE</div>
+                            </div>
+                            <h4 class="font-semibold text-white text-lg mb-2">Qidi Official Store</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="categorie-badge">Officieel</span>
+                                <span class="categorie-badge">Garantie</span>
+                                <span class="categorie-badge">Support</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-4 flex-grow">
+                                Officiële webshop voor de beste prijzen, garantie en ondersteuning. 
+                                Regelmatig aanbiedingen en bundels met filament.
+                            </p>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <span class="text-gray-400 text-sm ml-1">4.9/5</span>
+                                </div>
+                                <span class="voordeel-badge">Officieel</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Levertijd:</span>
+                                    <span class="text-emerald-400">1-2 weken</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Garantie:</span>
+                                    <span class="text-emerald-400">1-2 jaar</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Actie:</span>
+                                    <span class="text-amber-400 font-bold">Gratis filament</span>
+                                </div>
+                            </div>
+                            <a href="https://www.qidi3d.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                Bezoek Website
                             </a>
                         </div>
                     </div>
                 </div>
             </section>
-        </main>
 
-        <!-- Footer - Zelfde als indexpagina -->
-        <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="footer-grid grid md:grid-cols-4 gap-8">
-                    <div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
-                                <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
-                                <g transform="translate(60, 60) scale(0.8)">
-                                    <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
-                                    <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
-                                    <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
-                                    <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
-                                    <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
-                                    <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
-                                    <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
-                                    <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
-                                    <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
-                                </g>
-                                <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
-                                <g transform="translate(160, 125)">
-                                    <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
-                                    <circle cx="0" cy="20" r="3" fill="#10b981"/>
-                                </g>
-                            </svg>
-                            <span class="text-xl font-bold text-white">3DRonny</span>
+            <!-- Uitgebreide Filament Sectie -->
+            <section class="py-16 px-4" aria-labelledby="uitgebreid-filament-titel">
+                <div class="max-w-7xl mx-auto">
+                    <h2 id="uitgebreid-filament-titel" class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                        <i class="fas fa-spool text-emerald-400" aria-hidden="true"></i>
+                        Uitgebreide Filament Selectie
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        <!-- Standaard Materialen -->
+                        <div class="card p-6 text-center">
+                            <i class="fas fa-cube text-3xl text-blue-400 mb-3" aria-hidden="true"></i>
+                            <h4 class="font-semibold text-white mb-2">PLA</h4>
+                            <p class="text-gray-300 text-sm">Makkelijk printen, veel kleuren</p>
+                            <div class="mt-2">
+                                <span class="voordeel-badge">Beginners</span>
+                            </div>
                         </div>
-                        <p class="text-gray-400 text-sm">
-                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
-                        <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
-                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
-                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
-                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
-                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis 3D printen</a></li>
-                            <li><a href="leveranciers.html" class="text-emerald-400 font-medium">Leveranciers</a></li>
-                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-4">Services</h3>
-                        <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
-                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Advies & Consult</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-4">Contact</h3>
-                        <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
-                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contactformulier</a></li>
-                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-                    <div class="flex flex-col md:flex-row justify-between items-center">
-                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
-                        <div class="flex gap-6 mt-4 md:mt-0">
-                            <a href="privacy.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Privacy</a>
-                            <a href="voorwaarden.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Voorwaarden</a>
+                        
+                        <div class="card p-6 text-center">
+                            <i class="fas fa-shield-alt text-3xl text-green-400 mb-3" aria-hidden="true"></i>
+                            <h4 class="font-semibold text-white mb-2">PETG</h4>
+                            <p class="text-gray-300 text-sm">Sterk, taai, weersbestendig</p>
+                            <div class="mt-2">
+                                <span class="voordeel-badge">Functioneel</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-6 text-center">
+                            <i class="fas fa-tools text-3xl text-orange-400 mb-3" aria-hidden="true"></i>
+                            <h4 class="font-semibold text-white mb-2">ABS</h4>
+                            <p class="text-gray-300 text-sm">Hittebestendig, sterk</p>
+                            <div class="mt-2">
+                                <span class="voordeel-badge">Engineering</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-6 text-center">
+                            <i class="fas fa-bolt text-3xl text-purple-400 mb-3" aria-hidden="true"></i>
+                            <h4 class="font-semibold text-white mb-2">TPU</h4>
+                            <p class="text-gray-300 text-sm">Flexibel, slagvast</p>
+                            <div class="mt-2">
+                                <span class="voordeel-badge">Flexibel</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </footer>
-    </div>
 
-    <script>
-        // Filter functionaliteit
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const leverancierCards = document.querySelectorAll('.leverancier-card');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    const category = this.getAttribute('data-category');
-                    
-                    leverancierCards.forEach(card => {
-                        if (category === 'all') {
-                            card.style.display = 'flex';
-                        } else {
-                            const categories = card.getAttribute('data-categories').split(' ');
-                            if (categories.includes(category)) {
-                                card.style.display = 'flex';
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- AddNorth -->
+                        <div class="card p-6 leverancier-card" data-categories="filament belgie">
+                            <div class="leverancier-logo">
+                                <div class="w-full text-center font-bold text-xl text-cyan-400">AddNorth</div>
+                            </div>
+                            <h4 class="font-semibold text-white text-lg mb-2">AddNorth (Zweden)</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="categorie-badge">Premium</span>
+                                <span class="categorie-badge">Kleuren</span>
+                                <span class="categorie-badge">Consistent</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-4 flex-grow">
+                                Zweedse kwaliteit met prachtige kleuren. Uitstekende consistentie en 
+                                betrouwbaarheid. Mijn favoriet voor projecten waar kleur belangrijk is.
+                            </p>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <span class="text-gray-400 text-sm ml-1">5.0/5</span>
+                                </div>
+                                <span class="voordeel-badge">Kleuren</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Levertijd:</span>
+                                    <span class="text-emerald-400">3-5 dagen</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Prijs range:</span>
+                                    <span class="text-emerald-400">€25-35</span>
+                                </div>
+                            </div>
+                            <a href="https://addnorth.com" target="_blank" rel="noopener noreferrer" class="btn-primary no-underline w-full justify-center mt-4">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                Bezoek Website
+                            </a>
+                        </div>
+
+                        <!-- Fiberlogy -->
+                        <div class="card p-6 leverancier-card" data-categories="filament">
+                            <div class="leverancier-logo">
+                                <div class="w-full text-center font-bold text-xl text-orange-400">Fiberlogy</div>
+                            </div>
+                            <h4 class="font-semibold text-white text-lg mb-2">Fiberlogy (Polen)</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="categorie-badge">Engineering</span>
+                                <span class="categorie-badge">Specialiteiten</span>
+                                <span class="categorie-badge">Kwaliteit</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-4 flex-grow">
+                                Poolse fabrikant met focus op engineering materialen. Uitstekende 
+                                HD-PLA, Nylon en composiet materialen. Zeer consistent.
+                            </p>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+                                    <span class="text-gray-400 text-sm ml-1">4.6/5</span>
+                                </div>
+                                <span class="voordeel-badge">Engineering</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex
