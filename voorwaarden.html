@@ -1,324 +1,604 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algemene Voorwaarden - 3DRonny</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <!-- 3D Printing Meta Tags - Geoptimaliseerd -->
+    <meta name="description" content="Algemene voorwaarden van 3DRonny - Voorwaarden voor onze 3D print services en projecten.">
+    <meta name="keywords" content="voorwaarden, 3D printen, algemene voorwaarden, 3D print service, voorwaarden belgie">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Algemene Voorwaarden - 3DRonny Hobby 3D Print Services">
+    <meta property="og:description" content="Algemene voorwaarden van 3DRonny - Voorwaarden voor onze 3D print services en projecten.">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+    <meta property="og:url" content="https://3dronny.github.io/voorwaarden.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="3DRonny">
+    <meta property="og:locale" content="nl_NL">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Algemene Voorwaarden - 3DRonny Hobby 3D Print Services">
+    <meta name="twitter:description" content="Algemene voorwaarden van 3DRonny - Voorwaarden voor onze 3D print services.">
+    <meta name="twitter:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+
+    <!-- Additional Meta Tags -->
+    <meta name="author" content="Ronny - Hobbyist 3D Print">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="NL">
+
+    <!-- Preconnect voor betere performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <title>Algemene Voorwaarden - 3DRonny Hobby 3D Print Services</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Structured Data voor SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Algemene Voorwaarden - 3DRonny",
+      "description": "Algemene voorwaarden van 3DRonny - Voorwaarden voor onze 3D print services",
+      "url": "https://3dronny.github.io/voorwaarden.html"
+    }
+    </script>
+    
     <style>
-        /* Algemene stijlen */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --accent-color: #10b981;
+            --accent-hover: #059669;
         }
         
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #1f2937;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+        
+        .hero-section {
+            position: relative;
+            padding-top: max(5rem, env(safe-area-inset-top, 5rem));
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .material-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .print-element {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 2rem;
+            z-index: 0;
+        }
+        
+        /* Focus styles voor accessibility */
+        a:focus, button:focus {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Print styles voor betere afdrukken */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .card {
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+        
+        /* Voorwaarden-specifieke stijlen */
+        .voorwaarden-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .voorwaarden-section h3 {
+            color: #10b981;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        
+        .voorwaarden-section h4 {
+            color: #e5e7eb;
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+        
+        .voorwaarden-section p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .voorwaarden-section ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .voorwaarden-section ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .voorwaarden-section li {
+            margin-bottom: 0.5rem;
             line-height: 1.6;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Navigatie */
-        nav {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #007bff;
-        }
-        
-        /* Hoofdinhoud */
-        .main-content {
-            padding: 60px 0;
-            background-color: #fff;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        h1 {
-            font-size: 36px;
-            margin-bottom: 30px;
-            color: #222;
-            text-align: center;
-        }
-        
-        h2 {
-            font-size: 24px;
-            margin: 30px 0 15px;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        
-        h3 {
-            font-size: 20px;
-            margin: 20px 0 10px;
-            color: #444;
-        }
-        
-        p {
-            margin-bottom: 15px;
-        }
-        
-        ul, ol {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-        
-        li {
-            margin-bottom: 8px;
-        }
-        
-        .section {
-            margin-bottom: 40px;
-        }
-        
         .last-updated {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 30px;
-            text-align: center;
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
         }
         
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 300px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #ccc;
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: #fff;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            margin-top: 20px;
-            color: #999;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-            }
-            
-            .nav-links {
-                margin-top: 15px;
-            }
-            
-            .nav-links li {
-                margin: 0 15px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
-            
-            .footer-section {
-                min-width: 100%;
-            }
+        .important-note {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
         }
     </style>
 </head>
-<body>
-    <!-- Navigatie -->
-    <nav>
-        <div class="container nav-container">
-            <a href="https://3dronny.github.io/index.html" class="logo">3DRonny</a>
-            <ul class="nav-links">
-                <li><a href="https://3dronny.github.io/index.html">Home</a></li>
-                <li><a href="https://3dronny.github.io/index.html#services">Diensten</a></li>
-                <li><a href="https://3dronny.github.io/index.html#portfolio">Portfolio</a></li>
-                <li><a href="https://3dronny.github.io/index.html#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<body class="text-gray-200 min-h-screen relative overflow-x-hidden">
+    <!-- 3D Print Decoratie Elementen -->
+    <div class="print-element" style="top: 10%; left: 5%;">⎙</div>
+    <div class="print-element" style="top: 20%; right: 10%;">⧉</div>
+    <div class="print-element" style="bottom: 30%; left: 15%;">◷</div>
+    <div class="print-element" style="bottom: 20%; right: 5%;">◰</div>
+    <div class="print-element" style="top: 50%; left: 8%;">◫</div>
 
-    <!-- Hoofdinhoud -->
-    <div class="container">
-        <div class="main-content">
-            <h1>Algemene Voorwaarden</h1>
-            <p class="last-updated">Laatst bijgewerkt: 1 januari 2023</p>
-            
-            <div class="section">
-                <h2>Artikel 1: Toepasselijkheid</h2>
-                <p>1.1 Deze algemene voorwaarden zijn van toepassing op alle aanbiedingen, offertes en overeenkomsten tussen 3DRonny en een opdrachtgever.</p>
-                <p>1.2 Afwijkingen van deze voorwaarden zijn alleen geldig indien schriftelijk overeengekomen.</p>
+    <div class="relative z-10">
+        <!-- Navigation - Zelfde als indexpagina -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded">
+                                <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
+                                    <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                    <g transform="translate(60, 60) scale(0.8)">
+                                        <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                        <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    </g>
+                                    <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                    <g transform="translate(160, 125)">
+                                        <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                        <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                    </g>
+                                </svg>
+                                <span class="text-xl font-bold text-white">3DRonny</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Home</a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            </a>
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="section">
-                <h2>Artikel 2: Offertes en overeenkomsten</h2>
-                <p>2.1 Alle offertes zijn vrijblijvend, tenzij anders vermeld.</p>
-                <p>2.2 Offertes zijn 30 dagen geldig.</p>
-                <p>2.3 Een overeenkomst komt tot stand door schriftelijke acceptatie van een offerte of door opdrachtbevestiging van 3DRonny.</p>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Hero Section -->
+            <section class="relative px-4 hero-section" style="padding-bottom: 3rem;">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center space-y-8">
+                        <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30">
+                            <i class="fas fa-file-contract" aria-hidden="true"></i>
+                            Juridische Documenten
+                        </div>
+                        <h1 class="hero-title text-5xl lg:text-6xl font-bold text-white leading-tight">
+                            Algemene <span class="text-emerald-400">Voorwaarden</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+                            Lees hier de algemene voorwaarden voor onze 3D print services. Deze voorwaarden zijn van toepassing op alle opdrachten en projecten.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Voorwaarden Content -->
+            <section class="py-16 px-4" aria-labelledby="voorwaarden-titel">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card p-8">
+                        <div class="last-updated">
+                            <p><strong>Laatst bijgewerkt:</strong> Januari 2025</p>
+                            <p class="mt-2 text-sm">Deze voorwaarden zijn van toepassing op alle overeenkomsten tussen 3DRonny en de opdrachtgever.</p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h2 id="voorwaarden-titel" class="text-3xl font-bold text-white mb-6">Algemene Voorwaarden 3DRonny</h2>
+                            <p>
+                                Deze algemene voorwaarden zijn van toepassing op alle offertes, overeenkomsten en opdrachten van 3DRonny, 
+                                een hobby 3D print service gevestigd in België.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>1. Algemene Bepalingen</h3>
+                            <h4>1.1 Toepasselijkheid</h4>
+                            <p>
+                                Deze voorwaarden zijn van toepassing op elke offerte, overeenkomst en opdracht tussen 3DRonny en de opdrachtgever, 
+                                tenzij schriftelijk anders is overeengekomen.
+                            </p>
+                            
+                            <h4>1.2 Definities</h4>
+                            <p>In deze voorwaarden wordt verstaan onder:</p>
+                            <ul>
+                                <li><strong>Opdrachtgever:</strong> De natuurlijke of rechtspersoon die opdracht geeft tot het verrichten van werkzaamheden</li>
+                                <li><strong>3DRonny:</strong> De aanbieder van 3D print services</li>
+                                <li><strong>Overeenkomst:</strong> Elke overeenkomst tussen 3DRonny en opdrachtgever</li>
+                                <li><strong>Werkzaamheden:</strong> 3D printen, ontwerpen, advies en alle daarmee verband houdende diensten</li>
+                            </ul>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>2. Offertes en Opdrachten</h3>
+                            <h4>2.1 Offertes</h4>
+                            <p>
+                                Alle offertes van 3DRonny zijn vrijblijvend, tenzij in de offerte een termijn voor aanvaarding is gesteld. 
+                                Prijzen in offertes zijn exclusief BTW en eventuele andere heffingen.
+                            </p>
+                            
+                            <h4>2.2 Opdrachtbevestiging</h4>
+                            <p>
+                                Een opdracht komt tot stand door schriftelijke bevestiging door 3DRonny of door daadwerkelijke uitvoering 
+                                van de opdracht.
+                            </p>
+                            
+                            <h4>2.3 Specificaties</h4>
+                            <p>
+                                De opdrachtgever is verantwoordelijk voor de juistheid en volledigheid van de verstrekte specificaties, 
+                				tekeningen, modellen en andere gegevens.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>3. Prijzen en Betaling</h3>
+                            <h4>3.1 Prijsbepaling</h4>
+                            <p>
+                                Prijzen worden bepaald op basis van:
+                            </p>
+                            <ul>
+                                <li>Gebruikte materialen (filament)</li>
+                                <li>Printtijd</li>
+                                <li>Complexiteit van het ontwerp</li>
+                                <li>Noodzakelijke nabewerking</li>
+                                <li>Eventuele ontwerpkosten</li>
+                            </ul>
+                            
+                            <h4>3.2 Betaling</h4>
+                            <p>
+                                Tenzij anders overeengekomen, dient betaling te geschieden binnen 14 dagen na factuurdatum. 
+                                Bij betalingen na deze termijn is 3DRonny gerechtigd de wettelijke interest te berekenen.
+                            </p>
+                            
+                            <h4>3.3 Kleine Afwijkingen</h4>
+                            <p>
+                                Kleine afwijkingen in gewicht, afmetingen of kleur ten opzichte van de offerte zijn toegestaan 
+                                en geven geen aanleiding tot prijsaanpassing of ontbinding van de overeenkomst.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>4. Levering en Levertijd</h3>
+                            <h4>4.1 Levertijd</h4>
+                            <p>
+                                Vermelde levertijden zijn bij benadering en niet bindend. Overschrijding van enige levertijd geeft 
+                                de opdrachtgever niet het recht de overeenkomst te ontbinden of schadevergoeding te vorderen.
+                            </p>
+                            
+                            <h4>4.2 Opschorting</h4>
+                            <p>
+                                3DRonny heeft het recht de uitvoering van de overeenkomst op te schorten indien de opdrachtgever 
+                                zijn verplichtingen niet nakomt.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>5. Aansprakelijkheid</h3>
+                            <h4>5.1 Beperking Aansprakelijkheid</h4>
+                            <p>
+                                De aansprakelijkheid van 3DRonny is beperkt tot de bedragen die in het kader van de opdracht 
+                                zijn overeengekomen. 3DRonny is niet aansprakelijk voor indirecte schade.
+                            </p>
+                            
+                            <h4>5.2 Intellectueel Eigendom</h4>
+                            <p>
+                                De opdrachtgever garandeert dat hij bevoegd is de verstrekte modellen en ontwerpen te laten gebruiken 
+                                en dat dit geen inbreuk maakt op intellectuele eigendomsrechten van derden.
+                            </p>
+                            
+                            <h4>5.3 Eigen Risico</h4>
+                            <p>
+                                De opdrachtgever erkent dat 3D geprinte objecten onderhevig kunnen zijn aan bepaalde beperkingen 
+                                en gebruikt deze op eigen risico voor het beoogde doel.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>6. Garantie en Klachten</h3>
+                            <h4>6.1 Garantie</h4>
+                            <p>
+                                3DRonny biedt garantie op fabricagefouten voor een periode van 30 dagen na levering. 
+                                Garantie dekt niet slijtage, verkeerd gebruik of wijzigingen door de opdrachtgever.
+                            </p>
+                            
+                            <h4>6.2 Klachten</h4>
+                            <p>
+                                Klachten over geleverde producten of diensten moeten binnen 7 dagen na levering schriftelijk 
+                                bij 3DRonny worden gemeld. Na deze termijn vervalt elk recht op herstel of vergoeding.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>7. Overmacht</h3>
+                            <p>
+                                Onder overmacht wordt in deze voorwaarden verstaan elke van de wil van 3DRonny onafhankelijke 
+                                omstandigheid die de nakoming van haar verplichtingen geheel of gedeeltelijk verhindert. 
+                                Hieronder vallen onder meer stroomstoringen, materiaaltekorten, machine-uitval en andere 
+                                onvoorziene omstandigheden.
+                            </p>
+                        </div>
+
+                        <div class="voorwaarden-section">
+                            <h3>8. Toepasselijk Recht en Geschillen</h3>
+                            <h4>8.1 Toepasselijk Recht</h4>
+                            <p>
+                                Op alle overeenkomsten is uitsluitend Belgisch recht van toepassing.
+                            </p>
+                            
+                            <h4>8.2 Geschillen</h4>
+                            <p>
+                                Geschillen zullen in eerste aanleg in onderling overleg worden opgelost. 
+                                Indien partijen er niet in slagen in onderling overleg tot een oplossing te komen, 
+                                is de bevoegde rechter in de vestigingsplaats van 3DRonny bevoegd van geschillen kennis te nemen.
+                            </p>
+                        </div>
+
+                        <div class="important-note">
+                            <p><strong>Belangrijke opmerking:</strong> Dit is een hobby-service. Voor kritische toepassingen 
+                            (medisch, veiligheid, automotive, etc.) dient u professionele 3D print services te raadplegen.</p>
+                        </div>
+
+                        <div class="mt-8 p-6 bg-gray-800/50 rounded-lg">
+                            <h3 class="text-xl font-semibold text-white mb-4">Contact & Vragen</h3>
+                            <p class="mb-2">Voor vragen over deze voorwaarden kunt u contact opnemen met:</p>
+                            <p class="mb-2"><strong>3DRonny</strong></p>
+                            <p class="mb-2">E-mail: <a href="mailto:3Dronny@gmail.com" class="text-emerald-400 hover:text-emerald-300">3Dronny@gmail.com</a></p>
+                            <p>Website: <a href="https://3dronny.github.io" class="text-emerald-400 hover:text-emerald-300">https://3dronny.github.io</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="py-16 px-4" aria-labelledby="cta-titel">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="card p-12">
+                        <h2 id="cta-titel" class="text-4xl font-bold text-white mb-6">Vragen over onze voorwaarden?</h2>
+                        <p class="text-xl text-gray-300 mb-8">
+                            Heeft u vragen over onze algemene voorwaarden of wilt u meer informatie over onze services? 
+                            Neem gerust contact met ons op.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="contact.html" class="btn-primary no-underline">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                                Neem Contact Op
+                            </a>
+                            <a href="index.html" class="btn-outline no-underline">
+                                <i class="fas fa-home" aria-hidden="true"></i>
+                                Terug naar Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer - Zelfde als indexpagina -->
+        <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="footer-grid grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
+                                <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                <g transform="translate(60, 60) scale(0.8)">
+                                    <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                </g>
+                                <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                <g transform="translate(160, 125)">
+                                    <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                    <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                </g>
+                            </svg>
+                            <span class="text-xl font-bold text-white">3DRonny</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis 3D printen</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Services</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Advies & Consult</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Contact</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contactformulier</a></li>
+                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="privacy.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Privacy</a>
+                            <a href="voorwaarden.html" class="text-emerald-400 font-medium">Voorwaarden</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="section">
-                <h2>Artikel 3: Prijzen en betaling</h2>
-                <p>3.1 Alle prijzen zijn in euro's en exclusief btw, tenzij anders vermeld.</p>
-                <p>3.2 Betaling dient te geschieden binnen 14 dagen na factuurdatum, tenzij anders overeengekomen.</p>
-                <p>3.3 Bij te late betaling is de opdrachtgever in verzuim en is 3DRonny gerechtigd de wettelijke rente in rekening te brengen.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 4: Levering en levertijden</h2>
-                <p>4.1 Vermelde levertijden zijn bij benadering en niet bindend.</p>
-                <p>4.2 3DRonny is niet aansprakelijk voor vertragingen veroorzaakt door omstandigheden buiten haar macht.</p>
-                <p>4.3 De opdrachtgever is verplicht de geleverde producten tijdig te controleren op gebreken.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 5: Aansprakelijkheid</h2>
-                <p>5.1 3DRonny is niet aansprakelijk voor schade, tenzij sprake is van opzet of grove schuld.</p>
-                <p>5.2 De aansprakelijkheid van 3DRonny is beperkt tot de waarde van de opdracht.</p>
-                <p>5.3 3DRonny is niet aansprakelijk voor schade als gevolg van onjuiste of onvolledige informatie verstrekt door de opdrachtgever.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 6: Intellectueel eigendom</h2>
-                <p>6.1 De opdrachtgever garandeert dat hij het recht heeft om de aangeleverde bestanden te laten printen.</p>
-                <p>6.2 3DRonny behoudt het recht om printopdrachten te weigeren die inbreuk maken op intellectuele eigendomsrechten.</p>
-                <p>6.3 Het intellectueel eigendom van door 3DRonny ontwikkelde ontwerpen blijft bij 3DRonny, tenzij anders overeengekomen.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 7: Garantie en klachten</h2>
-                <p>7.1 3DRonny biedt garantie op fabricagefouten voor een periode van 30 dagen na levering.</p>
-                <p>7.2 Garantie dekt niet schade veroorzaakt door onjuist gebruik, onvoldoende onderhoud of wijzigingen door derden.</p>
-                <p>7.3 Klachten dienen binnen 14 dagen na ontvangst schriftelijk te worden gemeld.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 8: Annulering</h2>
-                <p>8.1 Annulering van een opdracht is alleen mogelijk met schriftelijke toestemming van 3DRonny.</p>
-                <p>8.2 Bij annulering zijn de reeds gemaakte kosten en 30% van de orderwaarde verschuldigd.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 9: Toepasselijk recht en geschillen</h2>
-                <p>9.1 Op alle overeenkomsten is Nederlands recht van toepassing.</p>
-                <p>9.2 Geschillen zullen in eerste aanleg worden voorgelegd aan de bevoegde rechter in de vestigingsplaats van 3DRonny.</p>
-            </div>
-            
-            <div class="section">
-                <h2>Artikel 10: Wijzigingen</h2>
-                <p>10.1 3DRonny behoudt zich het recht voor deze voorwaarden eenzijdig te wijzigen.</p>
-                <p>10.2 Wijzigingen worden van kracht na publicatie op de website van 3DRonny.</p>
-            </div>
-            
-            <a href="https://3dronny.github.io/index.html" class="back-link">← Terug naar homepage</a>
-        </div>
+        </footer>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>3DRonny</h3>
-                    <p>Uw partner voor hoogwaardige 3D-print oplossingen. Van prototype tot eindproduct.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Navigatie</h3>
-                    <a href="https://3dronny.github.io/index.html">Home</a>
-                    <a href="https://3dronny.github.io/index.html#services">Diensten</a>
-                    <a href="https://3dronny.github.io/index.html#portfolio">Portfolio</a>
-                    <a href="https://3dronny.github.io/index.html#contact">Contact</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Juridisch</h3>
-                    <a href="file:///C|/Users/ronal/Downloads/privacy.html">Privacybeleid</a>
-                    <a href="file:///C|/Users/ronal/Downloads/voorwaarden.html">Algemene Voorwaarden</a>
-                    <a href="https://3dronny.github.io/index.html#contact">Contact</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 3DRonny. Alle rechten voorbehouden.</p>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
