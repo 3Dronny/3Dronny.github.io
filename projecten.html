@@ -692,17 +692,6 @@
                 });
             });
 
-            // Button click handlers voor demonstratie
-            document.querySelectorAll('.btn-primary').forEach(button => {
-                if (button.textContent.includes('Details') || button.textContent.includes('Volg')) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const projectTitle = this.closest('.card').querySelector('h3').textContent;
-                        alert(`Details voor: ${projectTitle}\n\nDeze functionaliteit kan worden uitgebreid met een project detail pagina.`);
-                    });
-                }
-            });
-        });
-    </script>
+           
 </body>
 </html>
