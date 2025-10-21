@@ -146,10 +146,10 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - Aangepast voor 1 grote foto + 20 kleine foto's in grid */
+        /* Project Gallery Styles - Aangepast voor 1 grote foto + 20 kleine foto's in 4x5 grid */
         .project-gallery {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr 400px;
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -161,8 +161,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 500px;
-            padding: 20px;
+            min-height: 450px;
+            padding: 15px;
             width: 100%;
         }
         
@@ -183,31 +183,10 @@
         
         .thumbnail-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
             gap: 0.5rem;
             height: fit-content;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        
-        /* Scrollbar styling voor thumbnail container */
-        .thumbnail-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .thumbnail-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-        
-        .thumbnail-container::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 3px;
-        }
-        
-        .thumbnail-container::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-hover);
         }
         
         .thumbnail {
@@ -220,7 +199,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 60px;
+            min-height: 80px;
         }
         
         .thumbnail:hover {
@@ -259,6 +238,16 @@
         }
         
         /* Aangepaste responsive instellingen */
+        @media (max-width: 1200px) {
+            .project-gallery {
+                grid-template-columns: 1fr 350px;
+            }
+            
+            .thumbnail {
+                min-height: 70px;
+            }
+        }
+        
         @media (max-width: 1024px) {
             .project-gallery {
                 grid-template-columns: 1fr;
@@ -266,14 +255,7 @@
             
             .thumbnail-container {
                 grid-template-columns: repeat(5, 1fr);
-                max-height: none;
-                overflow-y: visible;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .thumbnail-container {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(4, 1fr);
             }
             
             .main-image {
@@ -281,19 +263,40 @@
             }
         }
         
+        @media (max-width: 768px) {
+            .thumbnail-container {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(5, 1fr);
+            }
+            
+            .main-image {
+                min-height: 350px;
+            }
+            
+            .thumbnail {
+                min-height: 60px;
+            }
+        }
+        
         @media (max-width: 640px) {
             .thumbnail-container {
                 grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(7, 1fr);
             }
             
             .main-image {
                 min-height: 300px;
+            }
+            
+            .thumbnail {
+                min-height: 50px;
             }
         }
         
         @media (max-width: 480px) {
             .thumbnail-container {
                 grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(10, 1fr);
             }
         }
         
@@ -418,7 +421,7 @@
                     </div>
                     
                     <div class="thumbnail-container">
-                        <!-- 20 thumbnails in 2 kolommen -->
+                        <!-- 20 thumbnails in 4x5 grid -->
                         <div class="thumbnail active" onclick="changeImage('fotos/multiboard.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
