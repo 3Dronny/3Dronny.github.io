@@ -954,7 +954,7 @@
                     <div class="card p-8">
                         <h2 class="text-3xl font-bold text-white mb-4">Interesse in een soortgelijk project?</h2>
                         <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                            Neem contact op voor een vrijblijvende offerte of advies over jouw 3D print project.
+                            Neem contact op voor een vrijblijvende offerte oder advies over jouw 3D print project.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <a href="contact.html" class="btn-primary no-underline">
@@ -976,7 +976,6 @@
             <div class="max-w-7xl mx-auto px-4">
                 <div class="footer-grid grid md:grid-cols-4 gap-8">
                     <div>
-
                         <div class="flex items-center gap-3 mb-4">
                             <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
                                 <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
@@ -1048,22 +1047,40 @@
     </div>
 
     <script>
-        // Functie om de hoofdfoto te veranderen bij klik op een thumbnail
+        // Verbeterde functie om de hoofdfoto te veranderen bij klik op een thumbnail
         function changeImage(src, element) {
             // Update de hoofdfoto
             const mainImage = document.getElementById('main-project-image');
-            const loadingDiv = mainImage.previousElementSibling;
             
-            // Toon loading state
-            loadingDiv.style.display = 'flex';
+            // Veilige manier om loading div te vinden
+            let loadingDiv = null;
+            if (mainImage && mainImage.previousElementSibling) {
+                loadingDiv = mainImage.previousElementSibling;
+            }
+            
+            // Toon loading state als loading div bestaat
+            if (loadingDiv && loadingDiv.classList.contains('image-loading')) {
+                loadingDiv.style.display = 'flex';
+            }
+            
             mainImage.classList.remove('image-loaded');
             
             // Simuleer een kleine vertraging voor een betere UX
             setTimeout(() => {
                 mainImage.src = src;
                 mainImage.onload = function() {
-                    loadingDiv.style.display = 'none';
+                    if (loadingDiv) {
+                        loadingDiv.style.display = 'none';
+                    }
                     mainImage.classList.add('image-loaded');
+                };
+                
+                // Fallback voor als de afbeelding niet laadt
+                mainImage.onerror = function() {
+                    if (loadingDiv) {
+                        loadingDiv.style.display = 'none';
+                    }
+                    console.error('Afbeelding kon niet geladen worden:', src);
                 };
             }, 300);
             
