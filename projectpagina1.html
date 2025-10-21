@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <!-- 3D Printing Meta Tags - Geoptimaliseerd -->
+    <meta name="description" content="Projectdetail: Gereedschapshouder - 3D geprinte modulaire organisatie oplossing door 3DRonny">
+    <meta name="keywords" content="3D printen, gereedschapshouder, PETG, modulair ontwerp, 3D print project, 3DRonny">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Gereedschapshouder Project - 3DRonny">
+    <meta property="og:description" content="Bekijk het gereedschapshouder project van 3DRonny - een 3D geprinte modulaire organisatie oplossing in PETG.">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/railbox1.jpg">
+    <meta property="og:url" content="https://3dronny.github.io/project-detail.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="3DRonny">
+    <meta property="og:locale" content="nl_NL">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gereedschapshouder Project - 3DRonny">
+    <meta name="twitter:description" content="3D geprinte modulaire organisatie oplossing in PETG">
+    <meta name="twitter:image" content="https://3dronny.github.io/fotos/railbox1.jpg">
+
+    <!-- Additional Meta Tags -->
+    <meta name="author" content="Ronny - Hobbyist 3D Print">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="NL">
+
+    <!-- Preconnect voor betere performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <title>Gereedschapshouder Project - 3DRonny</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+        }
+        
+        body {
+            background-color: #1f2937;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            cursor: pointer;
+            min-height: 44px;
+        }
+        
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .material-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Project Gallery Styles */
+        .project-gallery {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .main-image {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            padding: 20px;
+        }
+        
+        .main-image .image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .main-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .thumbnail-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .thumbnail {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .thumbnail:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .thumbnail.active {
+            border: 2px solid var(--accent-color);
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #374151;
+        }
+        
+        .image-loaded {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Aangepaste responsive instellingen voor 10 thumbnails */
+        @media (max-width: 1024px) {
+            .project-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .thumbnail-container {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .thumbnail-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .main-image {
+                min-height: 400px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .thumbnail-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .main-image {
+                min-height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .thumbnail-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Focus styles voor accessibility */
+        a:focus, button:focus {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Print styles voor betere afdrukken */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .card {
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-200 min-h-screen relative overflow-x-hidden">
+    
+    <div class="relative z-10">
+        <!-- Navigation -->
+        <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded">
+                                <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
+                                    <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                    <g transform="translate(60, 60) scale(0.8)">
+                                        <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                        <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                        <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                        <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    </g>
+                                    <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                    <g transform="translate(160, 125)">
+                                        <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                        <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                    </g>
+                                </svg>
+                                <span class="text-xl font-bold text-white">3DRonny</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fa-solid fa-house-chimney mr-2"></i>Home
+                            </a>
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
+                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
+                            <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
+                            <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
+                            </a>
+                            <a href="links.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Links</a>
+                            <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content" class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Breadcrumb -->
+                <nav class="mb-8" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm text-gray-400">
+                        <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Home</a></li>
+                        <li><i class="fas fa-chevron-right text-xs"></i></li>
+                        <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
+                        <li><i class="fas fa-chevron-right text-xs"></i></li>
+                        <li class="text-emerald-400">Gereedschapshouder</li>
+                    </ol>
+                </nav>
+
+                <!-- Project Header -->
+                <div class="mb-8">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <h1 class="text-4xl font-bold text-white mb-2">Gereedschapshouder</h1>
+                            <p class="text-xl text-gray-300">Een modulaire organisatie oplossing voor gereedschap</p>
+                        </div>
+                        <div class="mt-4 md:mt-0 flex items-center gap-4">
+                            <span class="material-badge">Voltooid</span>
+                            <span class="text-sm text-gray-400"><i class="fas fa-calendar mr-1"></i>Mei 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Gallery -->
+                <div class="project-gallery">
+                    <div class="main-image card">
+                        <div class="image-container w-full h-full">
+                            <div class="image-loading">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400"></div>
+                            </div>
+                            <img src="fotos/opslag-systeem.jpg" 
+                                 alt="Gereedschapshouder project - hoofdfoto" 
+                                 class="w-full h-full object-contain image-loaded"
+                                 id="main-project-image"
+                                 onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                        </div>
+                    </div>
+                    
+                    <div class="thumbnail-container">
+                        <div class="thumbnail active" onclick="changeImage('fotos/railbox1.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox1.jpg" 
+                                     alt="Gereedschapshouder - hoofdfoto" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox2.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox2.jpg" 
+                                     alt="Gereedschapshouder - detail van de gelagerde rails" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox3.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox3.jpg" 
+                                     alt="Gereedschapshouder - montage proces" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox4.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox4.jpg" 
+                                     alt="Gereedschapshouder - eindresultaat" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/box3.png', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/box3.png" 
+                                     alt="Gereedschapshouder - verschillende kleuren" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/box3 met divider.png', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/box3 met divider.png" 
+                                     alt="Gereedschapshouder - gebruik in praktijk" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <!-- Nieuwe thumbnails toegevoegd -->
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox7.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox7.jpg" 
+                                     alt="Gereedschapshouder - detailopname" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox8.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox8.jpg" 
+                                     alt="Gereedschapshouder - zijaanzicht" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox9.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox9.jpg" 
+                                     alt="Gereedschapshouder - bovenaanzicht" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/railbox10.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/railbox10.jpg" 
+                                     alt="Gereedschapshouder - volledig geassembleerd" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Main Content -->
+                    <div class="lg:col-span-2">
+                        <div class="card p-8 mb-8">
+                            <h2 class="text-2xl font-bold text-white mb-4">Project Beschrijving</h2>
+                            <p class="text-gray-300 mb-4">
+                                Een railboxje met een gelagerd railsysteem, ontworpen voor optimale organisatie van gereedschap. 
+                                Het systeem staat mooi op een desk, kan geproduceerd worden in verschillende kleuren, 
+                                en kan ook groter gemaakt worden voor specifieke behoeften.
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                Dit project is een aangepast model gebaseerd op het ontwerp van een andere ontwerper, 
+                                met verbeteringen aan het gelagerde railsysteem voor soepelere beweging en betere duurzaamheid.
+                            </p>
+                            <p class="text-gray-300">
+                                Het modulaire ontwerp maakt het mogelijk om meerdere units te combineren voor uitgebreide 
+                                opslagoplossingen, ideaal voor werkplaatsen, kantoren of thuisgebruik.
+                            </p>
+                        </div>
+
+                        <div class="card p-8">
+                            <h2 class="text-2xl font-bold text-white mb-4">Technische Specificaties</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-3">Print Details</h3>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-layer-group text-emerald-400 mr-2 w-5"></i>
+                                            <span>Laaghoogte: 0.15mm</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-cube text-emerald-400 mr-2 w-5"></i>
+                                            <span>Vulling: 25%</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-tachometer-alt text-emerald-400 mr-2 w-5"></i>
+                                            <span>Snelheid: 60mm/s</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-thermometer-half text-emerald-400 mr-2 w-5"></i>
+                                            <span>Nozzle Temp: 240°C</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-bed text-emerald-400 mr-2 w-5"></i>
+                                            <span>Bed Temp: 80°C</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-3">Project Details</h3>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-clock text-emerald-400 mr-2 w-5"></i>
+                                            <span>Printtijd: 18 uur</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-weight text-emerald-400 mr-2 w-5"></i>
+                                            <span>Filament: 250g PETG</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-ruler text-emerald-400 mr-2 w-5"></i>
+                                            <span>Afmetingen: 200x150x80mm</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-cogs text-emerald-400 mr-2 w-5"></i>
+                                            <span>Onderdelen: 6 geprinte + hardware</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-tools text-emerald-400 mr-2 w-5"></i>
+                                            <span>Montagetijd: 30 minuten</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="space-y-8">
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Project Info</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-gray-400">Status</p>
+                                    <p class="text-white font-medium">Voltooid</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400">Categorie</p>
+                                    <p class="text-white font-medium">Functionele Prints</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400">Materiaal</p>
+                                    <p class="text-white font-medium">PETG</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400">Printer</p>
+                                    <p class="text-white font-medium">Qidi X-Max 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400">Complexiteit</p>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-emerald-400"></i>
+                                        <i class="fas fa-star text-emerald-400"></i>
+                                        <i class="fas fa-star text-emerald-400"></i>
+                                        <i class="fas fa-star text-gray-600"></i>
+                                        <i class="fas fa-star text-gray-600"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Downloads</h3>
+                            <div class="space-y-3">
+                                <a href="https://www.thingiverse.com/thing:7145596" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-download text-emerald-400 mr-3"></i>
+                                        <span class="text-white">STL Bestanden</span>
+                                    </div>
+                                    <i class="fas fa-external-link-alt text-gray-400"></i>
+                                </a>
+                                <a href="#" 
+                                   class="flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-pdf text-emerald-400 mr-3"></i>
+                                        <span class="text-white">Montage Handleiding</span>
+                                    </div>
+                                    <i class="fas fa-download text-gray-400"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Gerelateerde Projecten</h3>
+                            <div class="space-y-4">
+                                <a href="project-detail-vaasjes.html" class="block group">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                                            <img src="fotos/vaasjes.jpg" alt="Droogbloemen vaasjes" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium group-hover:text-emerald-400 transition-colors">Droogbloemen Vaasjes</p>
+                                            <p class="text-sm text-gray-400">PETG • Decoratief</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="project-detail-opbergsysteem.html" class="block group">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                                            <img src="fotos/opslag-systeem.jpg" alt="Opslag systeem" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium group-hover:text-emerald-400 transition-colors">Modulair Opslag Systeem</p>
+                                            <p class="text-sm text-gray-400">PETG • Functioneel</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="mt-12 text-center">
+                    <div class="card p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">Interesse in een soortgelijk project?</h2>
+                        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                            Neem contact op voor een vrijblijvende offerte of advies over jouw 3D print project.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="contact.html" class="btn-primary no-underline">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                                Neem Contact Op
+                            </a>
+                            <a href="projecten.html" class="btn-outline no-underline">
+                                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                                Andere Projecten
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="footer-grid grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg width="32" height="32" viewBox="0 0 200 200" aria-hidden="true">
+                                <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
+                                <g transform="translate(60, 60) scale(0.8)">
+                                    <polygon points="30,20 70,20 90,50 50,50" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="50,50 90,50 80,80 40,80" fill="#10b981" fill-opacity="0.5" stroke="#10b981" stroke-width="2"/>
+                                    <polygon points="30,20 50,50 40,80 20,50" fill="#10b981" fill-opacity="0.7" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="30" y1="20" x2="20" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="20" y1="50" x2="40" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="40" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="80" y1="80" x2="90" y2="50" stroke="#10b981" stroke-width="3"/>
+                                    <line x1="90" y1="50" x2="70" y2="20" stroke="#10b981" stroke-width="3"/>
+                                </g>
+                                <path d="M 40,150 Q 70,130 100,140 Q 130,150 160,130" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+                                <g transform="translate(160, 125)">
+                                    <rect x="-5" y="0" width="10" height="15" fill="#374151" stroke="#10b981" stroke-width="1"/>
+                                    <circle cx="0" cy="20" r="3" fill="#10b981"/>
+                                </g>
+                            </svg>
+                            <span class="text-xl font-bold text-white">3DRonny</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Pagina's</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
+                            <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis</a></li>
+                            <li><a href="links.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Links</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Services</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
+                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Advies & Consult</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-4">Contact</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+                            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Contactformulier</a></li>
+                            <li><i class="fas fa-clock mr-2 text-emerald-400"></i>Flexibele beschikbaarheid</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>© 2025 3DRonny. Alle rechten voorbehouden.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="privacy.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Privacy</a>
+                            <a href="voorwaarden.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Voorwaarden</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Functie om de hoofdfoto te veranderen bij klik op een thumbnail
+        function changeImage(src, element) {
+            // Update de hoofdfoto
+            const mainImage = document.getElementById('main-project-image');
+            const loadingDiv = mainImage.previousElementSibling;
+            
+            // Toon loading state
+            loadingDiv.style.display = 'flex';
+            mainImage.classList.remove('image-loaded');
+            
+            // Simuleer een kleine vertraging voor een betere UX
+            setTimeout(() => {
+                mainImage.src = src;
+                mainImage.onload = function() {
+                    loadingDiv.style.display = 'none';
+                    mainImage.classList.add('image-loaded');
+                };
+            }, 300);
+            
+            // Update actieve thumbnail
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
