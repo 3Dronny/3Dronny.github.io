@@ -146,10 +146,10 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - Aangepast voor 1 grote foto + 20 kleine foto's in 4x5 grid */
+        /* Project Gallery Styles - Aangepast voor 1 grote foto + 32 kleine foto's in 8x4 grid */
         .project-gallery {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 500px;
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -183,15 +183,15 @@
         
         .thumbnail-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-            gap: 0.5rem;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0.4rem;
             height: fit-content;
         }
         
         .thumbnail {
             background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -199,7 +199,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 80px;
+            min-height: 55px;
         }
         
         .thumbnail:hover {
@@ -238,13 +238,25 @@
         }
         
         /* Aangepaste responsive instellingen */
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .project-gallery {
-                grid-template-columns: 1fr 350px;
+                grid-template-columns: 1fr 450px;
             }
             
-            .thumbnail {
-                min-height: 70px;
+            .thumbnail-container {
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .project-gallery {
+                grid-template-columns: 1fr 400px;
+            }
+            
+            .thumbnail-container {
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: repeat(7, 1fr);
             }
         }
         
@@ -254,7 +266,7 @@
             }
             
             .thumbnail-container {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(8, 1fr);
                 grid-template-rows: repeat(4, 1fr);
             }
             
@@ -265,8 +277,8 @@
         
         @media (max-width: 768px) {
             .thumbnail-container {
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(5, 1fr);
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(6, 1fr);
             }
             
             .main-image {
@@ -274,14 +286,14 @@
             }
             
             .thumbnail {
-                min-height: 60px;
+                min-height: 50px;
             }
         }
         
         @media (max-width: 640px) {
             .thumbnail-container {
-                grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: repeat(7, 1fr);
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(8, 1fr);
             }
             
             .main-image {
@@ -289,14 +301,18 @@
             }
             
             .thumbnail {
-                min-height: 50px;
+                min-height: 45px;
             }
         }
         
         @media (max-width: 480px) {
             .thumbnail-container {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: repeat(10, 1fr);
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(11, 1fr);
+            }
+            
+            .thumbnail {
+                min-height: 40px;
             }
         }
         
@@ -421,11 +437,11 @@
                     </div>
                     
                     <div class="thumbnail-container">
-                        <!-- 20 thumbnails in 4x5 grid -->
+                        <!-- 32 thumbnails in 8x4 grid -->
                         <div class="thumbnail active" onclick="changeImage('fotos/multiboard.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/multiboard.jpg" 
                                      alt="Gereedschapshouder - hoofdfoto" 
@@ -436,7 +452,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox2.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox2.jpg" 
                                      alt="Gereedschapshouder - detail van de gelagerde rails" 
@@ -447,7 +463,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox3.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox3.jpg" 
                                      alt="Gereedschapshouder - montage proces" 
@@ -458,7 +474,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox4.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox4.jpg" 
                                      alt="Gereedschapshouder - eindresultaat" 
@@ -469,7 +485,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/box3.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/box3.png" 
                                      alt="Gereedschapshouder - verschillende kleuren" 
@@ -480,7 +496,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/box3 met divider.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/box3 met divider.png" 
                                      alt="Gereedschapshouder - gebruik in praktijk" 
@@ -491,7 +507,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox7.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox7.jpg" 
                                      alt="Gereedschapshouder - detailopname" 
@@ -502,7 +518,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox8.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox8.jpg" 
                                      alt="Gereedschapshouder - zijaanzicht" 
@@ -513,7 +529,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox9.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox9.jpg" 
                                      alt="Gereedschapshouder - bovenaanzicht" 
@@ -524,7 +540,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/railbox10.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/railbox10.jpg" 
                                      alt="Gereedschapshouder - volledig geassembleerd" 
@@ -532,11 +548,11 @@
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
                         </div>
-                        <!-- Extra thumbnails om 20 te bereiken -->
+                        <!-- Extra thumbnails om 32 te bereiken -->
                         <div class="thumbnail" onclick="changeImage('fotos/extra1.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra1.jpg" 
                                      alt="Gereedschapshouder - extra foto 1" 
@@ -547,7 +563,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra2.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra2.jpg" 
                                      alt="Gereedschapshouder - extra foto 2" 
@@ -558,7 +574,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra3.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra3.jpg" 
                                      alt="Gereedschapshouder - extra foto 3" 
@@ -569,7 +585,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra4.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra4.jpg" 
                                      alt="Gereedschapshouder - extra foto 4" 
@@ -580,7 +596,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra5.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra5.jpg" 
                                      alt="Gereedschapshouder - extra foto 5" 
@@ -591,7 +607,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra6.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra6.jpg" 
                                      alt="Gereedschapshouder - extra foto 6" 
@@ -602,7 +618,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra7.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra7.jpg" 
                                      alt="Gereedschapshouder - extra foto 7" 
@@ -613,7 +629,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra8.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra8.jpg" 
                                      alt="Gereedschapshouder - extra foto 8" 
@@ -624,7 +640,7 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra9.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra9.jpg" 
                                      alt="Gereedschapshouder - extra foto 9" 
@@ -635,10 +651,143 @@
                         <div class="thumbnail" onclick="changeImage('fotos/extra10.jpg', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
-                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/extra10.jpg" 
                                      alt="Gereedschapshouder - extra foto 10" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <!-- Nog meer thumbnails voor 32 totaal -->
+                        <div class="thumbnail" onclick="changeImage('fotos/extra11.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra11.jpg" 
+                                     alt="Gereedschapshouder - extra foto 11" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra12.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra12.jpg" 
+                                     alt="Gereedschapshouder - extra foto 12" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra13.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra13.jpg" 
+                                     alt="Gereedschapshouder - extra foto 13" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra14.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra14.jpg" 
+                                     alt="Gereedschapshouder - extra foto 14" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra15.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra15.jpg" 
+                                     alt="Gereedschapshouder - extra foto 15" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra16.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra16.jpg" 
+                                     alt="Gereedschapshouder - extra foto 16" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra17.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra17.jpg" 
+                                     alt="Gereedschapshouder - extra foto 17" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra18.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra18.jpg" 
+                                     alt="Gereedschapshouder - extra foto 18" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra19.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra19.jpg" 
+                                     alt="Gereedschapshouder - extra foto 19" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra20.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra20.jpg" 
+                                     alt="Gereedschapshouder - extra foto 20" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra21.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra21.jpg" 
+                                     alt="Gereedschapshouder - extra foto 21" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra22.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra22.jpg" 
+                                     alt="Gereedschapshouder - extra foto 22" 
                                      class="w-full h-full object-cover image-loaded"
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
@@ -932,6 +1081,7 @@
             // Update actieve thumbnail
             document.querySelectorAll('.thumbnail').forEach(thumb => {
                 thumb.classList.remove('active');
+
             });
             element.classList.add('active');
         }
