@@ -146,7 +146,7 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - Aangepast voor 1 grote foto + 32 kleine foto's in 4x8 grid */
+        /* Project Gallery Styles - Aangepast voor 1 grote foto + 34 kleine foto's in 4x9 grid */
         .project-gallery {
             display: grid;
             grid-template-columns: 1fr 350px;
@@ -184,7 +184,7 @@
         .thumbnail-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(8, 1fr);
+            grid-template-rows: repeat(9, 1fr);
             gap: 0.5rem;
             height: fit-content;
         }
@@ -237,7 +237,7 @@
             transition: opacity 0.3s ease;
         }
         
-        /* Aangepaste responsive instellingen */
+        /* Aangepaste responsive instellingen voor 34 foto's */
         @media (max-width: 1200px) {
             .project-gallery {
                 grid-template-columns: 1fr 300px;
@@ -255,7 +255,7 @@
             
             .thumbnail-container {
                 grid-template-columns: repeat(8, 1fr);
-                grid-template-rows: repeat(4, 1fr);
+                grid-template-rows: repeat(5, 1fr);
             }
             
             .main-image {
@@ -281,7 +281,7 @@
         @media (max-width: 640px) {
             .thumbnail-container {
                 grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(8, 1fr);
+                grid-template-rows: repeat(9, 1fr);
             }
             
             .main-image {
@@ -296,7 +296,7 @@
         @media (max-width: 480px) {
             .thumbnail-container {
                 grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: repeat(11, 1fr);
+                grid-template-rows: repeat(12, 1fr);
             }
             
             .thumbnail {
@@ -425,7 +425,7 @@
                     </div>
                     
                     <div class="thumbnail-container">
-                        <!-- 32 thumbnails in 4x8 grid -->
+                        <!-- 34 thumbnails in 4x9 grid -->
                         <div class="thumbnail active" onclick="changeImage('fotos/BOX1.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
@@ -536,7 +536,6 @@
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
                         </div>
-                        <!-- Extra thumbnails om 32 te bereiken -->
                         <div class="thumbnail" onclick="changeImage('fotos/BOX3 devider4.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
@@ -647,7 +646,6 @@
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
                         </div>
-                        <!-- Nog meer thumbnails voor 32 totaal -->
                         <div class="thumbnail" onclick="changeImage('fotos/Spraycan holder 70mm.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
@@ -776,6 +774,29 @@
                                 </div>
                                 <img src="fotos/multitoolholder.png" 
                                      alt="Gereedschapshouder - extra foto 22" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <!-- Extra thumbnails voor 34 totaal -->
+                        <div class="thumbnail" onclick="changeImage('fotos/extra-foto-33.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra-foto-33.jpg" 
+                                     alt="Gereedschapshouder - extra foto 33" 
+                                     class="w-full h-full object-cover image-loaded"
+                                     onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
+                            </div>
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/extra-foto-34.jpg', this)">
+                            <div class="image-container w-full h-full">
+                                <div class="image-loading">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400"></div>
+                                </div>
+                                <img src="fotos/extra-foto-34.jpg" 
+                                     alt="Gereedschapshouder - extra foto 34" 
                                      class="w-full h-full object-cover image-loaded"
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
