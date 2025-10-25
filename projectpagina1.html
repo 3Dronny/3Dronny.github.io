@@ -146,12 +146,13 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - Aangepast voor 1 grote foto + 34 kleine foto's in 4x9 grid */
+        /* Project Gallery Styles - Aangepast voor perfecte uitlijning */
         .project-gallery {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: 2rem;
             margin-bottom: 2rem;
+            align-items: start;
         }
         
         .main-image {
@@ -161,9 +162,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 450px;
-            padding: 15px;
             width: 100%;
+            height: 735px; /* Exacte hoogte om gelijk te zijn aan 9 thumbnails (70px + 8 gaps) */
+            padding: 20px;
         }
         
         .main-image .image-container {
@@ -177,6 +178,8 @@
         .main-image img {
             max-width: 100%;
             max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
             display: block;
         }
@@ -186,7 +189,7 @@
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(9, 1fr);
             gap: 0.5rem;
-            height: fit-content;
+            height: 735px; /* 9 thumbnails × 70px + 8 gaps × 0.5rem = 630px + 4rem = 670px + padding/border */
         }
         
         .thumbnail {
@@ -199,7 +202,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 70px;
+            height: 70px; /* Vaste hoogte voor consistente grid */
+            border: 2px solid transparent;
         }
         
         .thumbnail:hover {
@@ -237,70 +241,100 @@
             transition: opacity 0.3s ease;
         }
         
-        /* Aangepaste responsive instellingen voor 34 foto's */
+        /* Aangepaste responsive instellingen voor perfecte uitlijning */
         @media (max-width: 1200px) {
             .project-gallery {
                 grid-template-columns: 1fr 300px;
             }
             
+            .main-image {
+                height: 675px; /* Aangepaste hoogte voor kleinere thumbnails */
+            }
+            
+            .thumbnail-container {
+                height: 675px;
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
             .thumbnail {
-                min-height: 65px;
+                height: 65px;
             }
         }
         
         @media (max-width: 1024px) {
             .project-gallery {
                 grid-template-columns: 1fr;
-            }
-            
-            .thumbnail-container {
-                grid-template-columns: repeat(8, 1fr);
-                grid-template-rows: repeat(5, 1fr);
+                gap: 1rem;
             }
             
             .main-image {
-                min-height: 400px;
+                height: 600px; /* Vierkant voor tablet */
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .thumbnail-container {
+                height: auto;
+                grid-template-columns: repeat(8, 1fr);
+                grid-template-rows: repeat(5, 1fr);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .thumbnail {
+                height: 65px;
             }
         }
         
         @media (max-width: 768px) {
+            .main-image {
+                height: 500px;
+                max-width: 500px;
+            }
+            
             .thumbnail-container {
                 grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: repeat(6, 1fr);
-            }
-            
-            .main-image {
-                min-height: 350px;
+                max-width: 500px;
             }
             
             .thumbnail {
-                min-height: 60px;
+                height: 60px;
             }
         }
         
         @media (max-width: 640px) {
+            .main-image {
+                height: 400px;
+                max-width: 400px;
+            }
+            
             .thumbnail-container {
                 grid-template-columns: repeat(4, 1fr);
                 grid-template-rows: repeat(9, 1fr);
-            }
-            
-            .main-image {
-                min-height: 300px;
+                max-width: 400px;
             }
             
             .thumbnail {
-                min-height: 55px;
+                height: 55px;
             }
         }
         
         @media (max-width: 480px) {
+            .main-image {
+                height: 350px;
+                max-width: 350px;
+                padding: 15px;
+            }
+            
             .thumbnail-container {
                 grid-template-columns: repeat(3, 1fr);
                 grid-template-rows: repeat(12, 1fr);
+                max-width: 350px;
             }
             
             .thumbnail {
-                min-height: 50px;
+                height: 50px;
             }
         }
         
