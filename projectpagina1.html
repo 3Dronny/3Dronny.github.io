@@ -163,7 +163,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 840px; /* Exacte hoogte om gelijk te zijn aan 9 thumbnails (70px + 8 gaps) */
+            height: 840px;
             padding: 0;
         }
         
@@ -173,24 +173,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-			background: #374151;
+            background: #374151;
         }
         
         .main-image img {
-            max-width: 100% !important;
-            max-height: 100% !important; 
+            width: 100% !important;
+            height: 100% !important;
             object-fit: cover;
-			object-position: center;     /* ← Centreert het belangrijkste deel */
+            object-position: center;
             display: block;
-        
         }
         
         .thumbnail-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* 4 KOLOMMEN */
             grid-template-rows: repeat(9, 1fr);
             gap: 0.5rem;
-            height: 735px; /* 9 thumbnails × 70px + 8 gaps × 0.5rem = 630px + 4rem = 670px + padding/border */
+            height: 735px;
         }
         
         .thumbnail {
@@ -203,7 +202,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 70px; /* Vaste hoogte voor consistente grid */
+            height: 70px;
             border: 2px solid transparent;
         }
         
@@ -249,12 +248,12 @@
             }
             
             .main-image {
-                height: 675px; /* Aangepaste hoogte voor kleinere thumbnails */
+                height: 675px;
             }
             
             .thumbnail-container {
                 height: 675px;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(4, 1fr); /* 4 KOLOMMEN */
             }
             
             .thumbnail {
@@ -269,14 +268,14 @@
             }
             
             .main-image {
-                height: 700px; /* Vierkant voor tablet */
+                height: 700px;
                 max-width: 700px;
                 margin: 0 auto;
             }
             
             .thumbnail-container {
                 height: auto;
-                grid-template-columns: repeat(8, 1fr);
+                grid-template-columns: repeat(8, 1fr); /* 8 KOLOMMEN VOOR TABLET */
                 grid-template-rows: repeat(5, 1fr);
                 max-width: 600px;
                 margin: 0 auto;
@@ -288,15 +287,13 @@
         }
         
         @media (max-width: 768px) {
-    .main-image {  /* ← ACCOLADE TOEGEVOEGD */
-        height: 600px;
-        max-width: 600px;
-    }
-    /* ... */
-}
+            .main-image {
+                height: 600px;
+                max-width: 600px;
+            }
             
             .thumbnail-container {
-                grid-template-columns: repeat(6, 1fr);
+                grid-template-columns: repeat(6, 1fr); /* 6 KOLOMMEN VOOR MOBIEL */
                 grid-template-rows: repeat(6, 1fr);
                 max-width: 500px;
             }
@@ -313,7 +310,7 @@
             }
             
             .thumbnail-container {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(4, 1fr); /* 4 KOLOMMEN VOOR KLEINE MOBIEL */
                 grid-template-rows: repeat(9, 1fr);
                 max-width: 400px;
             }
@@ -331,7 +328,7 @@
             }
             
             .thumbnail-container {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(3, 1fr); /* 3 KOLOMMEN VOOR EXTRA KLEIN */
                 grid-template-rows: repeat(12, 1fr);
                 max-width: 350px;
             }
@@ -804,6 +801,7 @@
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
                             </div>
                         </div>
+
                         <div class="thumbnail" onclick="changeImage('fotos/multitoolholder.png', this)">
                             <div class="image-container w-full h-full">
                                 <div class="image-loading">
@@ -1012,7 +1010,7 @@
                     <div class="card p-8">
                         <h2 class="text-3xl font-bold text-white mb-4">Interesse in een soortgelijk project?</h2>
                         <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                            Neem contact op voor een vrijblijvende offerte of advies over jouw 3D print project.
+                            Neem contact op voor een vrijblijvende offerte or advies over jouw 3D print project.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <a href="contact.html" class="btn-primary no-underline">
