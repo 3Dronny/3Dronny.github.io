@@ -4,24 +4,92 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
-    <meta name="description" content="Qidi Tech X-Max 3 - Mijn professionele 3D printer voor grote, complexe projecten. 325x325x325mm build volume, heated chamber voor ABS, ASA, PC, nylon prints">
-    <meta name="keywords" content="3DronnyQidi Tech X-Max 3, Qidi printer, grote 3D printer, professional 3D printer, heated chamber, ABS printing, ASA printing, polycarbonate prints, nylon prints, grote build volume, industriële 3D printer, betrouwbare 3D printer">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://3dronny.github.io/qidi-x-max3.html">
     
-    <meta property="og:title" content="3DRonny - Qidi X-Max 3 | Professionele 3D Printer">
-    <meta property="og:description" content="Qidi Tech X-Max 3 printer - 325x325x325mm build volume, heated chamber voor industriële materialen">
+    <!-- SEO Meta Tags -->
+    <title>Qidi Tech X-Max 3 Review | Professionele 3D Printer 325x325x315mm | 3DRonny</title>
+    <meta name="description" content="Expert review van de Qidi Tech X-Max 3: grote 325mm³ build volume, heated chamber voor ABS, ASA, polycarbonaat. Perfect voor industriële 3D print projecten.">
+    <meta name="keywords" content="Qidi Tech X-Max 3, grote 3D printer, heated chamber printer, ABS 3D printen, industriële 3D printer, professionele 3D printer, 325mm build volume, Qidi X-Max 3 review">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Qidi Tech X-Max 3 Review | Professionele 3D Printer met Heated Chamber">
+    <meta property="og:description" content="Expert review van de Qidi X-Max 3 - Grote 325mm³ build volume met heated chamber voor perfecte ABS, ASA en polycarbonaat prints.">
     <meta property="og:image" content="https://3dronny.github.io/fotos/qidi-x-max3.jpg">
     <meta property="og:url" content="https://3dronny.github.io/qidi-x-max3.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="3DRonny">
-    <meta property="og:locale" content="be_BE">
+    <meta property="og:locale" content="nl_BE">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Qidi Tech X-Max 3 | Professionele 3D Printer Review">
+    <meta name="twitter:description" content="Grote 325mm³ build volume met heated chamber voor industriële 3D print materialen">
+
+    <!-- Preconnect voor performance -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
-    <title>3DRonny - Qidi X-Max 3 | Professionele 3D Printer</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Structured Data voor Product -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Qidi Tech X-Max 3 3D Printer",
+        "description": "Professionele 3D printer met 325x325x315mm build volume en heated chamber voor industriële materialen zoals ABS, ASA, polycarbonaat en nylon",
+        "review": {
+            "@type": "Review",
+            "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": "4.8",
+                "bestRating": "5"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "Ronny"
+            },
+            "reviewBody": "Uitstekende professionele 3D printer met heated chamber voor technische materialen. Zeer betrouwbaar voor grote projecten."
+        },
+        "brand": {
+            "@type": "Brand",
+            "name": "Qidi Tech"
+        },
+        "features": [
+            "325x325x315mm build volume",
+            "Heated chamber tot 65°C",
+            "350°C all-metal hotend",
+            "Direct drive extruder",
+            "WiFi en Ethernet connectivity"
+        ],
+        "url": "https://3dronny.github.io/qidi-x-max3.html"
+    }
+    </script>
+    
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://3dronny.github.io/index.html"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Qidi X-Max 3 Printer",
+                "item": "https://3dronny.github.io/qidi-x-max3.html"
+            }
+        ]
+    }
+    </script>
     
     <style>
         :root {
@@ -35,9 +103,6 @@
                 radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
-        
-        /* Fix voor browser navigatiebalk */
-    
         
         .hero-section {
             position: relative;
@@ -63,6 +128,50 @@
             top: 6px;
             outline: 2px solid white;
             outline-offset: 2px;
+        }
+        
+        /* Breadcrumb navigation */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .breadcrumb ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .breadcrumb a {
+            color: #10b981;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #34d399;
+        }
+        
+        .breadcrumb .separator {
+            color: #6b7280;
+        }
+        
+        .breadcrumb [aria-current="page"] {
+            color: #d1d5db;
+            font-weight: 600;
         }
         
         .nav-link {
@@ -218,11 +327,10 @@
         
         /* Focus styles voor accessibility */
         a:focus, button:focus {
-            
             outline-offset: 2px;
         }
         
-        /* Print styles voor betere afdrukken */
+        /* Print styles */
         @media print {
             .no-print {
                 display: none !important;
@@ -250,6 +358,10 @@
                 padding: 12px 16px;
                 display: block;
             }
+            
+            .breadcrumb ol {
+                font-size: 0.875rem;
+            }
         }
         
         @media (max-width: 640px) {
@@ -272,13 +384,16 @@
     </style>
 </head>
 <body class="text-gray-200 min-h-screen relative overflow-x-hidden">
+    <!-- Skip link voor keyboard users -->
+    <a href="#main-content" class="skip-link">Spring naar hoofdcontent</a>
+
     <div class="relative z-10">
         <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center gap-3">
-    <a href="index.html" class="flex items-center gap-3">
+                            <a href="index.html" class="flex items-center gap-3">
                                 <svg width="48" height="48" viewBox="0 0 200 200" aria-label="3DRonny Logo - 3D Printer Pictogram">
                                     <circle cx="100" cy="100" r="90" fill="#1f2937" stroke="#10b981" stroke-width="3"/>
                                     <g transform="translate(60, 60) scale(0.8)">
@@ -306,8 +421,8 @@
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-8">
                             <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
-    <i class="fa-solid fa-house-chimney mr-2"></i>Home
-</a>
+                                <i class="fa-solid fa-house-chimney mr-2"></i>Home
+                            </a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
@@ -319,8 +434,25 @@
                             <a href="contact.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Contact</a>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
+        </nav>
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <ol>
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="separator">/</li>
+                <li aria-current="page">
+                    <i class="fas fa-print" aria-hidden="true"></i>
+                    Qidi X-Max 3 Printer
+                </li>
+            </ol>
         </nav>
 
         <main id="main-content">
@@ -330,19 +462,19 @@
                         <div class="space-y-8">
                             <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30">
                                 <i class="fas fa-tools" aria-hidden="true"></i>
-                                Professionele 3D Printer
+                                Professionele 3D Printer Review
                             </div>
                             <h1 class="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                                Qidi Tech <span class="text-emerald-400">X-Max 3</span>
+                                Qidi Tech <span class="text-emerald-400">X-Max 3</span> Review
                             </h1>
                             <p class="text-xl text-gray-300 leading-relaxed">
-                                Mijn professionele werkpaard voor grote, complexe projecten. Met heated chamber en 325mm³ build volume perfect voor industriële materialen.
+                                Uitgebreide expert review van de Qidi Tech X-Max 3 - mijn professionele werkpaard voor grote, complexe projecten. Met heated chamber en 325mm³ build volume perfect voor industriële materialen zoals ABS, ASA en polycarbonaat.
                             </p>
                             <div class="flex flex-wrap gap-3">
                                 <span class="tech-badge">325x325x315mm Build Volume</span>
-                                <span class="tech-badge">Heated Chamber</span>
-                                <span class="tech-badge">All-Metal Hotend</span>
-                                <span class="tech-badge">Direct Drive</span>
+                                <span class="tech-badge">Heated Chamber 65°C</span>
+                                <span class="tech-badge">350°C All-Metal Hotend</span>
+                                <span class="tech-badge">Direct Drive Extruder</span>
                             </div>
                         </div>
                         <div class="relative">
@@ -353,7 +485,7 @@
                                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                         </div>
                                         <img src="fotos/qidi.jpg" 
-                                             alt="Qidi Tech X-Max 3 3D printer" 
+                                             alt="Qidi Tech X-Max 3 3D printer - Professionele printer met grote build volume en heated chamber" 
                                              class="w-full h-full object-cover rounded-lg image-loaded"
                                              loading="lazy"
                                              onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
@@ -368,8 +500,8 @@
             <section class="py-16 px-4" aria-labelledby="specificaties-titel">
                 <div class="max-w-7xl mx-auto">
                     <div class="text-center mb-12">
-                        <h2 id="specificaties-titel" class="text-4xl font-bold text-white mb-4">Technische Specificaties</h2>
-                        <p class="text-xl text-gray-300">Alles wat je wilt weten over de Qidi X-Max 3</p>
+                        <h2 id="specificaties-titel" class="text-4xl font-bold text-white mb-4">Qidi X-Max 3 Technische Specificaties</h2>
+                        <p class="text-xl text-gray-300">Complete specificaties van deze professionele 3D printer met heated chamber</p>
                     </div>
                     
                     <div class="grid lg:grid-cols-2 gap-8">
@@ -378,7 +510,7 @@
                                 <div class="feature-icon">
                                     <i class="fas fa-cube text-white" aria-hidden="true"></i>
                                 </div>
-                                Print Specificaties
+                                Print Specificaties & Prestaties
                             </h3>
                             <div class="space-y-2">
                                 <div class="spec-item">
@@ -398,12 +530,20 @@
                                     <span class="text-white font-semibold">Direct Drive</span>
                                 </div>
                                 <div class="spec-item">
-                                    <span class="text-gray-300">Max. Temperatuur</span>
-                                    <span class="text-white font-semibold">350°C (nozzle)</span>
+                                    <span class="text-gray-300">Max. Nozzle Temperatuur</span>
+                                    <span class="text-white font-semibold">350°C</span>
                                 </div>
                                 <div class="spec-item">
                                     <span class="text-gray-300">Chamber Temperatuur</span>
                                     <span class="text-white font-semibold">Tot 65°C</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="text-gray-300">Print Snelheid</span>
+                                    <span class="text-white font-semibold">Tot 150 mm/s</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="text-gray-300">Positioneringsnauwkeurigheid</span>
+                                    <span class="text-white font-semibold">X/Y: 0.01mm, Z: 0.002mm</span>
                                 </div>
                             </div>
                         </div>
@@ -413,16 +553,16 @@
                                 <div class="feature-icon">
                                     <i class="fas fa-vial text-white" aria-hidden="true"></i>
                                 </div>
-                                Ondersteunde Materialen
+                                Ondersteunde Materialen & Compatibiliteit
                             </h3>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 mb-6">
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">PLA</span>
+                                    <span class="text-gray-300">PLA / PLA+</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">PETG</span>
+                                    <span class="text-gray-300">PETG / PETG-CF</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
@@ -434,24 +574,24 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">Nylon</span>
+                                    <span class="text-gray-300">Nylon (PA6, PA12)</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">Polycarbonaat</span>
+                                    <span class="text-gray-300">Polycarbonaat (PC)</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">TPU</span>
+                                    <span class="text-gray-300">TPU / TPE</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
-                                    <span class="text-gray-300">PP</span>
+                                    <span class="text-gray-300">Polypropyleen (PP)</span>
                                 </div>
                             </div>
                             <div class="mt-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg">
                                 <p class="text-sm text-gray-300">
-                                    <strong>Expert tip:</strong> De heated chamber maakt deze printer perfect voor technische materialen zoals ABS, ASA en polycarbonaat die normaal gevoelig zijn voor warping.
+                                    <strong>Expert tip:</strong> De heated chamber tot 65°C maakt deze printer perfect voor technische materialen zoals ABS, ASA en polycarbonaat die normaal gevoelig zijn voor warping en krimpproblemen.
                                 </p>
                             </div>
                         </div>
@@ -462,8 +602,8 @@
             <section class="py-16 px-4 bg-gray-800/50" aria-labelledby="features-titel">
                 <div class="max-w-7xl mx-auto">
                     <div class="text-center mb-12">
-                        <h2 id="features-titel" class="text-4xl font-bold text-white mb-4">Belangrijkste Features</h2>
-                        <p class="text-xl text-gray-300">Waarom de Qidi X-Max 3 perfect is voor professionele projecten</p>
+                        <h2 id="features-titel" class="text-4xl font-bold text-white mb-4">Belangrijkste Features & Voordelen</h2>
+                        <p class="text-xl text-gray-300">Waarom de Qidi X-Max 3 uitblinkt voor professionele 3D print projecten</p>
                     </div>
                     
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -471,16 +611,16 @@
                             <div class="feature-icon mx-auto mb-4">
                                 <i class="fas fa-thermometer-full text-white text-xl" aria-hidden="true"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">Heated Chamber</h3>
-                            <p class="text-gray-300">Tot 65°C chamber temperatuur voor perfecte ABS, ASA en polycarbonaat prints zonder warping.</p>
+                            <h3 class="text-xl font-semibold text-white mb-3">Heated Chamber Technologie</h3>
+                            <p class="text-gray-300">Geïsoleerde heated chamber tot 65°C voor perfecte ABS, ASA en polycarbonaat prints zonder warping of krimpproblemen.</p>
                         </div>
                         
                         <div class="card p-6 text-center">
                             <div class="feature-icon mx-auto mb-4">
                                 <i class="fas fa-compress-arrows-alt text-white text-xl" aria-hidden="true"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">Direct Drive</h3>
-                            <p class="text-gray-300">Direct drive extruder voor betere controle bij flexibele materialen en complexe prints.</p>
+                            <h3 class="text-xl font-semibold text-white mb-3">Direct Drive Extruder</h3>
+                            <p class="text-gray-300">High-torque direct drive extruder voor betere controle bij flexibele materialen en complexe prints met veel retracties.</p>
                         </div>
                         
                         <div class="card p-6 text-center">
@@ -488,31 +628,31 @@
                                 <i class="fas fa-expand-arrows-alt text-white text-xl" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-white mb-3">Groot Build Volume</h3>
-                            <p class="text-gray-300">325mm³ volume voor grote projecten, behuizingen en meerdere onderdelen in één print.</p>
+                            <p class="text-gray-300">Ruim 325mm³ volume voor grote projecten, complete behuizingen en meerdere onderdelen in één print sessie.</p>
                         </div>
                         
                         <div class="card p-6 text-center">
                             <div class="feature-icon mx-auto mb-4">
                                 <i class="fas fa-tachometer-alt text-white text-xl" aria-hidden="true"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">Hoge Snelheid</h3>
-                            <p class="text-gray-300">Geoptimaliseerd voor hoge print snelheden zonder kwaliteitsverlies.</p>
+                            <h3 class="text-xl font-semibold text-white mb-3">Hoge Snelheid & Kwaliteit</h3>
+                            <p class="text-gray-300">Geoptimaliseerd voor hoge print snelheden tot 150mm/s zonder kwaliteitsverlies dankzij geavanceerde motion system.</p>
                         </div>
                         
                         <div class="card p-6 text-center">
                             <div class="feature-icon mx-auto mb-4">
                                 <i class="fas fa-wifi text-white text-xl" aria-hidden="true"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">Connectivity</h3>
-                            <p class="text-gray-300">USB, Ethernet en WiFi connectivity voor remote monitoring en print management.</p>
+                            <h3 class="text-xl font-semibold text-white mb-3">Geavanceerde Connectivity</h3>
+                            <p class="text-gray-300">USB, Ethernet en WiFi connectivity voor remote monitoring, print management en bediening op afstand.</p>
                         </div>
                         
                         <div class="card p-6 text-center">
                             <div class="feature-icon mx-auto mb-4">
                                 <i class="fas fa-shield-alt text-white text-xl" aria-hidden="true"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">Betrouwbaarheid</h3>
-                            <p class="text-gray-300">Industriële kwaliteit componenten voor 24/7 betrouwbare prints.</p>
+                            <h3 class="text-xl font-semibold text-white mb-3">Industriële Betrouwbaarheid</h3>
+                            <p class="text-gray-300">Hoogwaardige industriële componenten en robuuste constructie voor 24/7 betrouwbare prints en lange levensduur.</p>
                         </div>
                     </div>
                 </div>
@@ -522,15 +662,15 @@
                 <div class="max-w-7xl mx-auto">
                     <div class="grid lg:grid-cols-2 gap-12 items-center">
                         <div>
-                            <h2 id="waarom-titel" class="text-4xl font-bold text-white mb-6">Waarom ik voor Qidi koos</h2>
+                            <h2 id="waarom-titel" class="text-4xl font-bold text-white mb-6">Waarom ik voor de Qidi X-Max 3 koos - Mijn Ervaring</h2>
                             <div class="space-y-4">
                                 <div class="flex items-start gap-4">
                                     <div class="feature-icon mt-1">
                                         <i class="fas fa-gem text-white" aria-hidden="true"></i>
                                     </div>
                                     <div>
-                                        <h3 class="text-xl font-semibold text-white mb-2">Professionele Kwaliteit</h3>
-                                        <p class="text-gray-300">De X-Max 3 biedt industriële kwaliteit prints tegen een betaalbare prijs voor hobbyisten en professionals.</p>
+                                        <h3 class="text-xl font-semibold text-white mb-2">Professionele Printkwaliteit</h3>
+                                        <p class="text-gray-300">De Qidi X-Max 3 biedt consistente industriële kwaliteit prints tegen een betaalbare prijs, perfect voor zowel hobbyisten als professionals die betrouwbare resultaten nodig hebben.</p>
                                     </div>
                                 </div>
                                 
@@ -539,8 +679,8 @@
                                         <i class="fas fa-cogs text-white" aria-hidden="true"></i>
                                     </div>
                                     <div>
-                                        <h3 class="text-xl font-semibold text-white mb-2">Veelzijdigheid</h3>
-                                        <p class="text-gray-300">Met de heated chamber kan ik technische materialen printen die onmogelijk zijn op standaard printers.</p>
+                                        <h3 class="text-xl font-semibold text-white mb-2">Uitgebreide Materiaal Compatibiliteit</h3>
+                                        <p class="text-gray-300">Met de heated chamber kan ik technische materialen printen die onmogelijk zijn op standaard printers. ABS, ASA, polycarbonaat en nylon prints zijn nu probleemloos mogelijk.</p>
                                     </div>
                                 </div>
                                 
@@ -549,8 +689,8 @@
                                         <i class="fas fa-chart-line text-white" aria-hidden="true"></i>
                                     </div>
                                     <div>
-                                        <h3 class="text-xl font-semibold text-white mb-2">Betrouwbaarheid</h3>
-                                        <p class="text-gray-300">Na maanden van intensief gebruik blijft de printer consistent en betrouwbaar presteren.</p>
+                                        <h3 class="text-xl font-semibold text-white mb-2">Uitzonderlijke Betrouwbaarheid</h3>
+                                        <p class="text-gray-300">Na maanden van intensief gebruik blijft de Qidi X-Max 3 consistent en betrouwbaar presteren. Zelfs lange prints van 30+ uur verlopen zonder problemen.</p>
                                     </div>
                                 </div>
                             </div>
@@ -579,11 +719,15 @@
                                     <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
                                     <span class="text-gray-300">Je betrouwbare, consistente resultaten wilt</span>
                                 </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-check text-emerald-400" aria-hidden="true"></i>
+                                    <span class="text-gray-300">Je prototypes of functionele onderdelen print</span>
+                                </div>
                             </div>
                             
                             <div class="mt-8 p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-lg">
                                 <p class="text-sm text-gray-300">
-                                    <strong>Tip:</strong> De Qidi X-Max 3 is ideaal voor functionele onderdelen, prototypes, en professionele projecten waar kwaliteit en betrouwbaarheid essentieel zijn.
+                                    <strong>Expert Advies:</strong> De Qidi X-Max 3 is ideaal voor functionele onderdelen, professionele prototypes, en projecten waar kwaliteit en betrouwbaarheid essentieel zijn. Perfect voor engineering toepassingen en professionele productie.
                                 </p>
                             </div>
                         </div>
@@ -594,20 +738,23 @@
             <section class="py-16 px-4" aria-labelledby="cta-titel">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
-                        <h2 id="cta-titel" class="text-4xl font-bold text-white mb-6">Klaar voor Professionele Kwaliteit?</h2>
+                        <h2 id="cta-titel" class="text-4xl font-bold text-white mb-6">Klaar voor Professionele 3D Print Kwaliteit?</h2>
                         <p class="text-xl text-gray-300 mb-8">
-                            Laat je project printen op de Qidi X-Max 3 voor het beste resultaat met technische materialen en grote formaten.
+                            Laat je project printen op de Qidi X-Max 3 voor de beste resultaten met technische materialen en grote formaten. Perfecte prints gegarandeerd!
                         </p>
                         <a href="contact.html" class="btn-primary no-underline">
                             <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                            Als je wat wilt geprint hebben stuur hier mailtje
+                            Vraag een Professionele Print Aan
                         </a>
+                        <p class="text-sm text-gray-400 mt-4">
+                            Of stuur direct een e-mail naar: <a href="mailto:3Dronny@gmail.com" class="text-emerald-400 hover:text-emerald-300">3Dronny@gmail.com</a>
+                        </p>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Footer - CONSISTENT MET ANDERE PAGINA'S -->
+        <!-- Footer -->
         <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="footer-grid grid md:grid-cols-4 gap-8">
@@ -635,7 +782,7 @@
                             <span class="text-xl font-bold text-white">3DRonny</span>
                         </div>
                         <p class="text-gray-400 text-sm">
-                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                            Expert 3D print services met specialisatie in professionele printers en technische materialen.
                         </p>
                     </div>
                     <div>
@@ -645,19 +792,19 @@
                             <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
                             <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
-                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1" aria-current="page">Qidi X-Max 3</a></li>
                             <li><a href="geschiedenis.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Geschiedenis</a></li>
-                             <li><a href="links.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Links</a></li>
+                            <li><a href="links.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Links</a></li>
                             <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Contact</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-white mb-4">Services</h3>
+                        <h3 class="font-semibold text-white mb-4">Expertise</h3>
                         <ul class="space-y-2 text-gray-400 text-sm">
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Prototyping</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Functionele Prints</a></li>
-                            <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Creatieve Projecten</a></li>
-                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Advies & Consult</a></li>
+                            <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materiaal Advies</a></li>
+                            <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Professionele Prints</a></li>
+                            <li><a href="contact.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Technisch Advies</a></li>
                         </ul>
                     </div>
                     <div>

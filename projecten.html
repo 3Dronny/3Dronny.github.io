@@ -4,58 +4,73 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="3DRonny Projecten - Complete projecten met Qidi, Gereedschapshouders, behuizingen, custom ontwerpen, technische prints, rail systemen, modulaire ontwerpen, Fusion 360 projecten">
-    <meta name="keywords" content="3Dronny, 3D print projecten, case studies, project details, technische prints, custom ontwerpen, succesverhalen, project portfolio, gedetailleerde projecten, print process, ontwerp proces, CAD projecten, Fusion 360 designs, technische oplossingen, praktische prints, functionele ontwerpen, maatwerk projecten">
+    <!-- Canonical URL voor duplicate content preventie -->
+    <link rel="canonical" href="https://3dronny.github.io/projecten.html">
     
-    <!-- Open Graph voor Projecten -->
-    <meta property="og:title" content="3DRonny - Projecten | 3D Print Case Studies">
+    <!-- SEO Meta Tags -->
+    <title>3DRonny Projecten - 3D Print Case Studies & Portfolio | Gereedschapshouders, Custom Ontwerpen</title>
+    <meta name="description" content="Bekijk onze 3D print project portfolio: gedetailleerde case studies van gereedschapshouders, custom behuizingen, technische prints en modulaire systemen. Compleet van ontwerp tot eindresultaat.">
+    <meta name="keywords" content="3D print projecten, gereedschapshouders, custom ontwerpen, technische prints, 3D print portfolio, Fusion 360 projecten, modulaire systemen, 3D print case studies">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="3DRonny Projecten - 3D Print Case Studies & Portfolio">
     <meta property="og:description" content="Bekijk gedetailleerde 3D print projecten: gereedschapshouders, custom ontwerpen, technische prints met Qidi en Creality printers">
     <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
     <meta property="og:url" content="https://3dronny.github.io/projecten.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="3DRonny">
-    <meta property="og:locale" content="be_BE">
+    <meta property="og:locale" content="nl_BE">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="3DRonny - 3D Print Projecten">
-    <meta name="twitter:description" content="Bekijk gedetailleerde 3D print projecten en case studies">
+    <meta name="twitter:title" content="3DRonny - 3D Print Projecten Portfolio">
+    <meta name="twitter:description" content="Gedetailleerde 3D print projecten en case studies van custom ontwerpen">
 
     <!-- Preconnect voor betere performance -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
-    <title>3DRonny - Projecten | 3D Print Case Studies & Projecten</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Structured Data voor Projecten -->
+    <!-- Verbeterde Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "3DRonny 3D Print Projecten",
-      "description": "Gedetailleerde case studies van 3D print projecten",
+      "name": "3DRonny 3D Print Projecten Portfolio",
+      "description": "Gedetailleerde case studies van 3D print projecten inclusief gereedschapshouders, custom ontwerpen en technische prints",
       "url": "https://3dronny.github.io/projecten.html",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 8,
+        "numberOfItems": 24,
         "itemListElement": [
           {
             "@type": "CreativeWork",
-            "name": "Custom Drone Frame",
-            "description": "Lichtgewicht drone frame voor FPV racing",
-            "status": "InUitvoering"
+            "name": "Gereedschap Wall Organizer",
+            "description": "Wandmontage systeem voor gereedschapsorganisatie met sterke holders en afneembare bakjes",
+            "url": "https://3dronny.github.io/projectpagina1.html",
+            "dateCreated": "2024-01-15"
           },
           {
             "@type": "CreativeWork",
-            "name": "Modulaire Keuken Organizer",
-            "description": "Uitbreidbaar keukenorganisatiesysteem",
-            "status": "InUitvoering"
+            "name": "Electronics Enclosure",
+            "description": "Professionele behuizing voor elektronica met kabelmanagement en ventilatie",
+            "dateCreated": "2024-02-01"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "3D Mechanical Puzzle",
+            "description": "Uitdagende mechanische puzzel met 12 bewegende onderdelen voor educatieve doeleinden",
+            "dateCreated": "2024-01-20"
           }
         ]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "3DRonny",
+        "description": "Hobby 3D print services met passie voor kwaliteit en creativiteit"
       }
     }
     </script>
@@ -93,7 +108,6 @@
             width: 100%;
         }
         
-        /* ===== EXACT DEZELFDE BUTTON STYLING ALS CONTACT PAGINA ===== */
         .btn-primary {
             background: var(--accent-color);
             color: white;
@@ -124,7 +138,6 @@
             outline-offset: 3px;
         }
 
-        /* CTA section buttons - ZELFDE SPACING ALS ANDERE BUTTONS */
         .cta-section .btn-primary {
             padding: 16px 32px;
             min-height: 56px;
@@ -219,7 +232,6 @@
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
         
-        /* Image loading states */
         .image-container {
             position: relative;
             overflow: hidden;
@@ -239,12 +251,10 @@
             transition: opacity 0.3s ease;
         }
         
-        /* Focus styles voor accessibility */
         a:focus, button:focus {
             outline-offset: 2px;
         }
         
-        /* Print styles */
         @media print {
             .no-print {
                 display: none !important;
@@ -255,7 +265,6 @@
             }
         }
 
-        /* Responsive aanpassingen voor kleinere schermen - ZELFDE ALS CONTACT */
         @media (max-width: 768px) {
             .project-stats {
                 grid-template-columns: 1fr;
@@ -333,9 +342,8 @@
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-8">
                             <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
-    <i class="fa-solid fa-house-chimney mr-2"></i>Home
-</a>
-							
+                                <i class="fa-solid fa-house-chimney mr-2"></i>Home
+                            </a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
@@ -357,10 +365,10 @@
             <section class="py-16 px-4" aria-labelledby="projects-title">
                 <div class="max-w-7xl mx-auto text-center">
                     <h1 id="projects-title" class="text-5xl lg:text-6xl font-bold text-white mb-6">
-                        Mijn <span class="text-emerald-400">Projecten</span>
+                        3D Print <span class="text-emerald-400">Projecten Portfolio</span>
                     </h1>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                        Gedetailleerde beschrijvingen van mijn 3D print projecten. Van concept tot eindresultaat.
+                        Ontdek onze gedetailleerde 3D print case studies: van innovatieve gereedschapshouders tot complexe custom ontwerpen. Elk project toont het volledige proces van concept tot eindresultaat.
                     </p>
                 </div>
             </section>
@@ -368,7 +376,7 @@
             <!-- Project Status Overview -->
             <section class="py-8 px-4" aria-labelledby="stats-title">
                 <div class="max-w-7xl mx-auto">
-                    <h2 id="stats-title" class="sr-only">Project Statistieken</h2>
+                    <h2 id="stats-title" class="sr-only">Project Statistieken Overzicht</h2>
                     <div class="project-stats grid md:grid-cols-3 gap-8 mb-12">
                         <div class="card p-6 text-center">
                             <div class="text-3xl font-bold text-emerald-400 mb-2" aria-label="24 voltooide projecten">24</div>
@@ -389,25 +397,25 @@
             <!-- Active Projects -->
             <section class="py-8 px-4" aria-labelledby="active-projects-title">
                 <div class="max-w-7xl mx-auto">
-                    <h2 id="active-projects-title" class="text-3xl font-bold text-white mb-8">Actieve Projecten</h2>
+                    <h2 id="active-projects-title" class="text-3xl font-bold text-white mb-8">Actieve 3D Print Projecten</h2>
                     <div class="space-y-6">
                         <!-- Project 1 -->
                         <div class="card p-6">
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
-                                        <h3 class="text-xl font-semibold text-white">empty</h3>
+                                        <h3 class="text-xl font-semibold text-white">Custom Drone Frame - FPV Racing</h3>
                                         <span class="status-in-progress px-3 py-1 rounded-full text-sm font-medium">
                                             <i class="fas fa-sync-alt mr-1" aria-hidden="true"></i>In Uitvoering
                                         </span>
                                     </div>
                                     <p class="text-gray-300 mb-4">
-                                        empty text
+                                        Ontwikkeling van een lichtgewicht drone frame speciaal ontworpen voor FPV racing. Het frame combineert maximale stijfheid met minimaal gewicht door geavanceerde infill patronen en strategische materiaalverdeling. Geschikt voor zowel beginner als gevorderde racers.
                                     </p>
                                     <div class="flex flex-wrap gap-4 text-sm text-gray-400">
                                         <span><i class="fas fa-cube mr-1 text-emerald-400" aria-hidden="true"></i>ASA Carbon Fiber</span>
                                         <span><i class="fas fa-ruler mr-1 text-emerald-400" aria-hidden="true"></i>0.15mm Laaghoogte</span>
-                                        <span><i class="fas fa-percentage mr-1 text-emerald-400" aria-hidden="true"></i>25% Infill</span>
+                                        <span><i class="fas fa-percentage mr-1 text-emerald-400" aria-hidden="true"></i>25% Gyroid Infill</span>
                                     </div>
                                 </div>
                                 <div class="project-progress lg:w-48">
@@ -419,8 +427,7 @@
                                         <div class="progress-fill" style="width: 65%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Aug 2025</div>
-                                    <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
-                                    <a href="#" class="btn-primary w-full justify-center mt-4">
+                                    <a href="drone-frame-project.html" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
                                     </a>
@@ -433,13 +440,13 @@
                             <div class="project-header flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-4 mb-3">
-                                        <h3 class="text-xl font-semibold text-white">empty</h3>
+                                        <h3 class="text-xl font-semibold text-white">Modulaire Keuken Organizer Systeem</h3>
                                         <span class="status-in-progress px-3 py-1 rounded-full text-sm font-medium">
                                             <i class="fas fa-sync-alt mr-1" aria-hidden="true"></i>In Uitvoering
                                         </span>
                                     </div>
                                     <p class="text-gray-300 mb-4">
-                                        empty text
+                                        Uitbreidbaar keukenorganisatiesysteem met magnetische verbindingen voor eenvoudige configuratie wijzigingen. Het systeem omvat speciaal ontworpen houders voor kruiden, keukengerei en voorraadpotjes. Alle onderdelen zijn food-safe geprint met PETG materiaal.
                                     </p>
                                     <div class="flex flex-wrap gap-4 text-sm text-gray-400">
                                         <span><i class="fas fa-cube mr-1 text-emerald-400" aria-hidden="true"></i>PETG Food Safe</span>
@@ -456,8 +463,7 @@
                                         <div class="progress-fill" style="width: 40%"></div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-2">Verwachte oplevering: Sep 2025</div>
-                                    <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
-                                    <a href="#" class="btn-primary w-full justify-center mt-4">
+                                    <a href="keuken-organizer-project.html" class="btn-primary w-full justify-center mt-4">
                                         <i class="fas fa-code-branch"></i>
                                         Volg Project
                                     </a>
@@ -471,7 +477,7 @@
             <!-- Completed Projects -->
             <section class="py-16 px-4" aria-labelledby="completed-projects-title">
                 <div class="max-w-7xl mx-auto">
-                    <h2 id="completed-projects-title" class="text-3xl font-bold text-white mb-8">Voltooide Projecten</h2>
+                    <h2 id="completed-projects-title" class="text-3xl font-bold text-white mb-8">Voltooide 3D Print Projecten</h2>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Voltooide projecten">
                         <!-- Completed Project 1 -->
                         <div class="card p-6" role="listitem">
@@ -492,12 +498,11 @@
                                 </span>
                             </div>
                             <p class="text-gray-400 text-sm mb-4">
-                                Wandmontage systeem voor gereedschapsorganisatie met sterke holders , ook afneembare bakjes
+                                Innovatief wandmontage systeem voor gereedschapsorganisatie met sterke magnetische holders en afneembare bakjes. Ontworpen voor maximale ruimtebenutting in werkplaatsen en garages.
                             </p>
-                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                             <a href="projectpagina1.html" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
-                                Bekijk Details
+                                Bekijk Project Details
                             </a>
                         </div>
 
@@ -508,7 +513,7 @@
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
                                 <img src="fotos/electronics-enclosure.jpg" 
-                                     alt="test"
+                                     alt="Electronics enclosure - Professionele 3D geprinte behuizing voor elektronica met kabelmanagement"
                                      class="w-full h-full object-cover rounded-lg image-loaded"
                                      loading="lazy"
                                      onload="this.previousElementSibling.style.display='none'; this.classList.add('image-loaded')">
@@ -520,12 +525,11 @@
                                 </span>
                             </div>
                             <p class="text-gray-400 text-sm mb-4">
-                                empty
+                                Professionele behuizing voor elektronica projecten met geïntegreerd kabelmanagement en ventilatie. Geschikt voor Raspberry Pi, Arduino en andere microcontroller projecten.
                             </p>
-                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
-                            <a href="#" class="btn-primary w-full justify-center">
+                            <a href="electronics-enclosure-project.html" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
-                                Bekijk Details
+                                Bekijk Project Details
                             </a>
                         </div>
 
@@ -548,12 +552,11 @@
                                 </span>
                             </div>
                             <p class="text-gray-400 text-sm mb-4">
-                                Uitdagende mechanische puzzel met 12 bewegende onderdelen.
+                                Uitdagende mechanische puzzel met 12 bewegende onderdelen, perfect voor educatieve doeleinden en als cadeau voor puzzelliefhebbers. Geprint in meerdere kleuren voor beter onderscheid.
                             </p>
-                            <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
-                            <a href="#" class="btn-primary w-full justify-center">
+                            <a href="mechanical-puzzle-project.html" class="btn-primary w-full justify-center">
                                 <i class="fas fa-info-circle"></i>
-                                Bekijk Details
+                                Bekijk Project Details
                             </a>
                         </div>
                     </div>
@@ -564,11 +567,10 @@
             <section class="py-16 px-4 cta-section" aria-labelledby="cta-title">
                 <div class="max-w-4xl mx-auto text-center">
                     <div class="card p-12">
-                        <h2 id="cta-title" class="text-4xl font-bold text-white mb-6">Eigen Project Voorstellen?</h2>
+                        <h2 id="cta-title" class="text-4xl font-bold text-white mb-6">Eigen 3D Print Project Voorstellen?</h2>
                         <p class="text-xl text-gray-300 mb-8">
-                            Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie!
+                            Heb je een idee voor een custom 3D print project? Ik help graag bij de realisatie van jouw unieke ontwerp! Van prototype tot eindproduct.
                         </p>
-                        <!-- BUTTON MET ZELFDE SPACING ALS CONTACT -->
                         <a href="contact.html" class="btn-primary">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                             Project Bespreken
@@ -606,7 +608,7 @@
                             <span class="text-xl font-bold text-white">3DRonny</span>
                         </div>
                         <p class="text-gray-400 text-sm">
-                            Hobby 3D print services met passie voor kwaliteit en creativiteit.
+                            Hobby 3D print services met passie voor kwaliteit en creativiteit. Specialisatie in custom ontwerpen en functionele prints.
                         </p>
                     </div>
                     <div>
@@ -691,7 +693,7 @@
                     }
                 });
             });
-
-           
+        });
+    </script>
 </body>
 </html>
