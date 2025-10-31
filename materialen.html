@@ -139,28 +139,21 @@
         
         .skip-link {
          display: none; /* Dit verwijdert de groene balk volledig */
-}
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation - GEFIXTE VOLLEDIGE BREEDTE MET LINKS UITLIJNING */
+        /* Breadcrumb navigation - CONSISTENT WITH FIRST VERSION */
         .breadcrumb {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 0;
-            margin: 0 0 2rem 0;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: none;
-            border-right: none;
-            border-radius: 0;
-        }
-        
-        .breadcrumb-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
         
         .breadcrumb ol {
@@ -553,7 +546,9 @@
                             </a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
-                            <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
+                            <a href="materialen.html" class="nav-link text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 bg-emerald-600/20">
+                                <i class="fas fa-cube mr-1" aria-hidden="true"></i>Materialen
+                            </a>
                             <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
                             <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
                                 <i class="fas fa-history mr-1" aria-hidden="true"></i>Geschiedenis
@@ -566,9 +561,9 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation - GEFIXTE VOLLEDIGE BREEDTE MET LINKS UITLIJNING -->
+        <!-- Breadcrumb Navigation - CONSISTENT WITH FIRST VERSION -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
-            <div class="breadcrumb-container">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ol>
                     <li>
                         <a href="index.html">
