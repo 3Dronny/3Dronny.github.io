@@ -88,6 +88,50 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
+        /* Breadcrumb navigation - CONSISTENT MET ANDERE PAGINA'S */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .breadcrumb ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .breadcrumb a {
+            color: #10b981;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #34d399;
+        }
+        
+        .breadcrumb .separator {
+            color: #6b7280;
+        }
+        
+        .breadcrumb [aria-current="page"] {
+            color: #d1d5db;
+            font-weight: 600;
+        }
+        
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -345,7 +389,9 @@
                                 <i class="fa-solid fa-house-chimney mr-2"></i>Home
                             </a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
-                            <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
+                            <a href="projecten.html" class="nav-link text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 bg-emerald-600/20">
+                                <i class="fas fa-rocket mr-1" aria-hidden="true"></i>Projecten
+                            </a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
                             <a href="qidi-x-max3.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Qidi X-Max 3</a>
                             <a href="geschiedenis.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
@@ -357,6 +403,23 @@
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <!-- Breadcrumb Navigation - TOEGEVOEGD -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <ol>
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="separator">/</li>
+                <li aria-current="page">
+                    <i class="fas fa-rocket" aria-hidden="true"></i>
+                    Projecten Portfolio
+                </li>
+            </ol>
         </nav>
 
         <!-- Main Content -->
