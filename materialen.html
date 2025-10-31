@@ -146,7 +146,7 @@
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation - GEFIXTE VOLLEDIGE BREEDTE */
+        /* Breadcrumb navigation - GEFIXTE VOLLEDIGE BREEDTE MET LINKS UITLIJNING */
         .breadcrumb {
             background: rgba(255, 255, 255, 0.05);
             padding: 1rem 0;
@@ -157,7 +157,7 @@
             border-radius: 0;
         }
         
-        .breadcrumb .breadcrumb-container {
+        .breadcrumb-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
@@ -566,7 +566,7 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation - GEFIXTE VOLLEDIGE BREEDTE -->
+        <!-- Breadcrumb Navigation - GEFIXTE VOLLEDIGE BREEDTE MET LINKS UITLIJNING -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
             <div class="breadcrumb-container">
                 <ol>
@@ -586,463 +586,464 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="container flex-grow">
-            <!-- INTRODUCTIE -->
-            <section class="content-section" id="main-content">
-                <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
-                    <i class="fas fa-thermometer-half" aria-hidden="true"></i>
-                    Expert Materiaal Analyse
-                </div>
-                <h1 class="text-4xl font-bold mb-4">3D Print Materialen Vergelijking 2025</h1>
-                <p class="text-lg mb-6">Complete gids voor het kiezen van het juiste 3D print filament. Vergelijk <strong>thermische uitzetting</strong>, <strong>sterkte-eigenschappen</strong> en <strong>toepassingsgebieden</strong> van PLA, ABS, PETG, Nylon, Polycarbonaat, Polypropyleen en PEEK.</p>
-                <p>Als 3D print expert help ik je het perfecte materiaal te selecteren voor jouw project. Of je nu een beginner bent of een ervaren maker, deze uitgebreide vergelijking geeft je alle informatie die je nodig hebt.</p>
-                
-                <div class="hero-buttons flex flex-col sm:flex-row gap-4 mt-8">
-                    <a href="projecten.html" class="btn-primary no-underline">
-                        <i class="fas fa-rocket" aria-hidden="true"></i>
-                        Bekijk Onze Projecten
-                    </a>
-                    <a href="qidi-x-max3.html" class="btn-outline no-underline">
-                        <i class="fas fa-print" aria-hidden="true"></i>
-                        Printer Specificaties
-                    </a>
-                    <a href="contact.html" class="btn-outline no-underline">
-                        <i class="fas fa-comments" aria-hidden="true"></i>
-                        Persoonlijk Advies
-                    </a>
-                </div>
-            </section>
-            
-            <!-- THERMISCHE UITZETTING -->
-            <section class="content-section">
-                <h2 class="text-3xl font-bold mb-6">Thermische Uitzetting bij Verschillende Temperaturen</h2>
-                <p class="mb-6">Thermische uitzetting is cruciaal bij het ontwerpen van precisie-onderdelen. Gebruik de onderstaande slider om te zien hoe verschillende materialen reageren op temperatuurveranderingen.</p>
-                
-                <div class="temp-slider">
-                    <div class="slider-container">
-                        <span class="text-lg font-medium">Temperatuur:</span>
-                        <input type="range" id="tempSlider" min="20" max="200" value="20" step="10">
-                        <span class="slider-value text-xl font-bold" id="tempValue">20°C</span>
+        <main id="main-content">
+            <div class="container">
+                <!-- INTRODUCTIE -->
+                <section class="content-section">
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
+                        <i class="fas fa-thermometer-half" aria-hidden="true"></i>
+                        Expert Materiaal Analyse
                     </div>
-                </div>
-                
-                <div class="expansion-display">
-                    <h3 class="text-xl font-semibold mb-3">Uitzetting bij <span id="displayTemp" class="text-emerald-400">20°C</span></h3>
-                    <p class="mb-4">De relatieve uitzetting voor een staaf van 1 meter:</p>
-                    <div id="expansionResults" class="space-y-3">
-                        <!-- Hier komen de resultaten -->
+                    <h1 class="text-4xl font-bold mb-4">3D Print Materialen Vergelijking 2025</h1>
+                    <p class="text-lg mb-6">Complete gids voor het kiezen van het juiste 3D print filament. Vergelijk <strong>thermische uitzetting</strong>, <strong>sterkte-eigenschappen</strong> en <strong>toepassingsgebieden</strong> van PLA, ABS, PETG, Nylon, Polycarbonaat, Polypropyleen en PEEK.</p>
+                    <p>Als 3D print expert help ik je het perfecte materiaal te selecteren voor jouw project. Of je nu een beginner bent of een ervaren maker, deze uitgebreide vergelijking geeft je alle informatie die je nodig hebt.</p>
+                    
+                    <div class="hero-buttons flex flex-col sm:flex-row gap-4 mt-8">
+                        <a href="projecten.html" class="btn-primary no-underline">
+                            <i class="fas fa-rocket" aria-hidden="true"></i>
+                            Bekijk Onze Projecten
+                        </a>
+                        <a href="qidi-x-max3.html" class="btn-outline no-underline">
+                            <i class="fas fa-print" aria-hidden="true"></i>
+                            Printer Specificaties
+                        </a>
+                        <a href="contact.html" class="btn-outline no-underline">
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            Persoonlijk Advies
+                        </a>
                     </div>
-                </div>
+                </section>
                 
-                <div class="chart-container">
-                    <canvas id="expansionChart" aria-label="Vergelijkingsgrafiek van thermische uitzettingscoëfficiënten voor verschillende 3D print materialen" role="img"></canvas>
-                </div>
-                
-                <div class="text-center mt-6">
-                    <a href="gallery.html" class="btn-outline no-underline">
-                        <i class="fas fa-images" aria-hidden="true"></i>
-                        Bekijk Materialen in Onze Projecten
-                    </a>
-                </div>
-            </section>
-            
-            <!-- MATERIALEN OVERZICHT -->
-            <section class="content-section">
-                <h2 class="text-3xl font-bold mb-6">Materialen Overzicht - Eigenschappen & Toepassingen</h2>
-                <p class="mb-6">Elk materiaal heeft unieke eigenschappen die het geschikt maken voor specifieke toepassingen. Hieronder vind je een gedetailleerd overzicht van de meest gebruikte 3D print materialen.</p>
-                
-                <div class="materials-grid">
-                    <!-- PLA Card -->
-                    <div class="material-card">
-                        <div class="material-header pla">
-                            <h3 class="text-xl font-bold">PLA</h3>
-                            <p class="opacity-90">Polylactidezuur - Perfect voor Beginners</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">68 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 72%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Smeltpunt:</span>
-                                <span class="text-gray-300">150-160°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">50-70 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">3.5 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.24 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Makkelijk printen</span>
-                                <span class="material-badge">Scherpe details</span>
-                                <span class="material-badge">Biologisch afbreekbaar</span>
-                            </div>
-
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Prototypes, modellen, decoratieve objecten, educatieve projecten</p>
+                <!-- THERMISCHE UITZETTING -->
+                <section class="content-section">
+                    <h2 class="text-3xl font-bold mb-6">Thermische Uitzetting bij Verschillende Temperaturen</h2>
+                    <p class="mb-6">Thermische uitzetting is cruciaal bij het ontwerpen van precisie-onderdelen. Gebruik de onderstaande slider om te zien hoe verschillende materialen reageren op temperatuurveranderingen.</p>
+                    
+                    <div class="temp-slider">
+                        <div class="slider-container">
+                            <span class="text-lg font-medium">Temperatuur:</span>
+                            <input type="range" id="tempSlider" min="20" max="200" value="20" step="10">
+                            <span class="slider-value text-xl font-bold" id="tempValue">20°C</span>
                         </div>
                     </div>
                     
-                    <!-- ABS Card -->
-                    <div class="material-card">
-                        <div class="material-header abs">
-                            <h3 class="text-xl font-bold">ABS</h3>
-                            <p class="opacity-90">Acrylonitril-butadieen-styreen - Duurzaam & Slagvast</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">72 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 76%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Glasovergang:</span>
-                                <span class="text-gray-300">105°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">40 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">2.0-2.7 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.05 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Hittebestendig</span>
-                                <span class="material-badge">Slagvast</span>
-                                <span class="material-badge">Post-processing</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Functionele onderdelen, auto-onderdelen, LEGO-blokken, behuizingen</p>
+                    <div class="expansion-display">
+                        <h3 class="text-xl font-semibold mb-3">Uitzetting bij <span id="displayTemp" class="text-emerald-400">20°C</span></h3>
+                        <p class="mb-4">De relatieve uitzetting voor een staaf van 1 meter:</p>
+                        <div id="expansionResults" class="space-y-3">
+                            <!-- Hier komen de resultaten -->
                         </div>
                     </div>
                     
-                    <!-- PETG Card -->
-                    <div class="material-card">
-                        <div class="material-header petg">
-                            <h3 class="text-xl font-bold">PETG</h3>
-                            <p class="opacity-90">Polyethyleentereftalaat glycol - Sterk & Weerbestendig</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">60 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 63%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Smeltpunt:</span>
-                                <span class="text-gray-300">260°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">50 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">2.0 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.27 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Sterk & taai</span>
-                                <span class="material-badge">Weerbestendig</span>
-                                <span class="material-badge">Food-safe varianten</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Mechanische onderdelen, buiten toepassingen, voedselcontainers, medische hulpmiddelen</p>
-                        </div>
+                    <div class="chart-container">
+                        <canvas id="expansionChart" aria-label="Vergelijkingsgrafiek van thermische uitzettingscoëfficiënten voor verschillende 3D print materialen" role="img"></canvas>
                     </div>
                     
-                    <!-- Nylon Card -->
-                    <div class="material-card">
-                        <div class="material-header nylon">
-                            <h3 class="text-xl font-bold">Nylon (PA6)</h3>
-                            <p class="opacity-90">Polyamide 6 - Duurzaam & Slijtvast</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">80 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 85%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Smeltpunt:</span>
-                                <span class="text-gray-300">220°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">45-90 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">2-4 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.13 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Duurzaam</span>
-                                <span class="material-badge">Slijtvast</span>
-                                <span class="material-badge">Hoge taaiheid</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Tandwielen, lagers, functionele prototypes, industriële toepassingen</p>
-                        </div>
+                    <div class="text-center mt-6">
+                        <a href="gallery.html" class="btn-outline no-underline">
+                            <i class="fas fa-images" aria-hidden="true"></i>
+                            Bekijk Materialen in Onze Projecten
+                        </a>
                     </div>
-                    
-                    <!-- Polycarbonaat Card -->
-                    <div class="material-card">
-                        <div class="material-header pc">
-                            <h3 class="text-xl font-bold">Polycarbonaat</h3>
-                            <p class="opacity-90">PC - Transparant & Zeer Sterk</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">65 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 69%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Glasovergang:</span>
-                                <span class="text-gray-300">155°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">55-75 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">2.4 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.20 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Transparant</span>
-                                <span class="material-badge">Hoge sterkte</span>
-                                <span class="material-badge">Hittebestendig</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Veiligheidsbrillen, transparante behuizingen, medische apparatuur, veeleisende mechanische onderdelen</p>
-                        </div>
-                    </div>
-                    
-                    <!-- PP Card -->
-                    <div class="material-card">
-                        <div class="material-header pp">
-                            <h3 class="text-xl font-bold">Polypropyleen</h3>
-                            <p class="opacity-90">PP - Flexibel & Chemisch Resistent</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">110 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 100%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Smeltpunt:</span>
-                                <span class="text-gray-300">160-170°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">25-40 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">1.5-2.0 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">0.90-0.91 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Flexibel</span>
-                                <span class="material-badge">Chemisch resistent</span>
-                                <span class="material-badge">Lichtgewicht</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Levensmiddelenverpakking, chemische containers, scharnieren, flexibele onderdelen</p>
-                        </div>
-                    </div>
-                    
-                    <!-- PEEK Card -->
-                    <div class="material-card">
-                        <div class="material-header peek">
-                            <h3 class="text-xl font-bold">PEEK</h3>
-                            <p class="opacity-90">Polyetheretherketon - High-Performance</p>
-                        </div>
-                        <div class="material-content">
-                            <div class="property">
-                                <span class="property-name">Uitzettingscoëfficiënt:</span>
-                                <span class="expansion-value">47 × 10⁻⁶/°C</span>
-                            </div>
-                            <div class="property-bar">
-                                <div class="property-fill" style="width: 50%"></div>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Smeltpunt:</span>
-                                <span class="text-gray-300">343°C</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Treksterkte:</span>
-                                <span class="text-gray-300">90-100 MPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Elasticiteitsmodulus:</span>
-                                <span class="text-gray-300">3.6 GPa</span>
-                            </div>
-                            <div class="property">
-                                <span class="property-name">Dichtheid:</span>
-                                <span class="text-gray-300">1.32 g/cm³</span>
-                            </div>
-                            <div class="flex gap-2 mt-4 flex-wrap">
-                                <span class="material-badge">Hoge temperatuur</span>
-                                <span class="material-badge">Extreem sterk</span>
-                                <span class="material-badge">Chemisch resistent</span>
-                            </div>
-                            <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Lucht- en ruimtevaart, medische implantaten, automotive high-performance onderdelen, chemische industrie</p>
-                        </div>
-                    </div>
-                </div>
+                </section>
                 
-                <div class="text-center mt-8">
-                    <a href="contact.html" class="btn-primary no-underline">
-                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                        Vraag Persoonlijk Materiaal Advies
-                    </a>
-                </div>
-            </section>
-            
-            <!-- VERGELIJKINGSTABEL -->
-            <section class="content-section">
-                <h2 class="text-3xl font-bold mb-6">Complete Vergelijkingstabel 3D Print Materialen</h2>
-                <p class="mb-6">Overzicht van alle technische specificaties voor een snelle vergelijking tussen materialen.</p>
+                <!-- MATERIALEN OVERZICHT -->
+                <section class="content-section">
+                    <h2 class="text-3xl font-bold mb-6">Materialen Overzicht - Eigenschappen & Toepassingen</h2>
+                    <p class="mb-6">Elk materiaal heeft unieke eigenschappen die het geschikt maken voor specifieke toepassingen. Hieronder vind je een gedetailleerd overzicht van de meest gebruikte 3D print materialen.</p>
+                    
+                    <div class="materials-grid">
+                        <!-- PLA Card -->
+                        <div class="material-card">
+                            <div class="material-header pla">
+                                <h3 class="text-xl font-bold">PLA</h3>
+                                <p class="opacity-90">Polylactidezuur - Perfect voor Beginners</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">68 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Smeltpunt:</span>
+                                    <span class="text-gray-300">150-160°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">50-70 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">3.5 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.24 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Makkelijk printen</span>
+                                    <span class="material-badge">Scherpe details</span>
+                                    <span class="material-badge">Biologisch afbreekbaar</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Prototypes, modellen, decoratieve objecten, educatieve projecten</p>
+                            </div>
+                        </div>
+                        
+                        <!-- ABS Card -->
+                        <div class="material-card">
+                            <div class="material-header abs">
+                                <h3 class="text-xl font-bold">ABS</h3>
+                                <p class="opacity-90">Acrylonitril-butadieen-styreen - Duurzaam & Slagvast</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">72 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 76%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Glasovergang:</span>
+                                    <span class="text-gray-300">105°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">40 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">2.0-2.7 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.05 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Hittebestendig</span>
+                                    <span class="material-badge">Slagvast</span>
+                                    <span class="material-badge">Post-processing</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Functionele onderdelen, auto-onderdelen, LEGO-blokken, behuizingen</p>
+                            </div>
+                        </div>
+                        
+                        <!-- PETG Card -->
+                        <div class="material-card">
+                            <div class="material-header petg">
+                                <h3 class="text-xl font-bold">PETG</h3>
+                                <p class="opacity-90">Polyethyleentereftalaat glycol - Sterk & Weerbestendig</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">60 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 63%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Smeltpunt:</span>
+                                    <span class="text-gray-300">260°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">50 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">2.0 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.27 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Sterk & taai</span>
+                                    <span class="material-badge">Weerbestendig</span>
+                                    <span class="material-badge">Food-safe varianten</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Mechanische onderdelen, buiten toepassingen, voedselcontainers, medische hulpmiddelen</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Nylon Card -->
+                        <div class="material-card">
+                            <div class="material-header nylon">
+                                <h3 class="text-xl font-bold">Nylon (PA6)</h3>
+                                <p class="opacity-90">Polyamide 6 - Duurzaam & Slijtvast</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">80 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 85%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Smeltpunt:</span>
+                                    <span class="text-gray-300">220°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">45-90 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">2-4 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.13 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Duurzaam</span>
+                                    <span class="material-badge">Slijtvast</span>
+                                    <span class="material-badge">Hoge taaiheid</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Tandwielen, lagers, functionele prototypes, industriële toepassingen</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Polycarbonaat Card -->
+                        <div class="material-card">
+                            <div class="material-header pc">
+                                <h3 class="text-xl font-bold">Polycarbonaat</h3>
+                                <p class="opacity-90">PC - Transparant & Zeer Sterk</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">65 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 69%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Glasovergang:</span>
+                                    <span class="text-gray-300">155°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">55-75 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">2.4 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.20 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Transparant</span>
+                                    <span class="material-badge">Hoge sterkte</span>
+                                    <span class="material-badge">Hittebestendig</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Veiligheidsbrillen, transparante behuizingen, medische apparatuur, veeleisende mechanische onderdelen</p>
+                            </div>
+                        </div>
+                        
+                        <!-- PP Card -->
+                        <div class="material-card">
+                            <div class="material-header pp">
+                                <h3 class="text-xl font-bold">Polypropyleen</h3>
+                                <p class="opacity-90">PP - Flexibel & Chemisch Resistent</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">110 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 100%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Smeltpunt:</span>
+                                    <span class="text-gray-300">160-170°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">25-40 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">1.5-2.0 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">0.90-0.91 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Flexibel</span>
+                                    <span class="material-badge">Chemisch resistent</span>
+                                    <span class="material-badge">Lichtgewicht</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Levensmiddelenverpakking, chemische containers, scharnieren, flexibele onderdelen</p>
+                            </div>
+                        </div>
+                        
+                        <!-- PEEK Card -->
+                        <div class="material-card">
+                            <div class="material-header peek">
+                                <h3 class="text-xl font-bold">PEEK</h3>
+                                <p class="opacity-90">Polyetheretherketon - High-Performance</p>
+                            </div>
+                            <div class="material-content">
+                                <div class="property">
+                                    <span class="property-name">Uitzettingscoëfficiënt:</span>
+                                    <span class="expansion-value">47 × 10⁻⁶/°C</span>
+                                </div>
+                                <div class="property-bar">
+                                    <div class="property-fill" style="width: 50%"></div>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Smeltpunt:</span>
+                                    <span class="text-gray-300">343°C</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Treksterkte:</span>
+                                    <span class="text-gray-300">90-100 MPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Elasticiteitsmodulus:</span>
+                                    <span class="text-gray-300">3.6 GPa</span>
+                                </div>
+                                <div class="property">
+                                    <span class="property-name">Dichtheid:</span>
+                                    <span class="text-gray-300">1.32 g/cm³</span>
+                                </div>
+                                <div class="flex gap-2 mt-4 flex-wrap">
+                                    <span class="material-badge">Hoge temperatuur</span>
+                                    <span class="material-badge">Extreem sterk</span>
+                                    <span class="material-badge">Chemisch resistent</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Lucht- en ruimtevaart, medische implantaten, automotive high-performance onderdelen, chemische industrie</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-8">
+                        <a href="contact.html" class="btn-primary no-underline">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            Vraag Persoonlijk Materiaal Advies
+                        </a>
+                    </div>
+                </section>
                 
-                <div class="overflow-x-auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Materiaal</th>
-                                <th>Uitzettingscoëfficiënt (10⁻⁶/°C)</th>
-                                <th>Max. gebruikstemperatuur (°C)</th>
-                                <th>Treksterkte (MPa)</th>
-                                <th>Elasticiteitsmodulus (GPa)</th>
-                                <th>Dichtheid (g/cm³)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-semibold text-gray-300">PLA</td>
-                                <td class="text-gray-300">68</td>
-                                <td class="text-gray-300">50-60</td>
-                                <td class="text-gray-300">50-70</td>
-                                <td class="text-gray-300">3.5</td>
-                                <td class="text-gray-300">1.24</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">ABS</td>
-                                <td class="text-gray-300">72</td>
-                                <td class="text-gray-300">80-85</td>
-                                <td class="text-gray-300">40</td>
-                                <td class="text-gray-300">2.0-2.7</td>
-                                <td class="text-gray-300">1.05</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">PETG</td>
-                                <td class="text-gray-300">60</td>
-                                <td class="text-gray-300">70-75</td>
-                                <td class="text-gray-300">50</td>
-                                <td class="text-gray-300">2.0</td>
-                                <td class="text-gray-300">1.27</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">Nylon (PA6)</td>
-                                <td class="text-gray-300">80</td>
-                                <td class="text-gray-300">80-100</td>
-                                <td class="text-gray-300">45-90</td>
-                                <td class="text-gray-300">2-4</td>
-                                <td class="text-gray-300">1.13</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">Polycarbonaat</td>
-                                <td class="text-gray-300">65</td>
-                                <td class="text-gray-300">115-130</td>
-                                <td class="text-gray-300">55-75</td>
-                                <td class="text-gray-300">2.4</td>
-                                <td class="text-gray-300">1.20</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">Polypropyleen (PP)</td>
-                                <td class="text-gray-300">110</td>
-                                <td class="text-gray-300">100-120</td>
-                                <td class="text-gray-300">25-40</td>
-                                <td class="text-gray-300">1.5-2.0</td>
-                                <td class="text-gray-300">0.90-0.91</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold text-gray-300">PEEK</td>
-                                <td class="text-gray-300">47</td>
-                                <td class="text-gray-300">250</td>
-                                <td class="text-gray-300">90-100</td>
-                                <td class="text-gray-300">3.6</td>
-                                <td class="text-gray-300">1.32</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- VERGELIJKINGSTABEL -->
+                <section class="content-section">
+                    <h2 class="text-3xl font-bold mb-6">Complete Vergelijkingstabel 3D Print Materialen</h2>
+                    <p class="mb-6">Overzicht van alle technische specificaties voor een snelle vergelijking tussen materialen.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Materiaal</th>
+                                    <th>Uitzettingscoëfficiënt (10⁻⁶/°C)</th>
+                                    <th>Max. gebruikstemperatuur (°C)</th>
+                                    <th>Treksterkte (MPa)</th>
+                                    <th>Elasticiteitsmodulus (GPa)</th>
+                                    <th>Dichtheid (g/cm³)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">PLA</td>
+                                    <td class="text-gray-300">68</td>
+                                    <td class="text-gray-300">50-60</td>
+                                    <td class="text-gray-300">50-70</td>
+                                    <td class="text-gray-300">3.5</td>
+                                    <td class="text-gray-300">1.24</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">ABS</td>
+                                    <td class="text-gray-300">72</td>
+                                    <td class="text-gray-300">80-85</td>
+                                    <td class="text-gray-300">40</td>
+                                    <td class="text-gray-300">2.0-2.7</td>
+                                    <td class="text-gray-300">1.05</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">PETG</td>
+                                    <td class="text-gray-300">60</td>
+                                    <td class="text-gray-300">70-75</td>
+                                    <td class="text-gray-300">50</td>
+                                    <td class="text-gray-300">2.0</td>
+                                    <td class="text-gray-300">1.27</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">Nylon (PA6)</td>
+                                    <td class="text-gray-300">80</td>
+                                    <td class="text-gray-300">80-100</td>
+                                    <td class="text-gray-300">45-90</td>
+                                    <td class="text-gray-300">2-4</td>
+                                    <td class="text-gray-300">1.13</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">Polycarbonaat</td>
+                                    <td class="text-gray-300">65</td>
+                                    <td class="text-gray-300">115-130</td>
+                                    <td class="text-gray-300">55-75</td>
+                                    <td class="text-gray-300">2.4</td>
+                                    <td class="text-gray-300">1.20</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">Polypropyleen (PP)</td>
+                                    <td class="text-gray-300">110</td>
+                                    <td class="text-gray-300">100-120</td>
+                                    <td class="text-gray-300">25-40</td>
+                                    <td class="text-gray-300">1.5-2.0</td>
+                                    <td class="text-gray-300">0.90-0.91</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-gray-300">PEEK</td>
+                                    <td class="text-gray-300">47</td>
+                                    <td class="text-gray-300">250</td>
+                                    <td class="text-gray-300">90-100</td>
+                                    <td class="text-gray-300">3.6</td>
+                                    <td class="text-gray-300">1.32</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="text-center mt-6">
+                        <a href="qidi-x-max3.html" class="btn-outline no-underline">
+                            <i class="fas fa-print" aria-hidden="true"></i>
+                            Bekijk Onze Printer Specificaties
+                        </a>
+                    </div>
+                </section>
                 
-                <div class="text-center mt-6">
-                    <a href="qidi-x-max3.html" class="btn-outline no-underline">
-                        <i class="fas fa-print" aria-hidden="true"></i>
-                        Bekijk Onze Printer Specificaties
-                    </a>
-                </div>
-            </section>
-            
-            <!-- CONCLUSIE -->
-            <section class="content-section">
-                <h2 class="text-3xl font-bold mb-6">Expert Conclusie: Kies het Juiste Materiaal</h2>
-                <div class="space-y-4">
-                    <p>Uit onze uitgebreide analyse blijkt dat elk materiaal unieke voordelen biedt voor specifieke toepassingen. <strong>PEEK</strong> heeft de laagste thermische uitzettingscoëfficiënt (47 × 10⁻⁶/°C) en is daarmee het meest stabiele materiaal bij temperatuurveranderingen, ideaal voor precisietoepassingen in de lucht- en ruimtevaart en medische sector.</p>
-                    <p><strong>PETG</strong> biedt een uitstekende balans tussen sterkte, thermische stabiliteit en printbaarheid, waardoor het geschikt is voor de meeste functionele toepassingen. <strong>Polypropyleen (PP)</strong> heeft met 110 × 10⁻⁶/°C de hoogste uitzettingscoëfficiënt, wat belangrijk is om te overwegen bij ontwerpen waar temperatuurvariaties voorkomen.</p>
-                    <p>Voor beginners raden we <strong>PLA</strong> aan vanwege de eenvoudige verwerkbaarheid, terwijl gevorderde gebruikers kunnen profiteren van de superieure eigenschappen van <strong>PEEK</strong> en <strong>polycarbonaat</strong> voor veeleisende toepassingen.</p>
-                    <p class="font-semibold text-emerald-400">De juiste materiaalkeuze hangt af van je specifieke vereisten: temperatuurbereik, mechanische belasting, chemische resistentie en budget.</p>
-                </div>
-                
-                <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                    <a href="contact.html" class="btn-primary no-underline">
-                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                        Gratis Materiaal Advies
-                    </a>
-                    <a href="projecten.html" class="btn-outline no-underline">
-                        <i class="fas fa-rocket" aria-hidden="true"></i>
-                        Bekijk Onze Projecten
-                    </a>
-                </div>
-            </section>
-        </div>
+                <!-- CONCLUSIE -->
+                <section class="content-section">
+                    <h2 class="text-3xl font-bold mb-6">Expert Conclusie: Kies het Juiste Materiaal</h2>
+                    <div class="space-y-4">
+                        <p>Uit onze uitgebreide analyse blijkt dat elk materiaal unieke voordelen biedt voor specifieke toepassingen. <strong>PEEK</strong> heeft de laagste thermische uitzettingscoëfficiënt (47 × 10⁻⁶/°C) en is daarmee het meest stabiele materiaal bij temperatuurveranderingen, ideaal voor precisietoepassingen in de lucht- en ruimtevaart en medische sector.</p>
+                        <p><strong>PETG</strong> biedt een uitstekende balans tussen sterkte, thermische stabiliteit en printbaarheid, waardoor het geschikt is voor de meeste functionele toepassingen. <strong>Polypropyleen (PP)</strong> heeft met 110 × 10⁻⁶/°C de hoogste uitzettingscoëfficiënt, wat belangrijk is om te overwegen bij ontwerpen waar temperatuurvariaties voorkomen.</p>
+                        <p>Voor beginners raden we <strong>PLA</strong> aan vanwege de eenvoudige verwerkbaarheid, terwijl gevorderde gebruikers kunnen profiteren van de superieure eigenschappen van <strong>PEEK</strong> en <strong>polycarbonaat</strong> voor veeleisende toepassingen.</p>
+                        <p class="font-semibold text-emerald-400">De juiste materiaalkeuze hangt af van je specifieke vereisten: temperatuurbereik, mechanische belasting, chemische resistentie en budget.</p>
+                    </div>
+                    
+                    <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                        <a href="contact.html" class="btn-primary no-underline">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            Gratis Materiaal Advies
+                        </a>
+                        <a href="projecten.html" class="btn-outline no-underline">
+                            <i class="fas fa-rocket" aria-hidden="true"></i>
+                            Bekijk Onze Projecten
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </main>
 
         <!-- Footer -->
         <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
