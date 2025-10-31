@@ -72,6 +72,50 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
+        /* Breadcrumb navigation - CONSISTENT MET ANDERE PAGINA'S */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .breadcrumb ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .breadcrumb a {
+            color: #10b981;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #34d399;
+        }
+        
+        .breadcrumb .separator {
+            color: #6b7280;
+        }
+        
+        .breadcrumb [aria-current="page"] {
+            color: #d1d5db;
+            font-weight: 600;
+        }
+        
         /* Fix voor browser navigatiebalk */
         
         
@@ -369,10 +413,9 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-8">
-                            <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
-    <i class="fa-solid fa-house-chimney mr-2"></i>Home
-</a>
-							
+                            <a href="index.html" class="nav-link text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 bg-emerald-600/20">
+                                <i class="fa-solid fa-house-chimney mr-2"></i>Home
+                            </a>
                             <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Gallerij</a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
@@ -386,6 +429,16 @@
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <!-- Breadcrumb Navigation - TOEGEVOEGD -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <ol>
+                <li aria-current="page">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                    Home
+                </li>
+            </ol>
         </nav>
 
         <!-- Main Content -->
@@ -692,7 +745,7 @@
                                 <div class="image-loading">
                                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
                                 </div>
-                                <img src="fotos/railbox1.jpg" 
+                                <img src="fotos/drawer.png" 
                                      alt="Professionele 3D geprinte gereedschapshouder België - modulaire organisatie" 
                                      class="w-full h-full object-cover rounded-lg image-loaded"
                                      loading="lazy"
@@ -794,7 +847,7 @@
                     <div>
                         <h3 class="font-semibold text-white mb-4">Pagina's</h3>
                         <ul class="space-y-2 text-gray-400 text-sm">
-                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
+                            <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1" aria-current="page">Home</a></li>
                             <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
                             <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
