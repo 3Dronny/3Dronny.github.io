@@ -64,6 +64,50 @@
                 radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
         }
         
+        /* Breadcrumb navigation - CONSISTENT MET ANDERE PAGINA'S */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .breadcrumb ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .breadcrumb a {
+            color: #10b981;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #34d399;
+        }
+        
+        .breadcrumb .separator {
+            color: #6b7280;
+        }
+        
+        .breadcrumb [aria-current="page"] {
+            color: #d1d5db;
+            font-weight: 600;
+        }
+        
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -161,14 +205,6 @@
             flex-shrink: 0;
         }
 
-        /* Breadcrumb styling */
-        .breadcrumb {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px 20px;
-            margin-bottom: 2rem;
-        }
-
         /* Responsive aanpassingen voor kleinere schermen */
         @media (max-width: 768px) {
             .btn-primary {
@@ -181,6 +217,10 @@
                 padding: 16px 32px;
                 min-height: 56px;
                 font-size: 1.1rem;
+            }
+            
+            .breadcrumb ol {
+                font-size: 0.875rem;
             }
         }
 
@@ -249,16 +289,22 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation -->
-        <div class="max-w-7xl mx-auto px-4 mt-6">
-            <nav class="breadcrumb text-sm" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-2">
-                    <li><a href="index.html" class="text-emerald-400 hover:text-emerald-300 transition-colors">Home</a></li>
-                    <li class="text-gray-400">/</li>
-                    <li class="text-white" aria-current="page">Contact & Offertes</li>
-                </ol>
-            </nav>
-        </div>
+        <!-- Breadcrumb Navigation - CONSISTENT GEMAAKT MET ANDERE PAGINA'S -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <ol>
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="separator">/</li>
+                <li aria-current="page">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    Contact & Offertes
+                </li>
+            </ol>
+        </nav>
 
         <main>
             <!-- Hero Section -->
