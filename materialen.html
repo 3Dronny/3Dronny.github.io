@@ -146,12 +146,12 @@
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation */
+        /* Breadcrumb navigation - VOLLEDIGE BREEDTE */
         .breadcrumb {
             background: rgba(255, 255, 255, 0.05);
             padding: 1rem 2rem;
             border-radius: 8px;
-            margin-bottom: 2rem;
+            margin: 0 2rem 2rem 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
@@ -501,6 +501,11 @@
             .breadcrumb ol {
                 font-size: 0.875rem;
             }
+            
+            .breadcrumb {
+                margin: 0 1rem 2rem 1rem;
+                padding: 1rem 1.5rem;
+            }
         }
     </style>
 </head>
@@ -558,25 +563,25 @@
             </div>
         </nav>
 
+        <!-- Breadcrumb Navigation - VOLLEDIGE BREEDTE -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <ol>
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="separator">/</li>
+                <li aria-current="page">
+                    <i class="fas fa-cube" aria-hidden="true"></i>
+                    Materialen Vergelijking
+                </li>
+            </ol>
+        </nav>
+
         <!-- Main Content -->
         <div class="container flex-grow">
-            <!-- Breadcrumb Navigation -->
-            <nav class="breadcrumb no-print" aria-label="Breadcrumb">
-                <ol>
-                    <li>
-                        <a href="index.html">
-                            <i class="fas fa-home" aria-hidden="true"></i>
-                            Home
-                        </a>
-                    </li>
-                    <li class="separator">/</li>
-                    <li aria-current="page">
-                        <i class="fas fa-cube" aria-hidden="true"></i>
-                        Materialen Vergelijking
-                    </li>
-                </ol>
-            </nav>
-
             <!-- INTRODUCTIE -->
             <section class="content-section" id="main-content">
                 <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
@@ -603,6 +608,7 @@
                 </div>
             </section>
             
+            <!-- Rest van de content blijft hetzelfde -->
             <!-- THERMISCHE UITZETTING -->
             <section class="content-section">
                 <h2 class="text-3xl font-bold mb-6">Thermische Uitzetting bij Verschillende Temperaturen</h2>
