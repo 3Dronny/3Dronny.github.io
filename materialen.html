@@ -147,26 +147,24 @@
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation - FORCEER LINKS UITLIJNING */
-.breadcrumb {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1rem 2rem 1rem 3rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
+        /* Breadcrumb navigation - MEER LINKS UITGELIJND */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem 1rem 3rem; /* 3rem aan linkerkant */
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
         
         .breadcrumb ol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Forceer links uitlijnen */
-    width: 100%;
-}
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
         
         .breadcrumb li {
             display: flex;
@@ -501,6 +499,10 @@
                 justify-content: center;
             }
             
+            .breadcrumb {
+                padding: 1rem 1.5rem 1rem 2rem; /* Minder padding op mobiel */
+            }
+            
             .breadcrumb ol {
                 font-size: 0.875rem;
             }
@@ -563,7 +565,7 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation - CONSISTENT WITH FIRST VERSION -->
+        <!-- Breadcrumb Navigation - MEER LINKS UITGELIJND -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ol>
@@ -739,6 +741,7 @@
                                     <span class="property-name">Uitzettingscoëfficiënt:</span>
                                     <span class="expansion-value">60 × 10⁻⁶/°C</span>
                                 </div>
+
                                 <div class="property-bar">
                                     <div class="property-fill" style="width: 63%"></div>
                                 </div>
