@@ -146,13 +146,21 @@
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation - VOLLEDIGE BREEDTE */
+        /* Breadcrumb navigation - GEFIXTE VOLLEDIGE BREEDTE */
         .breadcrumb {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            margin: 0 2rem 2rem 2rem;
+            padding: 1rem 0;
+            margin: 0 0 2rem 0;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+        }
+        
+        .breadcrumb .breadcrumb-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
         .breadcrumb ol {
@@ -501,11 +509,6 @@
             .breadcrumb ol {
                 font-size: 0.875rem;
             }
-            
-            .breadcrumb {
-                margin: 0 1rem 2rem 1rem;
-                padding: 1rem 1.5rem;
-            }
         }
     </style>
 </head>
@@ -563,21 +566,23 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation - VOLLEDIGE BREEDTE -->
+        <!-- Breadcrumb Navigation - GEFIXTE VOLLEDIGE BREEDTE -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
-            <ol>
-                <li>
-                    <a href="index.html">
-                        <i class="fas fa-home" aria-hidden="true"></i>
-                        Home
-                    </a>
-                </li>
-                <li class="separator">/</li>
-                <li aria-current="page">
-                    <i class="fas fa-cube" aria-hidden="true"></i>
-                    Materialen Vergelijking
-                </li>
-            </ol>
+            <div class="breadcrumb-container">
+                <ol>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-home" aria-hidden="true"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="separator">/</li>
+                    <li aria-current="page">
+                        <i class="fas fa-cube" aria-hidden="true"></i>
+                        Materialen Vergelijking
+                    </li>
+                </ol>
+            </div>
         </nav>
 
         <!-- Main Content -->
@@ -608,7 +613,6 @@
                 </div>
             </section>
             
-            <!-- Rest van de content blijft hetzelfde -->
             <!-- THERMISCHE UITZETTING -->
             <section class="content-section">
                 <h2 class="text-3xl font-bold mb-6">Thermische Uitzetting bij Verschillende Temperaturen</h2>
@@ -683,6 +687,7 @@
                                 <span class="material-badge">Scherpe details</span>
                                 <span class="material-badge">Biologisch afbreekbaar</span>
                             </div>
+
                             <p class="text-sm text-gray-400 mt-3"><strong>Ideaal voor:</strong> Prototypes, modellen, decoratieve objecten, educatieve projecten</p>
                         </div>
                     </div>
