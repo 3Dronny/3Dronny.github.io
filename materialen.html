@@ -147,10 +147,10 @@
             padding: 0 20px;
         }
         
-        /* Breadcrumb navigation - MEER LINKS UITGELIJND */
+        /* Breadcrumb navigation - EXACT ZELFDE ALS EERSTE VERSIE */
         .breadcrumb {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 2rem 1rem 3rem; /* 3rem aan linkerkant */
+            padding: 1rem 2rem;
             border-radius: 8px;
             margin-bottom: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -222,6 +222,7 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
+
             gap: 8px;
             text-decoration: none;
             border: none;
@@ -499,10 +500,6 @@
                 justify-content: center;
             }
             
-            .breadcrumb {
-                padding: 1rem 1.5rem 1rem 2rem; /* Minder padding op mobiel */
-            }
-            
             .breadcrumb ol {
                 font-size: 0.875rem;
             }
@@ -565,7 +562,7 @@
             </div>
         </nav>
 
-        <!-- Breadcrumb Navigation - MEER LINKS UITGELIJND -->
+        <!-- Breadcrumb Navigation - EXACT ZELFDE ALS EERSTE VERSIE -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ol>
@@ -586,7 +583,7 @@
 
         <!-- Main Content -->
         <main id="main-content">
-            <div class="container">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- INTRODUCTIE -->
                 <section class="content-section">
                     <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 mb-6">
@@ -741,7 +738,6 @@
                                     <span class="property-name">Uitzettingscoëfficiënt:</span>
                                     <span class="expansion-value">60 × 10⁻⁶/°C</span>
                                 </div>
-
                                 <div class="property-bar">
                                     <div class="property-fill" style="width: 63%"></div>
                                 </div>
@@ -1152,6 +1148,7 @@
             let html = '';
             const deltaTemp = temp - 20; // Reference temperature is 20°C
             
+
             materials.forEach(material => {
                 const expansion = (material.coefficient * deltaTemp / 1000).toFixed(2); // mm per meter
                 const expansionClass = expansion >= 0 ? 'text-green-400' : 'text-red-400';
