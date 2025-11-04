@@ -116,6 +116,11 @@
             font-weight: 600;
         }
         
+        /* FIX: Groene kleur voor Home link in breadcrumb op index pagina */
+        .breadcrumb a[aria-current="page"] {
+            color: #10b981 !important;
+        }
+        
         /* Fix voor browser navigatiebalk */
         
         
@@ -433,15 +438,15 @@
 
         <!-- Breadcrumb Navigation - TOEGEVOEGD -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
-    <ol>
-        <li>
-            <a href="index.html" aria-current="page">  <!-- Voeg <a> tag toe -->
-                <i class="fas fa-home" aria-hidden="true"></i>
-                Home
-            </a>
-        </li>
-    </ol>
-</nav>
+            <ol>
+                <li>
+                    <a href="index.html" aria-current="page">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Home
+                    </a>
+                </li>
+            </ol>
+        </nav>
 
         <!-- Main Content -->
         <main id="main-content">
