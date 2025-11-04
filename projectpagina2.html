@@ -11,7 +11,7 @@
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Gereedschapshouder Project - 3DRonny">
     <meta property="og:description" content="Bekijk het gereedschapshouder project van 3DRonny - een 3D geprinte modulaire organisatie oplossing in PETG.">
-    <meta property="og:image" content="https://3dronny.github.io/fotos/railbox1.jpg">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/quadlock-main.jpg">
     <meta property="og:url" content="https://3dronny.github.io/project-detail.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="3DRonny">
@@ -21,7 +21,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Gereedschapshouder Project - 3DRonny">
     <meta name="twitter:description" content="3D geprinte modulaire organisatie oplossing in PETG">
-    <meta name="twitter:image" content="https://3dronny.github.io/fotos/quadlock1.png">
+    <meta name="twitter:image" content="https://3dronny.github.io/fotos/quadlock-main.jpg">
 
     <!-- Additional Meta Tags -->
     <meta name="author" content="Ronny - Hobbyist 3D Print">
@@ -441,66 +441,75 @@
                             <div class="image-loading">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400"></div>
                             </div>
-                            <div class="placeholder-image">
-                                <div>
-                                    <i class="fas fa-image text-4xl mb-2"></i>
-                                    <p>Hoofdafbeelding<br><small>Quadlock</small></p>
-                                </div>
-                            </div>
+                            <img src="fotos/quadlock5.png" 
+                                 alt="Quadlock fiets mount hoofdafbeelding" 
+                                 class="image-loaded"
+                                 onload="this.previousElementSibling.style.display='none'"
+                                 onerror="handleImageError(this)">
                         </div>
                     </div>
                     
                     <div class="thumbnail-container">
                         <!-- 10 thumbnails in 2x5 grid -->
-                        <div class="thumbnail active" onclick="changeImage('thumbnail-1', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-tools"></i>
-                            </div>
+                        <div class="thumbnail active" onclick="changeImage('fotos/quadlock-main.jpg', this)">
+                            <img src="fotos/quadlock4.png" 
+                                 alt="Quadlock overzicht" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-2', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-box-open"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-detail1.jpg', this)">
+                            <img src="fotos/quadlock3.png" 
+                                 alt="Quadlock detail montage" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-3', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-detail2.jpg', this)">
+                            <img src="fotos/quadlock2.png" 
+                                 alt="Quadlock hefboom systeem" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-4', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-puzzle-piece"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-detail3.jpg', this)">
+                            <img src="fotos/quadlock5.png" 
+                                 alt="Quadlock op fiets gemonteerd" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-5', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-hammer"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-detail4.jpg', this)">
+                            <img src="fotos/quadlock-thumb5.jpg" 
+                                 alt="Quadlock met gsm" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-6', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-screwdriver"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-print1.jpg', this)">
+                            <img src="fotos/quadlock6.png" 
+                                 alt="3D print proces" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-7', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-ruler"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-print2.jpg', this)">
+                            <img src="fotos/quadlock-thumb7.jpg" 
+                                 alt="Print details" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-8', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-wrench"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-parts1.jpg', this)">
+                            <img src="fotos/quadlock-thumb8.jpg" 
+                                 alt="Onderdelen overzicht" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-9', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-print"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-parts2.jpg', this)">
+                            <img src="fotos/quadlock-thumb9.jpg" 
+                                 alt="Draadbussen en schroeven" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
-                        <div class="thumbnail" onclick="changeImage('thumbnail-10', this)">
-                            <div class="placeholder-image">
-                                <i class="fas fa-cube"></i>
-                            </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-install.jpg', this)">
+                            <img src="fotos/quadlock-thumb10.jpg" 
+                                 alt="Installatie op stuur" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
                         </div>
                     </div>
                 </div>
@@ -512,13 +521,13 @@
                         <div class="card p-8 mb-8">
                             <h2 class="text-2xl font-bold text-white mb-4">Project Beschrijving</h2>
                             <p class="text-gray-300 mb-4">
-                                EEn Quadlocksysteem dat bevestigd wordt in het midden van het stuur D.m.v 4 M5 bouten , GSM-houder wordt er ingeklikt kan dmv de lever uitgehaald worden , de lever kan in verschillende kleuren worden geprint
+                                Een Quadlock systeem dat bevestigd wordt in het midden van het stuur d.m.v. 4 M5 bouten. De GSM-houder wordt er ingeklikt en kan via de lever uitgehaald worden. De lever kan in verschillende kleuren worden geprint.
                             </p>
                             <p class="text-gray-300 mb-4">
-                                Dit model is een volledig eigen design , kan aangepast worden naar wens ( bevestiging )
+                                Dit model is een volledig eigen design en kan aangepast worden naar wens (bevestiging).
                             </p>
                             <p class="text-gray-300">
-                                Het leversysteem werkt met een wasknijperveertje dat er onder wordt geplaatst , er zitten ook draadbussen in het systeem voor de schroeven vast te kunnen draaien
+                                Het leversysteem werkt met een wasknijperveertje dat er onder wordt geplaatst. Er zitten ook draadbussen in het systeem voor de schroeven vast te kunnen draaien.
                             </p>
                         </div>
 
@@ -555,7 +564,7 @@
                                     <ul class="space-y-2 text-gray-300">
                                         <li class="flex items-center">
                                             <i class="fas fa-clock text-emerald-400 mr-2 w-5"></i>
-                                            <span>Printtijd: 9:30 </span>
+                                            <span>Printtijd: 9:30 uur</span>
                                         </li>
                                         <li class="flex items-center">
                                             <i class="fas fa-weight text-emerald-400 mr-2 w-5"></i>
@@ -567,7 +576,7 @@
                                         </li>
                                         <li class="flex items-center">
                                             <i class="fas fa-cogs text-emerald-400 mr-2 w-5"></i>
-                                            <span>Onderdelen: mount ,stuurmount , quad ,lever , draadbus (5) schroeven (5) veertje en gsmhouder</span>
+                                            <span>Onderdelen: mount, stuurmount, quad, lever, draadbus (5), schroeven (5), veertje en gsmhouder</span>
                                         </li>
                                         <li class="flex items-center">
                                             <i class="fas fa-tools text-emerald-400 mr-2 w-5"></i>
@@ -643,9 +652,10 @@
                                 <a href="project-detail-vaasjes.html" class="block group">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
-                                            <div class="placeholder-image">
-                                                <i class="fas fa-vase"></i>
-                                            </div>
+                                            <img src="fotos/vaasjes-thumb.jpg" 
+                                                 alt="Droogbloemen Vaasjes" 
+                                                 class="w-full h-full object-cover"
+                                                 onerror="handleThumbnailError(this)">
                                         </div>
                                         <div>
                                             <p class="text-white font-medium group-hover:text-emerald-400 transition-colors">Droogbloemen Vaasjes</p>
@@ -656,9 +666,10 @@
                                 <a href="project-detail-opbergsysteem.html" class="block group">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
-                                            <div class="placeholder-image">
-                                                <i class="fas fa-boxes"></i>
-                                            </div>
+                                            <img src="fotos/opbergsysteem-thumb.jpg" 
+                                                 alt="Modulair Opslag Systeem" 
+                                                 class="w-full h-full object-cover"
+                                                 onerror="handleThumbnailError(this)">
                                         </div>
                                         <div>
                                             <p class="text-white font-medium group-hover:text-emerald-400 transition-colors">Modulair Opslag Systeem</p>
@@ -676,7 +687,7 @@
                     <div class="card p-8">
                         <h2 class="text-3xl font-bold text-white mb-4">Interesse in een soortgelijk project?</h2>
                         <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                            Neem contact op voor een vrijblijvende offerte or advies over jouw 3D print project.
+                            Neem contact op voor een vrijblijvende offerte of advies over jouw 3D print project.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <a href="contact.html" class="btn-primary no-underline">
@@ -769,9 +780,9 @@
     </div>
 
     <script>
-        // Vereenvoudigde functie voor thumbnail interactie
-        function changeImage(thumbnailId, element) {
-            console.log('Clicked thumbnail:', thumbnailId);
+        // Image gallery functionaliteit
+        function changeImage(imageSrc, element) {
+            console.log('Changing image to:', imageSrc);
             
             // Update actieve thumbnail
             document.querySelectorAll('.thumbnail').forEach(thumb => {
@@ -779,13 +790,73 @@
             });
             element.classList.add('active');
             
-            // Hier zou je normaal de hoofdfoto veranderen
-            // Voor nu tonen we alleen een console log
-            console.log('Hoofdafbeelding zou nu veranderen naar:', thumbnailId);
+            // Verander hoofdfoto
+            const mainImageContainer = document.querySelector('.main-image .image-container');
+            mainImageContainer.innerHTML = `
+                <div class="image-loading">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400"></div>
+                </div>
+                <img src="${imageSrc}" 
+                     alt="Quadlock project afbeelding" 
+                     class="image-loaded" 
+                     style="opacity:0; transition: opacity 0.3s ease"
+                     onload="this.previousElementSibling.style.display='none'; this.style.opacity=1"
+                     onerror="handleImageError(this)">
+            `;
         }
-        
-        // Debug: log wanneer de pagina geladen is
-        console.log('Page loaded, changeImage function available');
+
+        // Error handling voor afbeeldingen
+        function handleImageError(img) {
+            console.error('Image failed to load:', img.src);
+            img.style.display = 'none';
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="placeholder-image">
+                    <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                    <p>Afbeelding niet geladen</p>
+                    <small>${img.src.split('/').pop()}</small>
+                </div>
+            `;
+        }
+
+        function handleThumbnailError(img) {
+            console.error('Thumbnail failed to load:', img.src);
+            img.style.display = 'none';
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="placeholder-image">
+                    <i class="fas fa-image"></i>
+                </div>
+            `;
+        }
+
+        // Keyboard navigation voor gallery
+        document.addEventListener('keydown', function(e) {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const activeThumb = document.querySelector('.thumbnail.active');
+            let currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+            
+            if (e.key === 'ArrowRight' && currentIndex < thumbnails.length - 1) {
+                thumbnails[currentIndex + 1].click();
+            } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                thumbnails[currentIndex - 1].click();
+            }
+        });
+
+        // Preload eerste paar afbeeldingen voor betere performance
+        window.addEventListener('load', function() {
+            const preloadImages = [
+                'fotos/quadlock-detail1.jpg',
+                'fotos/quadlock-detail2.jpg'
+            ];
+            
+            preloadImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        });
+
+        console.log('Page loaded, image gallery ready');
     </script>
 </body>
 </html>
