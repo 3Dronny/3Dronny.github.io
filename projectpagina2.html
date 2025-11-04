@@ -146,10 +146,10 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - Aangepast voor 10 thumbnails */
+        /* Project Gallery Styles - AANGEPAST: hoofdfoto dubbel zo groot */
         .project-gallery {
             display: grid;
-            grid-template-columns: 1fr 250px;
+            grid-template-columns: 1fr 200px; /* Thumbnails kolom smaller gemaakt */
             gap: 2rem;
             margin-bottom: 2rem;
             align-items: start;
@@ -163,7 +163,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 500px;
+            height: 600px; /* Verhoogd van 500px naar 600px */
             padding: 0;
         }
         
@@ -189,7 +189,7 @@
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(5, 1fr);
             gap: 0.75rem;
-            height: 500px;
+            height: 600px; /* Ook verhoogd naar 600px */
         }
         
         .thumbnail {
@@ -254,18 +254,18 @@
             padding: 1rem;
         }
         
-        /* Aangepaste responsive instellingen */
+        /* Aangepaste responsive instellingen - BIJGEWERKT */
         @media (max-width: 1200px) {
             .project-gallery {
-                grid-template-columns: 1fr 200px;
+                grid-template-columns: 1fr 180px;
             }
             
             .main-image {
-                height: 450px;
+                height: 550px;
             }
             
             .thumbnail-container {
-                height: 450px;
+                height: 550px;
             }
         }
         
@@ -276,8 +276,8 @@
             }
             
             .main-image {
-                height: 400px;
-                max-width: 600px;
+                height: 500px;
+                max-width: 800px; /* Verhoogd voor tablet */
                 margin: 0 auto;
             }
             
@@ -285,45 +285,45 @@
                 height: auto;
                 grid-template-columns: repeat(5, 1fr);
                 grid-template-rows: repeat(2, 1fr);
-                max-width: 500px;
+                max-width: 600px; /* Verhoogd voor tablet */
                 margin: 0 auto;
             }
         }
         
         @media (max-width: 768px) {
             .main-image {
-                height: 350px;
-                max-width: 500px;
+                height: 450px;
+                max-width: 700px;
             }
             
             .thumbnail-container {
                 grid-template-columns: repeat(5, 1fr);
-                max-width: 400px;
+                max-width: 500px;
             }
         }
         
         @media (max-width: 640px) {
             .main-image {
-                height: 300px;
-                max-width: 400px;
+                height: 400px;
+                max-width: 600px;
             }
             
             .thumbnail-container {
                 grid-template-columns: repeat(5, 1fr);
-                max-width: 350px;
+                max-width: 450px;
             }
         }
         
         @media (max-width: 480px) {
             .main-image {
-                height: 250px;
-                max-width: 350px;
+                height: 350px;
+                max-width: 400px;
             }
             
             .thumbnail-container {
                 grid-template-columns: repeat(3, 1fr);
                 grid-template-rows: repeat(4, 1fr);
-                max-width: 300px;
+                max-width: 350px;
                 gap: 0.5rem;
             }
         }
@@ -416,7 +416,7 @@
                         <li><i class="fas fa-chevron-right text-xs"></i></li>
                         <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors">Projecten</a></li>
                         <li><i class="fas fa-chevron-right text-xs"></i></li>
-                        <li class="text-emerald-400">Gereedschapshouder</li>
+                        <li class="text-emerald-400">Quadlock systeem</li>
                     </ol>
                 </nav>
 
@@ -434,14 +434,14 @@
                     </div>
                 </div>
 
-                <!-- Project Gallery -->
+                <!-- Project Gallery - HOOFDFOTO NU DUBBEL ZO GROOT -->
                 <div class="project-gallery">
                     <div class="main-image card">
                         <div class="image-container w-full h-full">
                             <div class="image-loading">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400"></div>
                             </div>
-                            <img src="fotos/quadlock5.png" 
+                            <img src="fotos/quadlock-main.jpg" 
                                  alt="Quadlock fiets mount hoofdafbeelding" 
                                  class="image-loaded"
                                  onload="this.previousElementSibling.style.display='none'"
@@ -451,38 +451,38 @@
                     
                     <div class="thumbnail-container">
                         <!-- 10 thumbnails in 2x5 grid -->
-                        <div class="thumbnail active" onclick="changeImage('fotos/quadlock4.png', this)">
-                            <img src="fotos/quadlock4.png" 
+                        <div class="thumbnail active" onclick="changeImage('fotos/quadlock1.png', this)">
+                            <img src="fotos/quadlock1.png" 
                                  alt="Quadlock overzicht" 
-                                 loading="lazy"
-                                 onerror="handleThumbnailError(this)">
-                        </div>
-                        <div class="thumbnail" onclick="changeImage('fotos/quadlock3.png', this)">
-                            <img src="fotos/quadlock3.png" 
-                                 alt="Quadlock detail montage" 
                                  loading="lazy"
                                  onerror="handleThumbnailError(this)">
                         </div>
                         <div class="thumbnail" onclick="changeImage('fotos/quadlock2.png', this)">
                             <img src="fotos/quadlock2.png" 
+                                 alt="Quadlock detail montage" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock3.png', this)">
+                            <img src="fotos/quadlock3.png" 
                                  alt="Quadlock hefboom systeem" 
+                                 loading="lazy"
+                                 onerror="handleThumbnailError(this)">
+                        </div>
+                        <div class="thumbnail" onclick="changeImage('fotos/quadlock4.png', this)">
+                            <img src="fotos/quadlock4.png" 
+                                 alt="Quadlock op fiets gemonteerd" 
                                  loading="lazy"
                                  onerror="handleThumbnailError(this)">
                         </div>
                         <div class="thumbnail" onclick="changeImage('fotos/quadlock5.png', this)">
                             <img src="fotos/quadlock5.png" 
-                                 alt="Quadlock op fiets gemonteerd" 
-                                 loading="lazy"
-                                 onerror="handleThumbnailError(this)">
-                        </div>
-                        <div class="thumbnail" onclick="changeImage('fotos/quadlock-detail4.jpg', this)">
-                            <img src="fotos/quadlock-thumb5.jpg" 
                                  alt="Quadlock met gsm" 
                                  loading="lazy"
                                  onerror="handleThumbnailError(this)">
                         </div>
                         <div class="thumbnail" onclick="changeImage('fotos/quadlock-print1.jpg', this)">
-                            <img src="fotos/quadlock6.png" 
+                            <img src="fotos/quadlock-thumb6.jpg" 
                                  alt="3D print proces" 
                                  loading="lazy"
                                  onerror="handleThumbnailError(this)">
