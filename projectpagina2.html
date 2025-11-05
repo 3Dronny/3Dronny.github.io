@@ -146,7 +146,7 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
         
-        /* Project Gallery Styles - AANGEPAST: hoofdfoto dubbel zo groot */
+        /* Project Gallery Styles - AANGEPAST: hoofdfoto zelfde grootte als eerste bestand */
         .project-gallery {
             display: grid;
             grid-template-columns: 1fr 200px; /* Thumbnails kolom smaller gemaakt */
@@ -163,7 +163,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 600px; /* Verhoogd van 500px naar 600px */
+            height: 840px; /* GECORRIGEERD: van 600px naar 840px (zelfde als eerste bestand) */
             padding: 0;
         }
         
@@ -189,7 +189,7 @@
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(5, 1fr);
             gap: 0.75rem;
-            height: 600px; /* Ook verhoogd naar 600px */
+            height: 735px; /* Aangepast voor betere verhouding met 840px hoofdfoto */
         }
         
         .thumbnail {
@@ -254,18 +254,18 @@
             padding: 1rem;
         }
         
-        /* Aangepaste responsive instellingen - BIJGEWERKT */
+        /* Aangepaste responsive instellingen - BIJGEWERKT voor grotere hoofdfoto */
         @media (max-width: 1200px) {
             .project-gallery {
                 grid-template-columns: 1fr 180px;
             }
             
             .main-image {
-                height: 550px;
+                height: 675px; /* GECORRIGEERD: van 550px naar 675px */
             }
             
             .thumbnail-container {
-                height: 550px;
+                height: 675px; /* Aangepast voor verhouding */
             }
         }
         
@@ -276,8 +276,8 @@
             }
             
             .main-image {
-                height: 500px;
-                max-width: 800px; /* Verhoogd voor tablet */
+                height: 700px; /* GECORRIGEERD: van 500px naar 700px */
+                max-width: 800px;
                 margin: 0 auto;
             }
             
@@ -285,14 +285,14 @@
                 height: auto;
                 grid-template-columns: repeat(5, 1fr);
                 grid-template-rows: repeat(2, 1fr);
-                max-width: 600px; /* Verhoogd voor tablet */
+                max-width: 600px;
                 margin: 0 auto;
             }
         }
         
         @media (max-width: 768px) {
             .main-image {
-                height: 450px;
+                height: 600px; /* GECORRIGEERD: van 450px naar 600px */
                 max-width: 700px;
             }
             
@@ -304,7 +304,7 @@
         
         @media (max-width: 640px) {
             .main-image {
-                height: 400px;
+                height: 500px; /* GECORRIGEERD: van 400px naar 500px */
                 max-width: 600px;
             }
             
@@ -316,7 +316,7 @@
         
         @media (max-width: 480px) {
             .main-image {
-                height: 350px;
+                height: 450px; /* GECORRIGEERD: van 350px naar 450px */
                 max-width: 400px;
             }
             
@@ -434,7 +434,7 @@
                     </div>
                 </div>
 
-                <!-- Project Gallery - HOOFDFOTO NU DUBBEL ZO GROOT -->
+                <!-- Project Gallery - HOOFDFOTO NU ZELFDE GROOTTE ALS EERSTE BESTAND -->
                 <div class="project-gallery">
                     <div class="main-image card">
                         <div class="image-container w-full h-full">
