@@ -370,7 +370,7 @@
                         <span id="file-volume">-</span>
                     </div>
                     <div class="file-info-item">
-                        <span class="file-info-label">Gewicht:</span>
+                        <span class="file-info-label">Gewicht (100% infill):</span>
                         <span id="file-weight">-</span>
                     </div>
                     <div class="file-info-item">
@@ -444,7 +444,7 @@
                 
                 <div class="price-breakdown">
                     <div class="breakdown-item">
-                        <div class="breakdown-title">Gewicht</div>
+                        <div class="breakdown-title">Gewicht (<span id="current-infill">20</span>% infill)</div>
                         <div class="breakdown-value" id="print-weight">0 g</div>
                     </div>
                     <div class="breakdown-item">
@@ -593,6 +593,12 @@
             // STL gebruikt mm, dus volume is in mm³
             // Converteren naar cm³ (1 cm³ = 1000 mm³)
             return Math.abs(volume) / 1000;
+        }
+
+        // Update het infill percentage in de weergave
+        function updateInfillDisplay() {
+            const infillValue = document.getElementById('infill').value;
+            document.getElementById('current-infill').textContent = infillValue;
         }
 
         // Globale variabelen
@@ -824,7 +830,7 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // NIEUW: Bereken en toon gewicht met 20,05% correctie
+            // NIEUW: Bereken en toon gewicht met 20,05% correctie (100% infill)
             const material = document.getElementById('material').value;
             const density = materialDensities[material];
             const weight = volume * density;
@@ -895,6 +901,9 @@
             const density = materialDensities[material];
             const infill = parseInt(document.getElementById('infill').value) / 100;
             const volume = stlFile.volume;
+            
+            // Update infill display
+            updateInfillDisplay();
             
             // NIEUW: Bereken gewicht met infill en 20,05% correctie
             const weight = volume * infill * density;
@@ -1000,9 +1009,13 @@
             });
             
             document.getElementById('quality').addEventListener('change', calculatePrice);
-            document.getElementById('infill').addEventListener('change', calculatePrice);
+            document.getElementById('infill').addEventListener('change', function() {
+                updateInfillDisplay();
+                calculatePrice();
+            });
             
             // Bereken initiële prijs
+            updateInfillDisplay();
             calculatePrice();
         });
     </script>
