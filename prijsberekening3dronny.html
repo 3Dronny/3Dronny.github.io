@@ -7,7 +7,7 @@
     <!-- Three.js voor 3D weergave -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Three.js STL loader -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -652,6 +652,9 @@
         let isWireframe = false;
         let animationId;
 
+        // STL Loader
+        const stlLoader = new THREE.STLLoader();
+
         // Initialiseer de 3D viewer
         function initViewer() {
             const container = document.getElementById('modelContainer');
@@ -677,10 +680,23 @@
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
             
+            // Resize handler
+            window.addEventListener('resize', onWindowResize);
+            
             // Start animatie
             animate();
             
             console.log('3D Viewer geïnitialiseerd');
+        }
+
+        // Resize handler
+        function onWindowResize() {
+            const container = document.getElementById('modelContainer');
+            if (container && camera && renderer) {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            }
         }
 
         // Animatie loop
@@ -694,9 +710,6 @@
             renderer.render(scene, camera);
         }
 
-        // STL Loader
-        const stlLoader = new THREE.STLLoader();
-
         // Laad STL bestand
         function loadSTL(file) {
             console.log('STL bestand laden:', file.name);
@@ -708,24 +721,35 @@
             
             loadingIndicator.style.display = 'block';
             modelPreview.style.display = 'none';
+            fileDetails.style.display = 'none';
             
             // Verwijder vorig model
             if (modelMesh) {
                 scene.remove(modelMesh);
+                modelMesh = null;
             }
             
             const reader = new FileReader();
             
             reader.onload = function(event) {
                 try {
+                    console.log('STL bestand gelezen, parsing...');
+                    
                     // Laad STL geometrie
                     const geometry = stlLoader.parse(event.target.result);
+                    console.log('STL parsing voltooid', geometry);
+                    
+                    if (!geometry || !geometry.attributes || !geometry.attributes.position) {
+                        throw new Error('Ongeldige STL geometrie');
+                    }
                     
                     // Bereken bounding box voor schaling
                     geometry.computeBoundingBox();
                     const boundingBox = geometry.boundingBox;
                     const size = new THREE.Vector3();
                     boundingBox.getSize(size);
+                    
+                    console.log('Model afmetingen:', size);
                     
                     // Schaal het model
                     const maxDimension = Math.max(size.x, size.y, size.z);
@@ -751,8 +775,9 @@
                     scene.add(modelMesh);
                     
                     // Update model informatie
+                    const triangleCount = geometry.index ? geometry.index.count / 3 : geometry.attributes.position.count / 3;
                     document.getElementById('fileName').textContent = file.name;
-                    document.getElementById('triangleCount').textContent = geometry.attributes.position.count / 3;
+                    document.getElementById('triangleCount').textContent = triangleCount;
                     
                     // Schat volume (vereenvoudigd)
                     const volume = (size.x * size.y * size.z) * 0.5;
@@ -771,7 +796,7 @@
                         <strong>Bestand:</strong> ${file.name}<br>
                         <strong>Grootte:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB<br>
                         <strong>Type:</strong> STL<br>
-                        <strong>Driehoeken:</strong> ${geometry.attributes.position.count / 3}<br>
+                        <strong>Driehoeken:</strong> ${triangleCount}<br>
                         <strong>Volume:</strong> ${volume.toFixed(2)} cm³<br>
                         <strong>Gewicht:</strong> ${weight.toFixed(2)} gram
                     `;
@@ -779,19 +804,19 @@
                     
                     updatePriceCalculation(volume, weight, volume * 2);
                     
-                    console.log('STL bestand succesvol geladen');
+                    console.log('STL bestand succesvol geladen en weergegeven');
                     
                 } catch (error) {
                     console.error('Fout bij laden STL:', error);
                     loadingIndicator.style.display = 'none';
-                    alert('Fout bij laden STL bestand. Probeer een ander bestand.');
+                    alert('Fout bij laden STL bestand: ' + error.message);
                 }
             };
             
             reader.onerror = function(error) {
                 console.error('FileReader error:', error);
                 loadingIndicator.style.display = 'none';
-                alert('Fout bij lezen van bestand');
+                alert('Fout bij lezen van bestand: ' + error.message);
             };
             
             reader.readAsArrayBuffer(file);
@@ -812,6 +837,7 @@
             // Verwijder vorig model
             if (modelMesh) {
                 scene.remove(modelMesh);
+                modelMesh = null;
             }
             
             // Maak een demo geometrie (een torus)
@@ -976,6 +1002,50 @@
             const totalCost = materialCost + printCost + extraCost;
             document.getElementById('totalCost').textContent = `€${totalCost.toFixed(2)}`;
         }
+        
+        // Event listeners voor prijsberekening
+        document.getElementById('material').addEventListener('change', () => {
+            if (document.getElementById('modelWeight').textContent !== '-') {
+                const volume = parseFloat(document.getElementById('modelVolume').textContent);
+                const weight = parseFloat(document.getElementById('modelWeight').textContent);
+                updatePriceCalculation(volume, weight, volume * 2);
+            }
+        });
+        
+        document.getElementById('quality').addEventListener('change', () => {
+            if (document.getElementById('modelVolume').textContent !== '-') {
+                const volume = parseFloat(document.getElementById('modelVolume').textContent);
+                const weight = parseFloat(document.getElementById('modelWeight').textContent);
+                updatePriceCalculation(volume, weight, volume * 2);
+            }
+        });
+        
+        document.getElementById('infill').addEventListener('change', () => {
+            if (document.getElementById('modelVolume').textContent !== '-') {
+                const volume = parseFloat(document.getElementById('modelVolume').textContent);
+                const weight = parseFloat(document.getElementById('modelWeight').textContent);
+                updatePriceCalculation(volume, weight, volume * 2);
+            }
+        });
+        
+        document.getElementById('color').addEventListener('change', () => {
+            if (document.getElementById('modelVolume').textContent !== '-') {
+                const volume = parseFloat(document.getElementById('modelVolume').textContent);
+                const weight = parseFloat(document.getElementById('modelWeight').textContent);
+                updatePriceCalculation(volume, weight, volume * 2);
+            }
+        });
+        
+        // Checkbox event listeners
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (document.getElementById('modelVolume').textContent !== '-') {
+                    const volume = parseFloat(document.getElementById('modelVolume').textContent);
+                    const weight = parseFloat(document.getElementById('modelWeight').textContent);
+                    updatePriceCalculation(volume, weight, volume * 2);
+                }
+            });
+        });
         
         // Initialiseer wanneer de pagina geladen is
         window.addEventListener('load', function() {
