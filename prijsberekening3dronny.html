@@ -427,8 +427,6 @@
                 <div class="viewer-controls">
                     <button class="btn" id="reset-view">Reset Weergave</button>
                     <button class="btn" id="toggle-wireframe">Draadmodel</button>
-                    <button class="btn" id="toggle-axes">Assen</button>
-                    <button class="btn" id="toggle-grid">Raster</button>
                     <button class="btn" id="auto-orient">Auto Oriëntatie</button>
                 </div>
             </div>
@@ -545,7 +543,6 @@
         // Globale variabelen
         let scene, camera, renderer, controls, model;
         let stlFile = null;
-        let axesHelper, gridHelper;
         let isViewerInitialized = false;
         
         // Initialisatie van de 3D viewer
@@ -582,27 +579,16 @@
             controls.minDistance = 1;
             controls.maxDistance = 50;
             
-            // Licht
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            // Licht - alleen ambient light voor zachte verlichting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
             
-            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight1.position.set(5, 10, 5);
-            scene.add(directionalLight1);
+            // Directional light voor betere diepte
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(5, 10, 5);
+            scene.add(directionalLight);
             
-            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
-            directionalLight2.position.set(-5, -5, -5);
-            scene.add(directionalLight2);
-            
-            // Grid helper - groter en op de "vloer"
-            gridHelper = new THREE.GridHelper(20, 20, 0xcccccc, 0xeeeeee);
-            gridHelper.rotation.x = Math.PI / 2; // Draai het grid naar horizontaal
-            gridHelper.position.y = -5; // Zet het grid onder het model
-            scene.add(gridHelper);
-            
-            // Assen helper
-            axesHelper = new THREE.AxesHelper(8);
-            scene.add(axesHelper);
+            // GEEN grid helper en GEEN assen helper meer!
             
             // Animatie
             function animate() {
@@ -713,7 +699,7 @@
                     // Mesh
                     model = new THREE.Mesh(geometry, material);
                     
-                    // Bereken optimale schaal - groter dan voorheen
+                    // Bereken optimale schaal
                     geometry.computeBoundingBox();
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
@@ -918,18 +904,6 @@
             document.getElementById('toggle-wireframe').addEventListener('click', function() {
                 if (model) {
                     model.material.wireframe = !model.material.wireframe;
-                }
-            });
-            
-            document.getElementById('toggle-axes').addEventListener('click', function() {
-                if (axesHelper) {
-                    axesHelper.visible = !axesHelper.visible;
-                }
-            });
-            
-            document.getElementById('toggle-grid').addEventListener('click', function() {
-                if (gridHelper) {
-                    gridHelper.visible = !gridHelper.visible;
                 }
             });
             
