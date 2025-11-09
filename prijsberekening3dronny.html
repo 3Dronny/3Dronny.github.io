@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Prijs Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -184,73 +186,16 @@
             margin-top: 20px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            height: 300px;
+            height: 400px;
             position: relative;
             overflow: hidden;
             display: none;
-            background-color: #f8f9fa;
         }
         
         #modelViewer {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .model-placeholder {
-            text-align: center;
-            color: var(--gray);
-        }
-        
-        .model-placeholder i {
-            font-size: 64px;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .cube-container {
-            width: 200px;
-            height: 200px;
-            perspective: 800px;
-            margin: 0 auto;
-        }
-        
-        .cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate 10s infinite linear;
-        }
-        
-        .face {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            border: 2px solid white;
-            opacity: 0.8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .front  { transform: rotateY(0deg) translateZ(100px); }
-        .back   { transform: rotateY(180deg) translateZ(100px); }
-        .right  { transform: rotateY(90deg) translateZ(100px); }
-        .left   { transform: rotateY(-90deg) translateZ(100px); }
-        .top    { transform: rotateX(90deg) translateZ(100px); }
-        .bottom { transform: rotateX(-90deg) translateZ(100px); }
-        
-        @keyframes rotate {
-            from { transform: rotateX(0) rotateY(0); }
-            to { transform: rotateX(360deg) rotateY(360deg); }
+            background-color: #f8f9fa;
         }
         
         .viewer-controls {
@@ -259,6 +204,7 @@
             left: 10px;
             display: flex;
             gap: 10px;
+            z-index: 100;
         }
         
         .viewer-controls button {
@@ -451,16 +397,12 @@
             margin-top: 10px;
         }
         
-        .model-loaded #staticModel {
-            display: none;
-        }
-        
-        .model-loaded #animatedModel {
-            display: block;
-        }
-        
-        #animatedModel {
-            display: none;
+        .model-stats {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
         }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -504,7 +446,7 @@
                         <input type="file" id="fileInput" class="file-input" accept=".stl,.obj,.3mf">
                         <button class="btn" onclick="document.getElementById('fileInput').click()">Bestand Kiezen</button>
                         <div class="demo-model">
-                            <button class="btn" onclick="loadDemoModel()" style="background-color: #2ecc71;">Laad Demo Model</button>
+                            <button class="btn" onclick="loadDemoSTL()" style="background-color: #2ecc71;">Laad Demo STL</button>
                         </div>
                         <div id="fileDetails" class="file-info" style="display: none; margin-top: 15px;"></div>
                     </div>
@@ -515,27 +457,11 @@
                     </div>
                     
                     <div class="model-preview" id="modelPreview">
-                        <div id="modelViewer">
-                            <div id="staticModel" class="model-placeholder">
-                                <i class="material-icons">3d_rotation</i>
-                                <p>3D model wordt hier weergegeven</p>
-                                <p><small>Klik op "Laad Demo Model" om een voorbeeld te zien</small></p>
-                            </div>
-                            <div id="animatedModel" class="cube-container">
-                                <div class="cube">
-                                    <div class="face front">VOOR</div>
-                                    <div class="face back">ACHTER</div>
-                                    <div class="face right">RECHTS</div>
-                                    <div class="face left">LINKS</div>
-                                    <div class="face top">BOVEN</div>
-                                    <div class="face bottom">ONDER</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="modelViewer"></div>
                         <div class="viewer-controls">
                             <button id="resetView">Reset Weergave</button>
+                            <button id="toggleWireframe">Draadmodel</button>
                             <button id="changeColor">Verander Kleur</button>
-                            <button id="toggleAnimation">Stop Animatie</button>
                         </div>
                     </div>
                     
@@ -693,26 +619,127 @@
     </footer>
 
     <script>
-        let isAnimating = true;
-        let currentColor = '#3498db';
+        // Three.js variabelen
+        let scene, camera, renderer, controls;
+        let modelMesh = null;
+        let isWireframe = false;
+        let isViewerInitialized = false;
         
-        // Laad een demo model
-        function loadDemoModel() {
-            console.log('Demo model laden...');
+        // STL Loader
+        const stlLoader = new THREE.STLLoader();
+        
+        // Initialiseer de 3D viewer
+        function initViewer() {
+            if (isViewerInitialized) return;
+            
+            const container = document.getElementById('modelViewer');
+            
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 10;
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Eenvoudige orbit controls
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+            
+            container.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            container.addEventListener('mousemove', (e) => {
+                if (isDragging && modelMesh) {
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+                    
+                    modelMesh.rotation.y += deltaX * 0.01;
+                    modelMesh.rotation.x += deltaY * 0.01;
+                    
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                }
+            });
+            
+            container.addEventListener('wheel', (e) => {
+                camera.position.z += e.deltaY * 0.01;
+                camera.position.z = Math.max(1, Math.min(50, camera.position.z));
+            });
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+            
+            // Animatie
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            isViewerInitialized = true;
+            console.log('3D Viewer geïnitialiseerd');
+        }
+        
+        // Laad een demo STL model
+        function loadDemoSTL() {
+            console.log('Demo STL laden...');
             
             const loadingIndicator = document.getElementById('loadingIndicator');
             const modelPreview = document.getElementById('modelPreview');
             const fileDetails = document.getElementById('fileDetails');
-            const modelViewer = document.getElementById('modelViewer');
             
             loadingIndicator.style.display = 'block';
             modelPreview.style.display = 'none';
+            
+            // Zorg dat viewer geïnitialiseerd is
+            if (!isViewerInitialized) {
+                initViewer();
+            }
+            
+            // Verwijder vorig model
+            if (modelMesh) {
+                scene.remove(modelMesh);
+            }
+            
+            // Maak een eenvoudig 3D model als demo (een torus)
+            const geometry = new THREE.TorusGeometry(3, 1, 16, 100);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db,
+                specular: 0x111111,
+                shininess: 200
+            });
+            
+            modelMesh = new THREE.Mesh(geometry, material);
+            scene.add(modelMesh);
+            
+            // Centreer camera
+            camera.position.set(0, 0, 10);
+            camera.lookAt(0, 0, 0);
             
             // Simuleer laadtijd
             setTimeout(() => {
                 loadingIndicator.style.display = 'none';
                 modelPreview.style.display = 'block';
-                modelViewer.classList.add('model-loaded');
                 
                 // Toon bestandsinformatie
                 fileDetails.innerHTML = `
@@ -728,7 +755,112 @@
                 // Update prijsberekening
                 updatePriceCalculation(25.5, 31.88, 180);
                 console.log('Demo model geladen en weergegeven');
-            }, 1500);
+            }, 1000);
+        }
+        
+        // Laad een STL bestand
+        function loadSTL(file) {
+            console.log('STL bestand laden:', file.name);
+            
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const modelPreview = document.getElementById('modelPreview');
+            const fileDetails = document.getElementById('fileDetails');
+            
+            loadingIndicator.style.display = 'block';
+            modelPreview.style.display = 'none';
+            
+            // Zorg dat viewer geïnitialiseerd is
+            if (!isViewerInitialized) {
+                initViewer();
+            }
+            
+            // Verwijder vorig model
+            if (modelMesh) {
+                scene.remove(modelMesh);
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                try {
+                    const geometry = stlLoader.parse(event.target.result);
+                    
+                    // Bereken bounding box voor schaling
+                    geometry.computeBoundingBox();
+                    const boundingBox = geometry.boundingBox;
+                    const size = new THREE.Vector3();
+                    boundingBox.getSize(size);
+                    
+                    // Schaal het model naar een redelijke grootte
+                    const maxDimension = Math.max(size.x, size.y, size.z);
+                    const scale = 5 / maxDimension;
+                    
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: 0x3498db,
+                        specular: 0x111111,
+                        shininess: 200
+                    });
+                    
+                    modelMesh = new THREE.Mesh(geometry, material);
+                    modelMesh.scale.set(scale, scale, scale);
+                    
+                    // Centreer het model
+                    const center = new THREE.Vector3();
+                    boundingBox.getCenter(center);
+                    modelMesh.position.copy(center.multiplyScalar(-scale));
+                    
+                    scene.add(modelMesh);
+                    
+                    // Pas camera aan
+                    camera.position.set(0, 0, maxDimension * 2);
+                    camera.lookAt(0, 0, 0);
+                    
+                    // Toon model
+                    loadingIndicator.style.display = 'none';
+                    modelPreview.style.display = 'block';
+                    
+                    // Bereken volume en gewicht (vereenvoudigd)
+                    const volume = calculateVolume(geometry);
+                    const weight = volume * 1.25; // PLA dichtheid ~1.25 g/cm³
+                    const printTime = volume * 2; // Vereenvoudigde berekening
+                    
+                    fileDetails.innerHTML = `
+                        <strong>Bestand:</strong> ${file.name}<br>
+                        <strong>Grootte:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB<br>
+                        <strong>Type:</strong> STL<br>
+                        <strong>Volume:</strong> ${volume.toFixed(2)} cm³<br>
+                        <strong>Geschat gewicht:</strong> ${weight.toFixed(2)} gram<br>
+                        <strong>Printtijd:</strong> ${Math.round(printTime)} minuten
+                    `;
+                    fileDetails.style.display = 'block';
+                    
+                    updatePriceCalculation(volume, weight, printTime);
+                    console.log('STL bestand succesvol geladen');
+                    
+                } catch (error) {
+                    console.error('Fout bij laden STL:', error);
+                    loadingIndicator.style.display = 'none';
+                    alert('Fout bij laden STL bestand: ' + error.message);
+                }
+            };
+            
+            reader.onerror = function(error) {
+                console.error('FileReader error:', error);
+                loadingIndicator.style.display = 'none';
+                alert('Fout bij lezen van bestand');
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Vereenvoudigde volume berekening
+        function calculateVolume(geometry) {
+            // Vereenvoudigde berekening - in een echte app zou je een preciezere methode gebruiken
+            geometry.computeBoundingBox();
+            const box = geometry.boundingBox;
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            return size.x * size.y * size.z * 0.5; // Vereenvoudigde schatting
         }
         
         // Bestand upload functionaliteit
@@ -737,7 +869,6 @@
         const fileDetails = document.getElementById('fileDetails');
         const modelPreview = document.getElementById('modelPreview');
         const loadingIndicator = document.getElementById('loadingIndicator');
-        const modelViewer = document.getElementById('modelViewer');
         
         // Upload area interactie
         uploadArea.addEventListener('dragover', (e) => {
@@ -783,33 +914,23 @@
                 return;
             }
             
-            // Toon laadindicator
-            loadingIndicator.style.display = 'block';
-            modelPreview.style.display = 'none';
-            
-            // Toon bestandsinformatie
-            fileDetails.innerHTML = `
-                <strong>Bestand:</strong> ${file.name}<br>
-                <strong>Grootte:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB<br>
-                <strong>Type:</strong> ${fileExtension.toUpperCase()}
-            `;
-            fileDetails.style.display = 'block';
-            
-            // Gebruik demo model voor nu
-            setTimeout(() => {
-                loadDemoModel();
-            }, 1000);
+            if (fileExtension === '.stl') {
+                loadSTL(file);
+            } else {
+                // Voor OBJ en 3MF, gebruik demo voor nu
+                alert('OBJ en 3MF ondersteuning komt binnenkort. Gebruik de demo voor nu.');
+                loadDemoSTL();
+            }
         }
         
         function updatePriceCalculation(volume, weight, printTime) {
-            // Haal geselecteerde opties op
+            // ... (zelfde als voorheen)
             const material = document.getElementById('material').value;
             const quality = document.getElementById('quality').value;
             const infill = parseInt(document.getElementById('infill').value);
             const color = document.getElementById('color').value;
             
-            // Bereken materiaalkosten
-            let materialPricePerGram = 0.15; // Standaard PLA
+            let materialPricePerGram = 0.15;
             switch(material) {
                 case 'petg': materialPricePerGram = 0.18; break;
                 case 'abs': materialPricePerGram = 0.20; break;
@@ -820,8 +941,7 @@
             
             const materialCost = weight * materialPricePerGram;
             
-            // Bereken printkosten (gebaseerd op printtijd en kwaliteit)
-            let hourlyRate = 5.00; // Standaard tarief
+            let hourlyRate = 5.00;
             switch(quality) {
                 case 'draft': hourlyRate = 4.00; break;
                 case 'high': hourlyRate = 6.00; break;
@@ -830,14 +950,10 @@
             
             const printCost = (printTime / 60) * hourlyRate;
             
-            // Bereken extra kosten
             let extraCost = 0;
-            
-            // Kleur premium
             if (color === 'premium') extraCost += 2.00;
             if (color === 'custom') extraCost += 5.00;
             
-            // Extra opties
             if (document.getElementById('postProcessing').checked) {
                 extraCost += parseFloat(document.getElementById('postProcessing').value);
             }
@@ -848,7 +964,6 @@
                 extraCost += parseFloat(document.getElementById('support').value);
             }
             
-            // Update de prijsweergave
             document.getElementById('materialCost').textContent = `€${materialCost.toFixed(2)}`;
             document.getElementById('printCost').textContent = `€${printCost.toFixed(2)}`;
             document.getElementById('extraCost').textContent = `€${extraCost.toFixed(2)}`;
@@ -859,36 +974,28 @@
         
         // Viewer controls
         document.getElementById('resetView').addEventListener('click', function() {
-            const cube = document.querySelector('.cube');
-            cube.style.animation = 'none';
-            setTimeout(() => {
-                cube.style.animation = 'rotate 10s infinite linear';
-            }, 10);
-            isAnimating = true;
-            this.textContent = 'Reset Weergave';
+            if (modelMesh) {
+                modelMesh.rotation.x = 0;
+                modelMesh.rotation.y = 0;
+                modelMesh.rotation.z = 0;
+            }
+            camera.position.set(0, 0, 10);
+            camera.lookAt(0, 0, 0);
+        });
+        
+        document.getElementById('toggleWireframe').addEventListener('click', function() {
+            if (modelMesh) {
+                isWireframe = !isWireframe;
+                modelMesh.material.wireframe = isWireframe;
+                this.textContent = isWireframe ? 'Volledig Model' : 'Draadmodel';
+            }
         });
         
         document.getElementById('changeColor').addEventListener('click', function() {
-            const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            currentColor = randomColor;
-            
-            const faces = document.querySelectorAll('.face');
-            faces.forEach(face => {
-                face.style.background = `linear-gradient(45deg, ${randomColor}, ${randomColor}dd)`;
-            });
-        });
-        
-        document.getElementById('toggleAnimation').addEventListener('click', function() {
-            const cube = document.querySelector('.cube');
-            isAnimating = !isAnimating;
-            
-            if (isAnimating) {
-                cube.style.animationPlayState = 'running';
-                this.textContent = 'Stop Animatie';
-            } else {
-                cube.style.animationPlayState = 'paused';
-                this.textContent = 'Start Animatie';
+            if (modelMesh) {
+                const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12, 0x9b59b6];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                modelMesh.material.color.setHex(randomColor);
             }
         });
         
@@ -907,7 +1014,8 @@
         
         // Initialiseer wanneer de pagina geladen is
         window.addEventListener('load', function() {
-            console.log('Pagina geladen');
+            console.log('Pagina geladen, initialiseer viewer...');
+            initViewer();
             updatePriceCalculation(0, 0, 0);
         });
     </script>
