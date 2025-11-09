@@ -370,6 +370,10 @@
                         <span id="file-volume">-</span>
                     </div>
                     <div class="file-info-item">
+                        <span class="file-info-label">Gewicht:</span>
+                        <span id="file-weight">-</span>
+                    </div>
+                    <div class="file-info-item">
                         <span class="file-info-label">Afmetingen:</span>
                         <span id="file-dimensions">-</span>
                     </div>
@@ -440,6 +444,10 @@
                 
                 <div class="price-breakdown">
                     <div class="breakdown-item">
+                        <div class="breakdown-title">Gewicht</div>
+                        <div class="breakdown-value" id="print-weight">0 g</div>
+                    </div>
+                    <div class="breakdown-item">
                         <div class="breakdown-title">Materiaalkosten</div>
                         <div class="breakdown-value" id="material-cost">€0.00</div>
                     </div>
@@ -465,6 +473,16 @@
     </div>
 
     <script>
+        // Materiaal dichtheden in g/cm³
+        const materialDensities = {
+            'pla': 1.24,
+            'petg': 1.27,
+            'abs': 1.05,
+            'tpu': 1.21,
+            'nylon': 1.14,
+            'resin': 1.12
+        };
+
         // Eenvoudige STL Parser voor zowel ASCII als Binary STL
         class SimpleSTLParser {
             static parseSTL(arrayBuffer) {
@@ -473,6 +491,7 @@
                 // Check if it's ASCII STL
                 const header = new TextDecoder().decode(arrayBuffer.slice(0, 80));
                 const isASCII = header.toLowerCase().includes('solid') && 
+
                                !header.toLowerCase().includes('endsolid');
                 
                 if (isASCII) {
@@ -645,7 +664,7 @@
             isViewerInitialized = true;
         }
         
-        // Automatische oriëntatie functie
+        // Automatische oriëntatie functie met 180 graden rotatie
         function autoOrientModel() {
             if (!model) return;
             
@@ -668,6 +687,9 @@
                 model.rotation.x = Math.PI / 2;
             }
             // Als Y de langste is, blijft het model zoals het is
+            
+            // NIEUW: Draai het model 180 graden rond de Y-as
+            model.rotation.y += Math.PI;
             
             // Centreer het model op de oorsprong
             const center = new THREE.Vector3();
@@ -745,7 +767,7 @@
                     
                     scene.add(model);
                     
-                    // Automatische oriëntatie
+                    // Automatische oriëntatie met 180 graden rotatie
                     autoOrientModel();
                     
                     // Update camera positie voor betere weergave
@@ -780,7 +802,7 @@
             reader.readAsArrayBuffer(file);
         }
         
-        // Bestandsinformatie bijwerken
+        // Bestandsinformatie bijwerken met gewichtsberekening
         function updateFileInfo(file, geometry) {
             document.getElementById('file-name').textContent = file.name;
             document.getElementById('file-size').textContent = formatFileSize(file.size);
@@ -797,11 +819,18 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
+            // NIEUW: Bereken en toon gewicht
+            const material = document.getElementById('material').value;
+            const density = materialDensities[material];
+            const weight = volume * density;
+            document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
+            
             // Sla modelgegevens op voor berekening
             stlFile = {
                 file: file,
                 volume: volume,
-                dimensions: size
+                dimensions: size,
+                weight: weight
             };
             
             // Bereken automatisch de prijs
@@ -841,12 +870,13 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen
+        // Prijs berekenen met gewichtsberekening
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
                 document.getElementById('print-time').textContent = '0 uur';
                 document.getElementById('machine-cost').textContent = '€0.00';
+                document.getElementById('print-weight').textContent = '0 g';
                 document.getElementById('total-price').textContent = '€5.00';
                 return;
             }
@@ -857,8 +887,13 @@
             
             const material = document.getElementById('material').value;
             const materialPrice = materialPrices[material];
+            const density = materialDensities[material];
             const infill = parseInt(document.getElementById('infill').value) / 100;
             const volume = stlFile.volume;
+            
+            // NIEUW: Bereken gewicht met infill
+            const weight = volume * infill * density;
+            document.getElementById('print-weight').textContent = weight.toFixed(1) + ' g';
             
             const materialCost = volume * infill * materialPrice;
             
@@ -948,7 +983,17 @@
             });
             
             // Formulier wijzigingen
-            document.getElementById('material').addEventListener('change', calculatePrice);
+            document.getElementById('material').addEventListener('change', function() {
+                if (stlFile) {
+                    // Update gewicht wanneer materiaal verandert
+                    const material = this.value;
+                    const density = materialDensities[material];
+                    const weight = stlFile.volume * density;
+                    document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
+                }
+                calculatePrice();
+            });
+            
             document.getElementById('quality').addEventListener('change', calculatePrice);
             document.getElementById('infill').addEventListener('change', calculatePrice);
             
