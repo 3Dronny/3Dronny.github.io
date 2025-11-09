@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Kosten Calculator | 3DRonny</title>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/jsm/loaders/STLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/jsm/controls/OrbitControls.js"></script>
     <style>
         * {
@@ -301,6 +300,15 @@
             display: none;
         }
         
+        .success-message {
+            background: #55efc4;
+            color: #00b894;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -331,6 +339,10 @@
                 
                 <div class="error-message" id="error-message">
                     Er is een fout opgetreden bij het uploaden. Probeer opnieuw.
+                </div>
+                
+                <div class="success-message" id="success-message">
+                    Bestand succesvol geüpload!
                 </div>
                 
                 <div class="loading" id="loading">
@@ -448,6 +460,82 @@
     </div>
 
     <script>
+        // Eenvoudige STL Parser voor zowel ASCII als Binary STL
+        class SimpleSTLParser {
+            static parseSTL(arrayBuffer) {
+                const dataView = new DataView(arrayBuffer);
+                
+                // Check if it's ASCII STL
+                const header = new TextDecoder().decode(arrayBuffer.slice(0, 80));
+                const isASCII = header.toLowerCase().includes('solid') && 
+                               !header.includes('COLOR=') && 
+                               !header.includes('MATERIAL=');
+                
+                if (isASCII) {
+                    return this.parseASCIISTL(arrayBuffer);
+                } else {
+                    return this.parseBinarySTL(arrayBuffer);
+                }
+            }
+            
+            static parseASCIISTL(arrayBuffer) {
+                const text = new TextDecoder().decode(arrayBuffer);
+                const lines = text.split('\n');
+                const vertices = [];
+                const faces = [];
+                let currentFace = [];
+                
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('vertex')) {
+                        const parts = trimmed.split(/\s+/);
+                        if (parts.length >= 4) {
+                            const x = parseFloat(parts[1]);
+                            const y = parseFloat(parts[2]);
+                            const z = parseFloat(parts[3]);
+                            currentFace.push(vertices.length);
+                            vertices.push(x, y, z);
+                        }
+                    } else if (trimmed.startsWith('endloop')) {
+                        if (currentFace.length === 3) {
+                            faces.push(...currentFace);
+                        }
+                        currentFace = [];
+                    }
+                }
+                
+                return { vertices: new Float32Array(vertices), faces: new Uint32Array(faces) };
+            }
+            
+            static parseBinarySTL(arrayBuffer) {
+                const dataView = new DataView(arrayBuffer);
+                const faces = dataView.getUint32(80, true);
+                const vertices = [];
+                const facesArray = [];
+                
+                let offset = 84;
+                for (let i = 0; i < faces; i++) {
+                    // Skip normal
+                    offset += 12;
+                    
+                    // Read vertices
+                    for (let j = 0; j < 3; j++) {
+                        const x = dataView.getFloat32(offset, true);
+                        const y = dataView.getFloat32(offset + 4, true);
+                        const z = dataView.getFloat32(offset + 8, true);
+                        vertices.push(x, y, z);
+                        facesArray.push(vertices.length / 3 - 1);
+                        offset += 12;
+                    }
+                    
+                    // Skip attribute byte count
+                    offset += 2;
+                }
+                
+                return { vertices: new Float32Array(vertices), faces: new Uint32Array(facesArray) };
+            }
+        }
+
         // Globale variabelen
         let scene, camera, renderer, controls, model;
         let stlFile = null;
@@ -470,8 +558,12 @@
             camera.position.z = 5;
             
             // Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true,
+                preserveDrawingBuffer: true // Voor betere compatibiliteit
+            });
             renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0xffffff, 1);
             container.appendChild(renderer.domElement);
             
             // Controls
@@ -509,9 +601,11 @@
             
             // Responsive
             window.addEventListener('resize', function() {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
+                if (container.clientWidth > 0 && container.clientHeight > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
             });
             
             isViewerInitialized = true;
@@ -532,6 +626,7 @@
             // Toon laadindicator
             document.getElementById('loading').style.display = 'block';
             hideError();
+            hideSuccess();
             
             const reader = new FileReader();
             
@@ -542,13 +637,19 @@
                         initViewer();
                     }
                     
-                    const loader = new THREE.STLLoader();
-                    const geometry = loader.parse(event.target.result);
+                    // Gebruik onze eigen STL parser
+                    const stlData = SimpleSTLParser.parseSTL(event.target.result);
                     
                     // Verwijder vorig model
                     if (model) {
                         scene.remove(model);
                     }
+                    
+                    // Creëer geometry
+                    const geometry = new THREE.BufferGeometry();
+                    geometry.setAttribute('position', new THREE.BufferAttribute(stlData.vertices, 3));
+                    geometry.setIndex(new THREE.BufferAttribute(stlData.faces, 1));
+                    geometry.computeVertexNormals();
                     
                     // Materiaal met contrasterende kleur voor witte achtergrond
                     const material = new THREE.MeshPhongMaterial({ 
@@ -562,13 +663,14 @@
                     model = new THREE.Mesh(geometry, material);
                     
                     // Centreer het model
+                    geometry.computeBoundingSphere();
                     geometry.computeBoundingBox();
+                    
                     const center = new THREE.Vector3();
                     geometry.boundingBox.getCenter(center);
-                    model.geometry.translate(-center.x, -center.y, -center.z);
+                    model.position.sub(center);
                     
                     // Schaal het model
-                    geometry.computeBoundingBox();
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
@@ -580,12 +682,13 @@
                     // Update bestandsinformatie
                     updateFileInfo(file, geometry);
                     
-                    // Verberg laadindicator
+                    // Verberg laadindicator en toon succes
                     document.getElementById('loading').style.display = 'none';
+                    showSuccess('Bestand succesvol geladen!');
                     
                 } catch (error) {
                     console.error('Fout bij het laden van STL-bestand:', error);
-                    showError('Er is een fout opgetreden bij het laden van het STL-bestand. Controleer of het bestand geldig is.');
+                    showError('Fout bij laden STL-bestand: ' + error.message);
                     document.getElementById('loading').style.display = 'none';
                 }
             };
@@ -644,6 +747,18 @@
         // Foutmelding verbergen
         function hideError() {
             document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Succesmelding tonen
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+        }
+        
+        // Succesmelding verbergen
+        function hideSuccess() {
+            document.getElementById('success-message').style.display = 'none';
         }
         
         // Prijs berekenen
@@ -714,7 +829,7 @@
                 document.getElementById('file-input').click();
             });
             
-            // Bestand input - FIX: direct event listener
+            // Bestand input
             document.getElementById('file-input').addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     loadSTL(e.target.files[0]);
@@ -726,7 +841,6 @@
             
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
-                document.body.addEventListener(eventName, preventDefaults, false);
             });
             
             function preventDefaults(e) {
