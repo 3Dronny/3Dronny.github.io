@@ -370,7 +370,7 @@
                         <span id="file-volume">-</span>
                     </div>
                     <div class="file-info-item">
-                        <span class="file-info-label">Gewicht (100% infill):</span>
+                        <span class="file-info-label">Gewicht (30% infill):</span>
                         <span id="file-weight">-</span>
                     </div>
                     <div class="file-info-item">
@@ -405,8 +405,8 @@
                     <label for="infill">Infill Percentage</label>
                     <select id="infill">
                         <option value="10">10% (Zeer licht)</option>
-                        <option value="20" selected>20% (Licht)</option>
-                        <option value="30">30% (Medium)</option>
+                        <option value="20">20% (Licht)</option>
+                        <option value="30" selected>30% (Medium)</option>
                         <option value="50">50% (Sterk)</option>
                         <option value="80">80% (Zeer sterk)</option>
                         <option value="100">100% (Massief)</option>
@@ -444,7 +444,7 @@
                 
                 <div class="price-breakdown">
                     <div class="breakdown-item">
-                        <div class="breakdown-title">Gewicht (<span id="current-infill">20</span>% infill)</div>
+                        <div class="breakdown-title">Gewicht (<span id="current-infill">30</span>% infill)</div>
                         <div class="breakdown-value" id="print-weight">0 g</div>
                     </div>
                     <div class="breakdown-item">
@@ -830,10 +830,10 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // NIEUW: Bereken en toon gewicht met 20,05% correctie (100% infill)
+            // NIEUW: Bereken en toon gewicht met 20,05% correctie bij 30% infill
             const material = document.getElementById('material').value;
             const density = materialDensities[material];
-            const weight = volume * density;
+            const weight = volume * density * 0.30; // 30% infill
             document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
             
             // Sla modelgegevens op voor berekening
@@ -1002,7 +1002,7 @@
                     // Update gewicht wanneer materiaal verandert
                     const material = this.value;
                     const density = materialDensities[material];
-                    const weight = stlFile.volume * density;
+                    const weight = stlFile.volume * density * 0.30; // 30% infill
                     document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
                 }
                 calculatePrice();
