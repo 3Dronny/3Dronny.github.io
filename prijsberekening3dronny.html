@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Print Kosten Calculator</title>
+    <title>3D Print Kosten Calculator | 3DRonny</title>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/jsm/loaders/STLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/jsm/controls/OrbitControls.js"></script>
@@ -94,6 +94,11 @@
         
         .upload-area:hover {
             background-color: #f0f4ff;
+        }
+        
+        .upload-area.dragover {
+            background-color: #e1e8ff;
+            border-color: #2575fc;
         }
         
         .upload-icon {
@@ -245,6 +250,26 @@
             display: none;
         }
         
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #6a11cb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         footer {
             text-align: center;
             margin-top: 40px;
@@ -281,6 +306,11 @@
                     <button class="btn" id="upload-btn">Bestand selecteren</button>
                 </div>
                 
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>STL-bestand wordt geladen...</p>
+                </div>
+                
                 <div class="file-info" id="file-info">
                     <div class="file-info-item">
                         <span class="file-info-label">Bestandsnaam:</span>
@@ -293,6 +323,10 @@
                     <div class="file-info-item">
                         <span class="file-info-label">Volume:</span>
                         <span id="file-volume">-</span>
+                    </div>
+                    <div class="file-info-item">
+                        <span class="file-info-label">Afmetingen:</span>
+                        <span id="file-dimensions">-</span>
                     </div>
                 </div>
                 
@@ -346,6 +380,7 @@
                     <button class="btn" id="reset-view">Reset Weergave</button>
                     <button class="btn" id="toggle-wireframe">Draadmodel</button>
                     <button class="btn" id="toggle-axes">Assen</button>
+                    <button class="btn" id="toggle-grid">Raster</button>
                 </div>
             </div>
         </div>
@@ -386,6 +421,7 @@
         // Globale variabelen
         let scene, camera, renderer, controls, model;
         let stlFile = null;
+        let axesHelper, gridHelper;
         
         // Initialisatie van de 3D viewer
         function initViewer() {
@@ -419,11 +455,11 @@
             scene.add(directionalLight);
             
             // Grid helper
-            const gridHelper = new THREE.GridHelper(10, 10);
+            gridHelper = new THREE.GridHelper(10, 10);
             scene.add(gridHelper);
             
             // Assen helper
-            const axesHelper = new THREE.AxesHelper(5);
+            axesHelper = new THREE.AxesHelper(5);
             scene.add(axesHelper);
             
             // Animatie
@@ -444,44 +480,67 @@
         
         // STL-bestand laden
         function loadSTL(file) {
+            if (!file || !file.name.toLowerCase().endsWith('.stl')) {
+                alert('Alleen STL-bestanden worden ondersteund.');
+                return;
+            }
+            
+            // Toon laadindicator
+            document.getElementById('loading').style.display = 'block';
+            
             const reader = new FileReader();
             
             reader.onload = function(event) {
-                const loader = new THREE.STLLoader();
-                const geometry = loader.parse(event.target.result);
-                
-                // Verwijder vorig model
-                if (model) {
-                    scene.remove(model);
+                try {
+                    const loader = new THREE.STLLoader();
+                    const geometry = loader.parse(event.target.result);
+                    
+                    // Verwijder vorig model
+                    if (model) {
+                        scene.remove(model);
+                    }
+                    
+                    // Materiaal
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: 0x6a11cb, 
+                        specular: 0x111111, 
+                        shininess: 200 
+                    });
+                    
+                    // Mesh
+                    model = new THREE.Mesh(geometry, material);
+                    
+                    // Centreer het model
+                    geometry.computeBoundingBox();
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    model.geometry.translate(-center.x, -center.y, -center.z);
+                    
+                    // Schaal het model
+                    geometry.computeBoundingBox();
+                    const size = new THREE.Vector3();
+                    geometry.boundingBox.getSize(size);
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 5 / maxDim;
+                    model.scale.set(scale, scale, scale);
+                    
+                    scene.add(model);
+                    
+                    // Update bestandsinformatie
+                    updateFileInfo(file, geometry);
+                    
+                    // Verberg laadindicator
+                    document.getElementById('loading').style.display = 'none';
+                } catch (error) {
+                    console.error('Fout bij het laden van STL-bestand:', error);
+                    alert('Er is een fout opgetreden bij het laden van het STL-bestand. Controleer of het bestand geldig is.');
+                    document.getElementById('loading').style.display = 'none';
                 }
-                
-                // Materiaal
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: 0x6a11cb, 
-                    specular: 0x111111, 
-                    shininess: 200 
-                });
-                
-                // Mesh
-                model = new THREE.Mesh(geometry, material);
-                
-                // Centreer het model
-                geometry.computeBoundingBox();
-                const center = new THREE.Vector3();
-                geometry.boundingBox.getCenter(center);
-                model.geometry.translate(-center.x, -center.y, -center.z);
-                
-                // Schaal het model
-                const size = new THREE.Vector3();
-                geometry.boundingBox.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 5 / maxDim;
-                model.scale.set(scale, scale, scale);
-                
-                scene.add(model);
-                
-                // Update bestandsinformatie
-                updateFileInfo(file, geometry);
+            };
+            
+            reader.onerror = function() {
+                alert('Fout bij het lezen van het bestand.');
+                document.getElementById('loading').style.display = 'none';
             };
             
             reader.readAsArrayBuffer(file);
@@ -492,12 +551,23 @@
             document.getElementById('file-name').textContent = file.name;
             document.getElementById('file-size').textContent = formatFileSize(file.size);
             
-            // Bereken volume (vereenvoudigde berekening)
+            // Bereken volume en afmetingen
             geometry.computeBoundingBox();
             const size = new THREE.Vector3();
             geometry.boundingBox.getSize(size);
+            
+            // Schat volume (vereenvoudigde berekening)
             const volume = size.x * size.y * size.z;
             document.getElementById('file-volume').textContent = volume.toFixed(2) + ' cm³';
+            document.getElementById('file-dimensions').textContent = 
+                `${size.x.toFixed(2)} × ${size.y.toFixed(2)} × ${size.z.toFixed(2)} cm`;
+            
+            // Sla modelgegevens op voor berekening
+            stlFile = {
+                file: file,
+                volume: volume,
+                dimensions: size
+            };
         }
         
         // Bestandsgrootte formatteren
@@ -511,6 +581,11 @@
         
         // Prijs berekenen
         function calculatePrice() {
+            if (!stlFile) {
+                alert('Upload eerst een STL-bestand om de kosten te berekenen.');
+                return;
+            }
+            
             // Materiaalkosten
             const materialPrices = {
                 'pla': 0.05,
@@ -527,8 +602,8 @@
             // Infill percentage
             const infill = parseInt(document.getElementById('infill').value) / 100;
             
-            // Geschat volume (vereenvoudigd)
-            const volume = 50; // In cm³ - zou eigenlijk uit het model moeten komen
+            // Geschat volume
+            const volume = stlFile.volume;
             
             // Materiaalkosten
             const materialCost = volume * infill * materialPrice;
@@ -543,7 +618,7 @@
             
             const quality = document.getElementById('quality').value;
             const qualityMultiplier = qualityMultipliers[quality];
-            const printTime = volume * 0.1 * qualityMultiplier; // in uren
+            const printTime = volume * 0.05 * qualityMultiplier; // in uren
             
             // Machinekosten
             const machineCost = printTime * 2; // €2 per uur
@@ -574,8 +649,7 @@
             // Bestand input
             document.getElementById('file-input').addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
-                    stlFile = e.target.files[0];
-                    loadSTL(stlFile);
+                    loadSTL(e.target.files[0]);
                 }
             });
             
@@ -600,24 +674,19 @@
             });
             
             function highlight() {
-                dropArea.style.backgroundColor = '#f0f4ff';
-                dropArea.style.borderColor = '#3498db';
+                dropArea.classList.add('dragover');
             }
             
             function unhighlight() {
-                dropArea.style.backgroundColor = '';
-                dropArea.style.borderColor = '#6a11cb';
+                dropArea.classList.remove('dragover');
             }
             
             dropArea.addEventListener('drop', function(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
                 
-                if (files.length > 0 && files[0].name.toLowerCase().endsWith('.stl')) {
-                    stlFile = files[0];
-                    loadSTL(stlFile);
-                } else {
-                    alert('Alleen STL-bestanden worden ondersteund.');
+                if (files.length > 0) {
+                    loadSTL(files[0]);
                 }
             });
             
@@ -636,10 +705,11 @@
             });
             
             document.getElementById('toggle-axes').addEventListener('click', function() {
-                const axes = scene.getObjectByName('axesHelper');
-                if (axes) {
-                    axes.visible = !axes.visible;
-                }
+                axesHelper.visible = !axesHelper.visible;
+            });
+            
+            document.getElementById('toggle-grid').addEventListener('click', function() {
+                gridHelper.visible = !gridHelper.visible;
             });
             
             // Bereken initiële prijs
