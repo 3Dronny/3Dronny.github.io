@@ -473,14 +473,14 @@
     </div>
 
     <script>
-        // Materiaal dichtheden in g/cm³ - GECORRIGEERD met 56,10% bijtelling
+        // Materiaal dichtheden in g/cm³ - GECORRIGEERD met factor 1.748
         const materialDensities = {
-            'pla': 1.24 * 1.5610,    // 56,10% zwaarder
-            'petg': 1.27 * 1.5610,   // 56,10% zwaarder
-            'abs': 1.05 * 1.5610,    // 56,10% zwaarder
-            'tpu': 1.21 * 1.5610,    // 56,10% zwaarder
-            'nylon': 1.14 * 1.5610,  // 56,10% zwaarder
-            'resin': 1.12 * 1.5610   // 56,10% zwaarder
+            'pla': 1.24 * 1.748,    // 74.8% zwaarder
+            'petg': 1.27 * 1.748,   // 74.8% zwaarder
+            'abs': 1.05 * 1.748,    // 74.8% zwaarder
+            'tpu': 1.21 * 1.748,    // 74.8% zwaarder
+            'nylon': 1.14 * 1.748,  // 74.8% zwaarder
+            'resin': 1.12 * 1.748   // 74.8% zwaarder
         };
 
         // Eenvoudige STL Parser voor zowel ASCII als Binary STL
@@ -830,7 +830,7 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // NIEUW: Bereken en toon gewicht met 56,10% correctie bij 30% infill
+            // NIEUW: Bereken en toon gewicht met 74.8% correctie bij 30% infill
             const material = document.getElementById('material').value;
             const density = materialDensities[material];
             const weight = volume * density * 0.30; // 30% infill
@@ -905,7 +905,7 @@
             // Update infill display
             updateInfillDisplay();
             
-            // NIEUW: Bereken gewicht met infill en 56,10% correctie
+            // NIEUW: Bereken gewicht met infill en 74.8% correctie
             const weight = volume * infill * density;
             document.getElementById('print-weight').textContent = weight.toFixed(1) + ' g';
             
