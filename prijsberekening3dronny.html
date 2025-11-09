@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Print Prijs Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #e74c3c;
+            --light: #f9f9f9;
+            --dark: #333;
+            --gray: #777;
+            --light-gray: #eee;
+            --border: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #c0392b;
+        }
+        
+        .calculator-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: border-color 0.3s;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .upload-area p {
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .model-preview {
+            margin-top: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        #modelViewer {
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+        }
+        
+        .viewer-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .viewer-controls button {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        
+        .price-summary {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .feature-card i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+        }
+        
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: 'liga';
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">3D Print Service</div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Diensten</a></li>
+                        <li><a href="#">Materialen</a></li>
+                        <li><a href="#">Over ons</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>3D Print Prijs Calculator</h1>
+            <p>Upload uw 3D-model en ontvang direct een prijsopgave voor uw print. Snel, eenvoudig en transparant.</p>
+            <a href="#calculator" class="btn">Direct Prijs Berekenen</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="calculator" class="calculator-section">
+            <h2 class="section-title">Offerte Aanvragen</h2>
+            <div class="calculator-grid">
+                <div class="upload-column">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="material-icons">cloud_upload</i>
+                        <h3>Upload uw 3D-model</h3>
+                        <p>Sleep uw bestand hierheen of klik om te bladeren</p>
+                        <p class="file-info">Ondersteunde formaten: STL, OBJ, 3MF (max. 50MB)</p>
+                        <input type="file" id="fileInput" class="file-input" accept=".stl,.obj,.3mf">
+                        <button class="btn" onclick="document.getElementById('fileInput').click()">Bestand Kiezen</button>
+                        <div id="fileDetails" class="file-info" style="display: none; margin-top: 15px;"></div>
+                    </div>
+                    
+                    <div class="loading" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>Model wordt geladen en geanalyseerd...</p>
+                    </div>
+                    
+                    <div class="model-preview" id="modelPreview">
+                        <div id="modelViewer"></div>
+                        <div class="viewer-controls">
+                            <button id="resetView">Reset Weergave</button>
+                            <button id="toggleWireframe">Draadmodel</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="material">Materiaal</label>
+                        <select id="material" class="form-control">
+                            <option value="pla">PLA (€0.15 per gram)</option>
+                            <option value="petg">PETG (€0.18 per gram)</option>
+                            <option value="abs">ABS (€0.20 per gram)</option>
+                            <option value="tpu">TPU (€0.25 per gram)</option>
+                            <option value="nylon">Nylon (€0.30 per gram)</option>
+                            <option value="resin">Resin (€0.50 per ml)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quality">Kwaliteit / Laagdikte</label>
+                        <select id="quality" class="form-control">
+                            <option value="draft">Draft (0.3mm) - Snel</option>
+                            <option value="standard" selected>Standaard (0.2mm) - Aanbevolen</option>
+                            <option value="high">Hoog (0.15mm) - Detail</option>
+                            <option value="ultra">Ultra (0.1mm) - Zeer gedetailleerd</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="options-column">
+                    <div class="form-group">
+                        <label for="infill">Vuldichtheid</label>
+                        <select id="infill" class="form-control">
+                            <option value="10">10% - Licht</option>
+                            <option value="20" selected>20% - Standaard</option>
+                            <option value="40">40% - Sterk</option>
+                            <option value="60">60% - Zeer sterk</option>
+                            <option value="80">80% - Bijna massief</option>
+                            <option value="100">100% - Massief</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="color">Kleur</label>
+                        <select id="color" class="form-control">
+                            <option value="standard">Standaard (wit, zwart, grijs)</option>
+                            <option value="premium">Premium kleur (+ €2.00)</option>
+                            <option value="custom">Aangepaste kleur (+ €5.00)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Extra Opties</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="postProcessing" value="5">
+                            <label for="postProcessing">Nabewerking (+ €5.00)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="express" value="10">
+                            <label for="express">Express levering (+ €10.00)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="support" value="3">
+                            <label for="support">Ondersteuning nodig (+ €3.00)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="price-summary">
+                        <h3>Prijsopgave</h3>
+                        <div class="price-item">
+                            <span>Materiaalkosten:</span>
+                            <span id="materialCost">€0.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span>Printkosten:</span>
+                            <span id="printCost">€0.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span>Extra opties:</span>
+                            <span id="extraCost">€0.00</span>
+                        </div>
+                        <div class="price-total">
+                            <span>Totaal:</span>
+                            <span id="totalCost">€0.00</span>
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;">Offerte Aanvragen</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <i class="material-icons">speed</i>
+                <h3>Snel en Eenvoudig</h3>
+                <p>Binnen enkele seconden een prijsopgave voor uw 3D-print.</p>
+            </div>
+            <div class="feature-card">
+                <i class="material-icons">euro_symbol</i>
+                <h3>Transparante Prijzen</h3>
+                <p>Geen verborgen kosten. U ziet direct waar u voor betaalt.</p>
+            </div>
+            <div class="feature-card">
+                <i class="material-icons">3d_rotation</i>
+                <h3>3D Model Preview</h3>
+                <p>Bekijk uw model in 3D voordat u de bestelling plaatst.</p>
+            </div>
+            <div class="feature-card">
+                <i class="material-icons">support_agent</i>
+                <h3>Professioneel Advies</h3>
+                <p>Onze experts helpen u met het optimaliseren van uw ontwerp.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Onze Diensten</h3>
+                    <ul>
+                        <li><a href="#">3D Printen</a></li>
+                        <li><a href="#">3D Scannen</a></li>
+                        <li><a href="#">Ontwerp Services</a></li>
+                        <li><a href="#">Prototyping</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Materialen</h3>
+                    <ul>
+                        <li><a href="#">PLA</a></li>
+                        <li><a href="#">PETG</a></li>
+                        <li><a href="#">ABS</a></li>
+                        <li><a href="#">Resin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="#">info@3dprintservice.nl</a></li>
+                        <li><a href="#">+31 123 456 789</a></li>
+                        <li><a href="#">Adres: Straatnaam 123, Plaats</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Volg Ons</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 3D Print Service. Alle rechten voorbehouden.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Three.js variabelen
+        let scene, camera, renderer, controls;
+        let modelMesh = null;
+        let isWireframe = false;
+        
+        // Initialiseer de 3D viewer
+        function initViewer() {
+            const container = document.getElementById('modelViewer');
+            
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+            
+            // Animatie
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            // Resize handler
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+        
+        // Laad een STL model
+        function loadSTLModel(file) {
+            const loader = new THREE.STLLoader();
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const geometry = loader.parse(event.target.result);
+                
+                // Verwijder vorig model
+                if (modelMesh) {
+                    scene.remove(modelMesh);
+                }
+                
+                // Maak materiaal
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: 0x3498db,
+                    specular: 0x111111,
+                    shininess: 200
+                });
+                
+                // Maak mesh
+                modelMesh = new THREE.Mesh(geometry, material);
+                
+                // Centreer het model
+                geometry.computeBoundingBox();
+                const center = new THREE.Vector3();
+                geometry.boundingBox.getCenter(center);
+                modelMesh.geometry.translate(-center.x, -center.y, -center.z);
+                
+                // Schaal het model
+                const size = new THREE.Vector3();
+                geometry.boundingBox.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 5 / maxDim;
+                modelMesh.scale.set(scale, scale, scale);
+                
+                // Voeg toe aan scene
+                scene.add(modelMesh);
+                
+                // Update camera
+                controls.reset();
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Bestand upload functionaliteit
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileDetails = document.getElementById('fileDetails');
+        const modelPreview = document.getElementById('modelPreview');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        
+        // Upload area interactie
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#3498db';
+            uploadArea.style.backgroundColor = '#f0f8ff';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ddd';
+            uploadArea.style.backgroundColor = '';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ddd';
+            uploadArea.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        function handleFile(file) {
+            // Controleer bestandstype
+            const validExtensions = ['.stl', '.obj', '.3mf'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!validExtensions.includes(fileExtension)) {
+                alert('Ongeldig bestandstype. Alleen STL, OBJ en 3MF bestanden worden ondersteund.');
+                return;
+            }
+            
+            // Controleer bestandsgrootte (max 50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Bestand is te groot. Maximale grootte is 50MB.');
+                return;
+            }
+            
+            // Toon laadindicator
+            loadingIndicator.style.display = 'block';
+            modelPreview.style.display = 'none';
+            
+            // Toon bestandsinformatie
+            fileDetails.innerHTML = `
+                <strong>Bestand:</strong> ${file.name}<br>
+                <strong>Grootte:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB<br>
+                <strong>Type:</strong> ${fileExtension.toUpperCase()}
+            `;
+            fileDetails.style.display = 'block';
+            
+            // Laad en toon het 3D model
+            if (fileExtension === '.stl') {
+                loadSTLModel(file);
+                
+                // Wacht even om te simuleren dat het model geladen wordt
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                    modelPreview.style.display = 'block';
+                    simulateModelAnalysis();
+                }, 1500);
+            } else {
+                // Voor OBJ en 3MF toon we alleen een placeholder
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                    modelPreview.style.display = 'block';
+                    simulateModelAnalysis();
+                }, 1500);
+            }
+        }
+        
+        function simulateModelAnalysis() {
+            // Genereer willekeurige modelgegevens voor demonstratie
+            const volume = (Math.random() * 100).toFixed(2); // cm³
+            const weight = (volume * 1.25).toFixed(2); // gram (PLA dichtheid)
+            const printTime = Math.floor(Math.random() * 300) + 60; // minuten
+            
+            fileDetails.innerHTML += `<br><strong>Volume:</strong> ${volume} cm³<br>
+                <strong>Geschat gewicht:</strong> ${weight} gram<br>
+                <strong>Printtijd:</strong> ${printTime} minuten`;
+            
+            // Update prijsberekening
+            updatePriceCalculation(volume, weight, printTime);
+        }
+        
+        function updatePriceCalculation(volume, weight, printTime) {
+            // Haal geselecteerde opties op
+            const material = document.getElementById('material').value;
+            const quality = document.getElementById('quality').value;
+            const infill = parseInt(document.getElementById('infill').value);
+            const color = document.getElementById('color').value;
+            
+            // Bereken materiaalkosten
+            let materialPricePerGram = 0.15; // Standaard PLA
+            switch(material) {
+                case 'petg': materialPricePerGram = 0.18; break;
+                case 'abs': materialPricePerGram = 0.20; break;
+                case 'tpu': materialPricePerGram = 0.25; break;
+                case 'nylon': materialPricePerGram = 0.30; break;
+                case 'resin': materialPricePerGram = 0.50; break;
+            }
+            
+            const materialCost = weight * materialPricePerGram;
+            
+            // Bereken printkosten (gebaseerd op printtijd en kwaliteit)
+            let hourlyRate = 5.00; // Standaard tarief
+            switch(quality) {
+                case 'draft': hourlyRate = 4.00; break;
+                case 'high': hourlyRate = 6.00; break;
+                case 'ultra': hourlyRate = 8.00; break;
+            }
+            
+            const printCost = (printTime / 60) * hourlyRate;
+            
+            // Bereken extra kosten
+            let extraCost = 0;
+            
+            // Kleur premium
+            if (color === 'premium') extraCost += 2.00;
+            if (color === 'custom') extraCost += 5.00;
+            
+            // Extra opties
+            if (document.getElementById('postProcessing').checked) {
+                extraCost += parseFloat(document.getElementById('postProcessing').value);
+            }
+            if (document.getElementById('express').checked) {
+                extraCost += parseFloat(document.getElementById('express').value);
+            }
+            if (document.getElementById('support').checked) {
+                extraCost += parseFloat(document.getElementById('support').value);
+            }
+            
+            // Update de prijsweergave
+            document.getElementById('materialCost').textContent = `€${materialCost.toFixed(2)}`;
+            document.getElementById('printCost').textContent = `€${printCost.toFixed(2)}`;
+            document.getElementById('extraCost').textContent = `€${extraCost.toFixed(2)}`;
+            
+            const totalCost = materialCost + printCost + extraCost;
+            document.getElementById('totalCost').textContent = `€${totalCost.toFixed(2)}`;
+        }
+        
+        // Viewer controls
+        document.getElementById('resetView').addEventListener('click', function() {
+            controls.reset();
+        });
+        
+        document.getElementById('toggleWireframe').addEventListener('click', function() {
+            if (modelMesh) {
+                isWireframe = !isWireframe;
+                modelMesh.material.wireframe = isWireframe;
+                this.textContent = isWireframe ? 'Volledig Model' : 'Draadmodel';
+            }
+        });
+        
+        // Luister naar wijzigingen in formuliervelden
+        const formInputs = document.querySelectorAll('select, input[type="checkbox"]');
+        formInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Als er een model is geüpload, update de prijsberekening
+                if (fileDetails.style.display !== 'none') {
+                    // Gebruik de eerder gegenereerde waarden voor demonstratie
+                    const volume = 25.5; // Voorbeeldwaarde
+                    const weight = 31.88; // Voorbeeldwaarde
+                    const printTime = 180; // Voorbeeldwaarde
+                    updatePriceCalculation(volume, weight, printTime);
+                }
+            });
+        });
+        
+        // Initialiseer de 3D viewer wanneer de pagina geladen is
+        window.addEventListener('DOMContentLoaded', (event) => {
+            initViewer();
+            updatePriceCalculation(0, 0, 0);
+        });
+    </script>
+</body>
+</html>
