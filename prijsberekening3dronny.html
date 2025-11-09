@@ -473,14 +473,14 @@
     </div>
 
     <script>
-        // Materiaal dichtheden in g/cm³
+        // Materiaal dichtheden in g/cm³ - GECORRIGEERD met 20,05% reductie
         const materialDensities = {
-            'pla': 1.24,
-            'petg': 1.27,
-            'abs': 1.05,
-            'tpu': 1.21,
-            'nylon': 1.14,
-            'resin': 1.12
+            'pla': 1.24 * 0.7995,    // 20,05% lichter
+            'petg': 1.27 * 0.7995,   // 20,05% lichter
+            'abs': 1.05 * 0.7995,    // 20,05% lichter
+            'tpu': 1.21 * 0.7995,    // 20,05% lichter
+            'nylon': 1.14 * 0.7995,  // 20,05% lichter
+            'resin': 1.12 * 0.7995   // 20,05% lichter
         };
 
         // Eenvoudige STL Parser voor zowel ASCII als Binary STL
@@ -491,7 +491,6 @@
                 // Check if it's ASCII STL
                 const header = new TextDecoder().decode(arrayBuffer.slice(0, 80));
                 const isASCII = header.toLowerCase().includes('solid') && 
-
                                !header.toLowerCase().includes('endsolid');
                 
                 if (isASCII) {
@@ -756,12 +755,12 @@
                     // Mesh
                     model = new THREE.Mesh(geometry, material);
                     
-                    // Bereken optimale schaal
+                    // NIEUW: Bereken optimale schaal met 20% vergroting
                     geometry.computeBoundingBox();
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 8 / maxDim;
+                    const scale = (8 / maxDim) * 1.2; // 20% groter
                     
                     model.scale.set(scale, scale, scale);
                     
@@ -770,14 +769,20 @@
                     // Automatische oriëntatie met 180 graden rotatie
                     autoOrientModel();
                     
-                    // Update camera positie voor betere weergave
+                    // NIEUW: Verbeterde camera positioning voor betere centrering
                     const box = new THREE.Box3().setFromObject(model);
+                    const center = new THREE.Vector3();
+                    box.getCenter(center);
+                    
                     const newSize = new THREE.Vector3();
                     box.getSize(newSize);
-                    const cameraDistance = Math.max(newSize.x, newSize.y, newSize.z) * 1.8;
+                    const maxSize = Math.max(newSize.x, newSize.y, newSize.z);
                     
-                    camera.position.set(cameraDistance, cameraDistance * 0.5, cameraDistance);
-                    camera.lookAt(0, 0, 0);
+                    // Camera position based on model size for better framing
+                    const cameraDistance = maxSize * 2;
+                    camera.position.set(cameraDistance, cameraDistance * 0.7, cameraDistance);
+                    camera.lookAt(center);
+                    controls.target.copy(center);
                     controls.update();
                     
                     // Update bestandsinformatie met CORRECTE volume berekening
@@ -819,7 +824,7 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // NIEUW: Bereken en toon gewicht
+            // NIEUW: Bereken en toon gewicht met 20,05% correctie
             const material = document.getElementById('material').value;
             const density = materialDensities[material];
             const weight = volume * density;
@@ -891,7 +896,7 @@
             const infill = parseInt(document.getElementById('infill').value) / 100;
             const volume = stlFile.volume;
             
-            // NIEUW: Bereken gewicht met infill
+            // NIEUW: Bereken gewicht met infill en 20,05% correctie
             const weight = volume * infill * density;
             document.getElementById('print-weight').textContent = weight.toFixed(1) + ' g';
             
