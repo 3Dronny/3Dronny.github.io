@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Kosten Calculator | 3DRonny</title>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/jsm/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <style>
         * {
             margin: 0;
@@ -560,13 +560,13 @@
             // Renderer
             renderer = new THREE.WebGLRenderer({ 
                 antialias: true,
-                preserveDrawingBuffer: true // Voor betere compatibiliteit
+                preserveDrawingBuffer: true
             });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setClearColor(0xffffff, 1);
             container.appendChild(renderer.domElement);
             
-            // Controls
+            // Controls - GECORRIGEERDE ORBITCONTROLS
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
