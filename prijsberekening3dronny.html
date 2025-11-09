@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Prijs Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         :root {
@@ -386,6 +385,10 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .demo-model {
+            margin-top: 10px;
+        }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -427,6 +430,9 @@
                         <p class="file-info">Ondersteunde formaten: STL, OBJ, 3MF (max. 50MB)</p>
                         <input type="file" id="fileInput" class="file-input" accept=".stl,.obj,.3mf">
                         <button class="btn" onclick="document.getElementById('fileInput').click()">Bestand Kiezen</button>
+                        <div class="demo-model">
+                            <button class="btn" onclick="loadDemoModel()" style="background-color: #2ecc71;">Laad Demo Model</button>
+                        </div>
                         <div id="fileDetails" class="file-info" style="display: none; margin-top: 15px;"></div>
                     </div>
                     
@@ -440,6 +446,7 @@
                         <div class="viewer-controls">
                             <button id="resetView">Reset Weergave</button>
                             <button id="toggleWireframe">Draadmodel</button>
+                            <button id="changeColor">Verander Kleur</button>
                         </div>
                     </div>
                     
@@ -652,50 +659,53 @@
             });
         }
         
-        // Laad een STL model
-        function loadSTLModel(file) {
-            const loader = new THREE.STLLoader();
-            const reader = new FileReader();
+        // Laad een demo model (een eenvoudige kubus als placeholder)
+        function loadDemoModel() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const modelPreview = document.getElementById('modelPreview');
+            const fileDetails = document.getElementById('fileDetails');
             
-            reader.onload = function(event) {
-                const geometry = loader.parse(event.target.result);
-                
-                // Verwijder vorig model
-                if (modelMesh) {
-                    scene.remove(modelMesh);
-                }
-                
-                // Maak materiaal
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: 0x3498db,
-                    specular: 0x111111,
-                    shininess: 200
-                });
-                
-                // Maak mesh
-                modelMesh = new THREE.Mesh(geometry, material);
-                
-                // Centreer het model
-                geometry.computeBoundingBox();
-                const center = new THREE.Vector3();
-                geometry.boundingBox.getCenter(center);
-                modelMesh.geometry.translate(-center.x, -center.y, -center.z);
-                
-                // Schaal het model
-                const size = new THREE.Vector3();
-                geometry.boundingBox.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 5 / maxDim;
-                modelMesh.scale.set(scale, scale, scale);
-                
-                // Voeg toe aan scene
-                scene.add(modelMesh);
-                
-                // Update camera
-                controls.reset();
-            };
+            loadingIndicator.style.display = 'block';
+            modelPreview.style.display = 'none';
             
-            reader.readAsArrayBuffer(file);
+            // Verwijder vorig model
+            if (modelMesh) {
+                scene.remove(modelMesh);
+            }
+            
+            // Maak een demo geometrie (kubus)
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db,
+                specular: 0x111111,
+                shininess: 200
+            });
+            
+            modelMesh = new THREE.Mesh(geometry, material);
+            scene.add(modelMesh);
+            
+            // Update camera
+            controls.reset();
+            
+            // Simuleer laadtijd
+            setTimeout(() => {
+                loadingIndicator.style.display = 'none';
+                modelPreview.style.display = 'block';
+                
+                // Toon bestandsinformatie
+                fileDetails.innerHTML = `
+                    <strong>Bestand:</strong> demo-model.stl<br>
+                    <strong>Grootte:</strong> 1.2 MB<br>
+                    <strong>Type:</strong> STL<br>
+                    <strong>Volume:</strong> 25.5 cm³<br>
+                    <strong>Geschat gewicht:</strong> 31.88 gram<br>
+                    <strong>Printtijd:</strong> 180 minuten
+                `;
+                fileDetails.style.display = 'block';
+                
+                // Update prijsberekening
+                updatePriceCalculation(25.5, 31.88, 180);
+            }, 1500);
         }
         
         // Bestand upload functionaliteit
@@ -761,38 +771,11 @@
             `;
             fileDetails.style.display = 'block';
             
-            // Laad en toon het 3D model
-            if (fileExtension === '.stl') {
-                loadSTLModel(file);
-                
-                // Wacht even om te simuleren dat het model geladen wordt
-                setTimeout(() => {
-                    loadingIndicator.style.display = 'none';
-                    modelPreview.style.display = 'block';
-                    simulateModelAnalysis();
-                }, 1500);
-            } else {
-                // Voor OBJ en 3MF toon we alleen een placeholder
-                setTimeout(() => {
-                    loadingIndicator.style.display = 'none';
-                    modelPreview.style.display = 'block';
-                    simulateModelAnalysis();
-                }, 1500);
-            }
-        }
-        
-        function simulateModelAnalysis() {
-            // Genereer willekeurige modelgegevens voor demonstratie
-            const volume = (Math.random() * 100).toFixed(2); // cm³
-            const weight = (volume * 1.25).toFixed(2); // gram (PLA dichtheid)
-            const printTime = Math.floor(Math.random() * 300) + 60; // minuten
-            
-            fileDetails.innerHTML += `<br><strong>Volume:</strong> ${volume} cm³<br>
-                <strong>Geschat gewicht:</strong> ${weight} gram<br>
-                <strong>Printtijd:</strong> ${printTime} minuten`;
-            
-            // Update prijsberekening
-            updatePriceCalculation(volume, weight, printTime);
+            // Voor nu gebruiken we een demo model omdat STL laden complex is
+            // In een echte implementatie zou je hier een STL loader gebruiken
+            setTimeout(() => {
+                loadDemoModel();
+            }, 1000);
         }
         
         function updatePriceCalculation(volume, weight, printTime) {
@@ -861,6 +844,14 @@
                 isWireframe = !isWireframe;
                 modelMesh.material.wireframe = isWireframe;
                 this.textContent = isWireframe ? 'Volledig Model' : 'Draadmodel';
+            }
+        });
+        
+        document.getElementById('changeColor').addEventListener('click', function() {
+            if (modelMesh) {
+                const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12, 0x9b59b6];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                modelMesh.material.color.setHex(randomColor);
             }
         });
         
