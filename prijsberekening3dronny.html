@@ -412,6 +412,12 @@
                         <option value="100">100% (Massief)</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="volume-correction">Volume Correctie Factor</label>
+                    <input type="number" id="volume-correction" value="2.67" step="0.01" min="0.1" max="10">
+                    <small style="color: #666; font-size: 0.9rem;">Pas deze factor aan als het volume niet overeenkomt met je slicer</small>
+                </div>
                 
                 <button class="btn btn-secondary" id="calculate-btn">Bereken Prijs</button>
             </div>
@@ -551,7 +557,7 @@
             }
         }
 
-        // Volume berekening voor STL
+        // VERBETERDE Volume berekening voor STL
         function calculateSTLVolume(geometry) {
             const positions = geometry.attributes.position.array;
             const indices = geometry.index ? geometry.index.array : null;
@@ -580,7 +586,9 @@
                 }
             }
             
-            return Math.abs(volume) / 1000;
+            // CORRECTIE: Gebruik de correctiefactor
+            const correctionFactor = parseFloat(document.getElementById('volume-correction').value) || 1;
+            return Math.abs(volume) / 1000 * correctionFactor;
         }
 
         // Update infill display
@@ -861,6 +869,7 @@
                 return;
             }
             
+
             const materialPrices = {
                 'pla': 0.05, 'petg': 0.07, 'abs': 0.06, 'tpu': 0.09, 'nylon': 0.11, 'resin': 0.15
             };
@@ -969,6 +978,15 @@
             document.getElementById('infill').addEventListener('change', function() {
                 updateWeightDisplay();
                 calculatePrice();
+            });
+
+            // NIEUW: Event listener voor volume correctie
+            document.getElementById('volume-correction').addEventListener('change', function() {
+                if (stlFile) {
+                    // Herbereken volume met nieuwe correctiefactor
+                    const geometry = model.geometry;
+                    updateFileInfo(stlFile.file, geometry);
+                }
             });
             
             updateInfillDisplay();
