@@ -370,7 +370,7 @@
                         <span id="file-volume">-</span>
                     </div>
                     <div class="file-info-item">
-                        <span class="file-info-label">Gewicht (30% infill):</span>
+                        <span class="file-info-label">Gewicht (<span id="current-infill-display">30</span>% infill):</span>
                         <span id="file-weight">-</span>
                     </div>
                     <div class="file-info-item">
@@ -473,14 +473,14 @@
     </div>
 
     <script>
-        // Materiaal dichtheden in g/cm³ - CORRECTIE voor juist gewicht
+        // CORRECTIE: Materiaal dichtheden in g/cm³ - zonder onnodige vermenigvuldiging
         const materialDensities = {
-            'pla': 1.24 * 1.749,
-            'petg': 1.27 * 1.749,
-            'abs': 1.05 * 1.749,
-            'tpu': 1.21 * 1.749,
-            'nylon': 1.14 * 1.749,
-            'resin': 1.12 * 1.749
+            'pla': 1.24,    // PLA: 1.24 g/cm³
+            'petg': 1.27,   // PETG: 1.27 g/cm³
+            'abs': 1.05,    // ABS: 1.05 g/cm³
+            'tpu': 1.21,    // TPU: 1.21 g/cm³
+            'nylon': 1.14,  // Nylon: 1.14 g/cm³
+            'resin': 1.12   // Resin: 1.12 g/cm³
         };
 
         // Eenvoudige STL Parser
@@ -587,6 +587,29 @@
         function updateInfillDisplay() {
             const infillValue = document.getElementById('infill').value;
             document.getElementById('current-infill').textContent = infillValue;
+            document.getElementById('current-infill-display').textContent = infillValue;
+            
+            // Update ook het gewicht in file-info als er een model geladen is
+            if (stlFile) {
+                updateWeightDisplay();
+            }
+        }
+
+        // Update gewichtsdisplay
+        function updateWeightDisplay() {
+            if (!stlFile) return;
+            
+            const material = document.getElementById('material').value;
+            const density = materialDensities[material];
+            const infill = parseInt(document.getElementById('infill').value) / 100;
+            const volume = stlFile.volume;
+            
+            // CORRECTIE: Gebruik het juiste infill percentage
+            const weight = volume * density * infill;
+            document.getElementById('file-weight').textContent = weight.toFixed(2) + ' g';
+            
+            // Update ook het globale stlFile object
+            stlFile.weight = weight;
         }
 
         // Globale variabelen
@@ -782,16 +805,13 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            const material = document.getElementById('material').value;
-            const density = materialDensities[material];
-            const weight = volume * density * 0.30;
-            document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
+            // CORRECTIE: Gebruik het geselecteerde infill percentage voor gewichtsberekening
+            updateWeightDisplay();
             
             stlFile = {
                 file: file,
                 volume: volume,
-                dimensions: size,
-                weight: weight
+                dimensions: size
             };
             
             calculatePrice();
@@ -853,8 +873,9 @@
             
             updateInfillDisplay();
             
+            // CORRECTIE: Gebruik hetzelfde gewicht als in file-info
             const weight = volume * infill * density;
-            document.getElementById('print-weight').textContent = weight.toFixed(1) + ' g';
+            document.getElementById('print-weight').textContent = weight.toFixed(2) + ' g';
             
             const materialCost = volume * infill * materialPrice;
             
@@ -940,18 +961,13 @@
             });
             
             document.getElementById('material').addEventListener('change', function() {
-                if (stlFile) {
-                    const material = this.value;
-                    const density = materialDensities[material];
-                    const weight = stlFile.volume * density * 0.30;
-                    document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
-                }
+                updateWeightDisplay();
                 calculatePrice();
             });
             
             document.getElementById('quality').addEventListener('change', calculatePrice);
             document.getElementById('infill').addEventListener('change', function() {
-                updateInfillDisplay();
+                updateWeightDisplay();
                 calculatePrice();
             });
             
