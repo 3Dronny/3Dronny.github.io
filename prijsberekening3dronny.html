@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Prijs Calculator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -190,12 +188,69 @@
             position: relative;
             overflow: hidden;
             display: none;
+            background-color: #f8f9fa;
         }
         
         #modelViewer {
             width: 100%;
             height: 100%;
-            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .model-placeholder {
+            text-align: center;
+            color: var(--gray);
+        }
+        
+        .model-placeholder i {
+            font-size: 64px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .cube-container {
+            width: 200px;
+            height: 200px;
+            perspective: 800px;
+            margin: 0 auto;
+        }
+        
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 10s infinite linear;
+        }
+        
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: 2px solid white;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .front  { transform: rotateY(0deg) translateZ(100px); }
+        .back   { transform: rotateY(180deg) translateZ(100px); }
+        .right  { transform: rotateY(90deg) translateZ(100px); }
+        .left   { transform: rotateY(-90deg) translateZ(100px); }
+        .top    { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+        
+        @keyframes rotate {
+            from { transform: rotateX(0) rotateY(0); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
         }
         
         .viewer-controls {
@@ -207,12 +262,18 @@
         }
         
         .viewer-controls button {
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
             border-radius: 4px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             cursor: pointer;
             font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .viewer-controls button:hover {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .form-group {
@@ -389,6 +450,18 @@
         .demo-model {
             margin-top: 10px;
         }
+        
+        .model-loaded #staticModel {
+            display: none;
+        }
+        
+        .model-loaded #animatedModel {
+            display: block;
+        }
+        
+        #animatedModel {
+            display: none;
+        }
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -442,11 +515,27 @@
                     </div>
                     
                     <div class="model-preview" id="modelPreview">
-                        <div id="modelViewer"></div>
+                        <div id="modelViewer">
+                            <div id="staticModel" class="model-placeholder">
+                                <i class="material-icons">3d_rotation</i>
+                                <p>3D model wordt hier weergegeven</p>
+                                <p><small>Klik op "Laad Demo Model" om een voorbeeld te zien</small></p>
+                            </div>
+                            <div id="animatedModel" class="cube-container">
+                                <div class="cube">
+                                    <div class="face front">VOOR</div>
+                                    <div class="face back">ACHTER</div>
+                                    <div class="face right">RECHTS</div>
+                                    <div class="face left">LINKS</div>
+                                    <div class="face top">BOVEN</div>
+                                    <div class="face bottom">ONDER</div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="viewer-controls">
                             <button id="resetView">Reset Weergave</button>
-                            <button id="toggleWireframe">Draadmodel</button>
                             <button id="changeColor">Verander Kleur</button>
+                            <button id="toggleAnimation">Stop Animatie</button>
                         </div>
                     </div>
                     
@@ -604,87 +693,8 @@
     </footer>
 
     <script>
-        // Three.js variabelen
-        let scene, camera, renderer, controls;
-        let modelMesh = null;
-        let isWireframe = false;
-        let isViewerInitialized = false;
-        
-        // Initialiseer de 3D viewer
-        function initViewer() {
-            if (isViewerInitialized) return;
-            
-            const container = document.getElementById('modelViewer');
-            
-            // Scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf8f9fa);
-            
-            // Camera
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.z = 5;
-            
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-            
-            // Controls - vereenvoudigd zonder OrbitControls
-            let isDragging = false;
-            let previousMousePosition = { x: 0, y: 0 };
-            
-            container.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-            
-            container.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-            
-            container.addEventListener('mousemove', (e) => {
-                if (isDragging && modelMesh) {
-                    const deltaX = e.clientX - previousMousePosition.x;
-                    const deltaY = e.clientY - previousMousePosition.y;
-                    
-                    modelMesh.rotation.y += deltaX * 0.01;
-                    modelMesh.rotation.x += deltaY * 0.01;
-                    
-                    previousMousePosition = { x: e.clientX, y: e.clientY };
-                }
-            });
-            
-            container.addEventListener('wheel', (e) => {
-                camera.position.z += e.deltaY * 0.01;
-                camera.position.z = Math.max(1, Math.min(20, camera.position.z));
-            });
-            
-            // Licht
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(1, 1, 1);
-            scene.add(directionalLight);
-            
-            // Grid helper
-            const gridHelper = new THREE.GridHelper(10, 10);
-            scene.add(gridHelper);
-            
-            // Axes helper
-            const axesHelper = new THREE.AxesHelper(3);
-            scene.add(axesHelper);
-            
-            // Animatie
-            function animate() {
-                requestAnimationFrame(animate);
-                renderer.render(scene, camera);
-            }
-            animate();
-            
-            isViewerInitialized = true;
-            console.log('3D Viewer geïnitialiseerd');
-        }
+        let isAnimating = true;
+        let currentColor = '#3498db';
         
         // Laad een demo model
         function loadDemoModel() {
@@ -693,39 +703,16 @@
             const loadingIndicator = document.getElementById('loadingIndicator');
             const modelPreview = document.getElementById('modelPreview');
             const fileDetails = document.getElementById('fileDetails');
+            const modelViewer = document.getElementById('modelViewer');
             
             loadingIndicator.style.display = 'block';
             modelPreview.style.display = 'none';
-            
-            // Zorg dat viewer geïnitialiseerd is
-            if (!isViewerInitialized) {
-                initViewer();
-            }
-            
-            // Verwijder vorig model
-            if (modelMesh) {
-                scene.remove(modelMesh);
-            }
-            
-            // Maak een demo geometrie (kubus)
-            const geometry = new THREE.BoxGeometry(2, 2, 2);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x3498db,
-                specular: 0x111111,
-                shininess: 200
-            });
-            
-            modelMesh = new THREE.Mesh(geometry, material);
-            scene.add(modelMesh);
-            
-            // Centreer camera
-            camera.position.set(0, 0, 5);
-            camera.lookAt(0, 0, 0);
             
             // Simuleer laadtijd
             setTimeout(() => {
                 loadingIndicator.style.display = 'none';
                 modelPreview.style.display = 'block';
+                modelViewer.classList.add('model-loaded');
                 
                 // Toon bestandsinformatie
                 fileDetails.innerHTML = `
@@ -741,7 +728,7 @@
                 // Update prijsberekening
                 updatePriceCalculation(25.5, 31.88, 180);
                 console.log('Demo model geladen en weergegeven');
-            }, 1000);
+            }, 1500);
         }
         
         // Bestand upload functionaliteit
@@ -750,6 +737,7 @@
         const fileDetails = document.getElementById('fileDetails');
         const modelPreview = document.getElementById('modelPreview');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const modelViewer = document.getElementById('modelViewer');
         
         // Upload area interactie
         uploadArea.addEventListener('dragover', (e) => {
@@ -871,28 +859,36 @@
         
         // Viewer controls
         document.getElementById('resetView').addEventListener('click', function() {
-            if (modelMesh) {
-                modelMesh.rotation.x = 0;
-                modelMesh.rotation.y = 0;
-                modelMesh.rotation.z = 0;
-            }
-            camera.position.set(0, 0, 5);
-            camera.lookAt(0, 0, 0);
-        });
-        
-        document.getElementById('toggleWireframe').addEventListener('click', function() {
-            if (modelMesh) {
-                isWireframe = !isWireframe;
-                modelMesh.material.wireframe = isWireframe;
-                this.textContent = isWireframe ? 'Volledig Model' : 'Draadmodel';
-            }
+            const cube = document.querySelector('.cube');
+            cube.style.animation = 'none';
+            setTimeout(() => {
+                cube.style.animation = 'rotate 10s infinite linear';
+            }, 10);
+            isAnimating = true;
+            this.textContent = 'Reset Weergave';
         });
         
         document.getElementById('changeColor').addEventListener('click', function() {
-            if (modelMesh) {
-                const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12, 0x9b59b6];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                modelMesh.material.color.setHex(randomColor);
+            const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            currentColor = randomColor;
+            
+            const faces = document.querySelectorAll('.face');
+            faces.forEach(face => {
+                face.style.background = `linear-gradient(45deg, ${randomColor}, ${randomColor}dd)`;
+            });
+        });
+        
+        document.getElementById('toggleAnimation').addEventListener('click', function() {
+            const cube = document.querySelector('.cube');
+            isAnimating = !isAnimating;
+            
+            if (isAnimating) {
+                cube.style.animationPlayState = 'running';
+                this.textContent = 'Stop Animatie';
+            } else {
+                cube.style.animationPlayState = 'paused';
+                this.textContent = 'Start Animatie';
             }
         });
         
@@ -911,18 +907,8 @@
         
         // Initialiseer wanneer de pagina geladen is
         window.addEventListener('load', function() {
-            console.log('Pagina geladen, initialiseer viewer...');
-            initViewer();
+            console.log('Pagina geladen');
             updatePriceCalculation(0, 0, 0);
-            
-            // Voeg een standaard model toe voor demonstratie
-            setTimeout(() => {
-                const geometry = new THREE.BoxGeometry(1, 1, 1);
-                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-                const cube = new THREE.Mesh(geometry, material);
-                scene.add(cube);
-                console.log('Standaard kubus toegevoegd aan scene');
-            }, 500);
         });
     </script>
 </body>
