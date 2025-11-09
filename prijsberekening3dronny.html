@@ -152,6 +152,7 @@
         #model-viewer {
             width: 100%;
             height: 100%;
+            position: relative;
         }
         
         .viewer-controls {
@@ -281,6 +282,11 @@
             color: #7f8c8d;
             padding: 50px 20px;
             font-size: 1.1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
         }
         
         footer {
@@ -410,7 +416,7 @@
                 <h2 class="section-title">3D Model Viewer</h2>
                 <div class="viewer-container">
                     <div id="model-viewer">
-                        <div class="no-file-message">
+                        <div class="no-file-message" id="no-file-message">
                             <p>📁 Upload een STL-bestand om het 3D-model te bekijken</p>
                             <p style="margin-top: 10px; font-size: 0.9rem; color: #95a5a6;">
                                 Gebruik de knop "Bestand selecteren" of sleep een bestand naar het upload gebied
@@ -468,8 +474,7 @@
                 // Check if it's ASCII STL
                 const header = new TextDecoder().decode(arrayBuffer.slice(0, 80));
                 const isASCII = header.toLowerCase().includes('solid') && 
-                               !header.includes('COLOR=') && 
-                               !header.includes('MATERIAL=');
+                               !header.toLowerCase().includes('endsolid');
                 
                 if (isASCII) {
                     return this.parseASCIISTL(arrayBuffer);
@@ -547,11 +552,13 @@
             if (isViewerInitialized) return;
             
             const container = document.getElementById('model-viewer');
-            container.innerHTML = ''; // Leeg het container element
+            
+            // Verberg het "geen bestand" bericht
+            document.getElementById('no-file-message').style.display = 'none';
             
             // Scene met WITTE achtergrond
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff); // Witte achtergrond
+            scene.background = new THREE.Color(0xffffff);
             
             // Camera
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -566,24 +573,24 @@
             renderer.setClearColor(0xffffff, 1);
             container.appendChild(renderer.domElement);
             
-            // Controls - GECORRIGEERDE ORBITCONTROLS
+            // Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
             
-            // Licht - belangrijk voor witte achtergrond
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-            directionalLight.position.set(1, 1, 1);
-            scene.add(directionalLight);
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(1, 1, 1);
+            scene.add(directionalLight1);
             
-            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight2.position.set(-1, -1, -1);
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+            directionalLight2.position.set(-1, -1, 1);
             scene.add(directionalLight2);
             
-            // Grid helper (lichtgrijs voor witte achtergrond)
+            // Grid helper
             gridHelper = new THREE.GridHelper(10, 10, 0xcccccc, 0xeeeeee);
             scene.add(gridHelper);
             
@@ -632,13 +639,13 @@
             
             reader.onload = function(event) {
                 try {
+                    // Gebruik onze eigen STL parser
+                    const stlData = SimpleSTLParser.parseSTL(event.target.result);
+                    
                     // Initialiseer viewer als dat nog niet gebeurd is
                     if (!isViewerInitialized) {
                         initViewer();
                     }
-                    
-                    // Gebruik onze eigen STL parser
-                    const stlData = SimpleSTLParser.parseSTL(event.target.result);
                     
                     // Verwijder vorig model
                     if (model) {
@@ -651,9 +658,9 @@
                     geometry.setIndex(new THREE.BufferAttribute(stlData.faces, 1));
                     geometry.computeVertexNormals();
                     
-                    // Materiaal met contrasterende kleur voor witte achtergrond
+                    // Materiaal
                     const material = new THREE.MeshPhongMaterial({ 
-                        color: 0x6a11cb, // Paarse kleur
+                        color: 0x6a11cb,
                         specular: 0x111111, 
                         shininess: 100,
                         flatShading: false
@@ -662,29 +669,32 @@
                     // Mesh
                     model = new THREE.Mesh(geometry, material);
                     
-                    // Centreer het model
-                    geometry.computeBoundingSphere();
+                    // Centreer en schaal het model
                     geometry.computeBoundingBox();
-                    
                     const center = new THREE.Vector3();
                     geometry.boundingBox.getCenter(center);
-                    model.position.sub(center);
                     
-                    // Schaal het model
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 5 / maxDim;
+                    const scale = 4 / maxDim;
+                    
                     model.scale.set(scale, scale, scale);
+                    model.position.sub(center.multiplyScalar(scale));
                     
                     scene.add(model);
+                    
+                    // Update camera positie
+                    camera.position.set(0, 0, maxDim * 1.5);
+                    camera.lookAt(0, 0, 0);
+                    controls.update();
                     
                     // Update bestandsinformatie
                     updateFileInfo(file, geometry);
                     
                     // Verberg laadindicator en toon succes
                     document.getElementById('loading').style.display = 'none';
-                    showSuccess('Bestand succesvol geladen!');
+                    showSuccess('Bestand succesvol geladen en weergegeven!');
                     
                 } catch (error) {
                     console.error('Fout bij het laden van STL-bestand:', error);
@@ -764,58 +774,35 @@
         // Prijs berekenen
         function calculatePrice() {
             if (!stlFile) {
-                // Toon standaardwaarden als er geen bestand is
                 document.getElementById('material-cost').textContent = '€0.00';
                 document.getElementById('print-time').textContent = '0 uur';
                 document.getElementById('machine-cost').textContent = '€0.00';
-                document.getElementById('total-price').textContent = '€5.00'; // Alleen setup kosten
+                document.getElementById('total-price').textContent = '€5.00';
                 return;
             }
             
-            // Materiaalkosten
             const materialPrices = {
-                'pla': 0.05,
-                'petg': 0.07,
-                'abs': 0.06,
-                'tpu': 0.09,
-                'nylon': 0.11,
-                'resin': 0.15
+                'pla': 0.05, 'petg': 0.07, 'abs': 0.06, 'tpu': 0.09, 'nylon': 0.11, 'resin': 0.15
             };
             
             const material = document.getElementById('material').value;
             const materialPrice = materialPrices[material];
-            
-            // Infill percentage
             const infill = parseInt(document.getElementById('infill').value) / 100;
-            
-            // Geschat volume
             const volume = stlFile.volume;
             
-            // Materiaalkosten
             const materialCost = volume * infill * materialPrice;
             
-            // Printtijd (vereenvoudigd)
             const qualityMultipliers = {
-                'draft': 0.7,
-                'standard': 1,
-                'high': 1.5,
-                'ultra': 2.5
+                'draft': 0.7, 'standard': 1, 'high': 1.5, 'ultra': 2.5
             };
             
             const quality = document.getElementById('quality').value;
             const qualityMultiplier = qualityMultipliers[quality];
-            const printTime = volume * 0.05 * qualityMultiplier; // in uren
-            
-            // Machinekosten
-            const machineCost = printTime * 2; // €2 per uur
-            
-            // Instelkosten
+            const printTime = volume * 0.05 * qualityMultiplier;
+            const machineCost = printTime * 2;
             const setupCost = 5.00;
-            
-            // Totale kosten
             const totalCost = materialCost + machineCost + setupCost;
             
-            // Resultaten weergeven
             document.getElementById('material-cost').textContent = '€' + materialCost.toFixed(2);
             document.getElementById('print-time').textContent = printTime.toFixed(1) + ' uur';
             document.getElementById('machine-cost').textContent = '€' + machineCost.toFixed(2);
@@ -873,9 +860,6 @@
                 }
             });
             
-            // Bereken knop
-            document.getElementById('calculate-btn').addEventListener('click', calculatePrice);
-            
             // Viewer controls
             document.getElementById('reset-view').addEventListener('click', function() {
                 if (controls) {
@@ -901,7 +885,7 @@
                 }
             });
             
-            // Formulier wijzigingen triggeren automatisch berekening
+            // Formulier wijzigingen
             document.getElementById('material').addEventListener('change', calculatePrice);
             document.getElementById('quality').addEventListener('change', calculatePrice);
             document.getElementById('infill').addEventListener('change', calculatePrice);
