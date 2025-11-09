@@ -90,6 +90,7 @@
             margin-bottom: 20px;
             transition: all 0.3s;
             cursor: pointer;
+            background: #fafafa;
         }
         
         .upload-area:hover {
@@ -109,6 +110,7 @@
         
         .upload-text {
             margin-bottom: 15px;
+            color: #666;
         }
         
         .btn {
@@ -145,7 +147,7 @@
             margin-bottom: 20px;
             position: relative;
             min-height: 400px;
-            background: #f8f9fa;
+            background: white;
         }
         
         #model-viewer {
@@ -157,6 +159,7 @@
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
         
         .calculator-section {
@@ -184,6 +187,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            background: white;
         }
         
         .result-section {
@@ -254,6 +258,9 @@
             display: none;
             text-align: center;
             padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 10px;
         }
         
         .spinner {
@@ -270,12 +277,28 @@
             to { transform: rotate(360deg); }
         }
         
+        .no-file-message {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 50px 20px;
+            font-size: 1.1rem;
+        }
+        
         footer {
             text-align: center;
             margin-top: 40px;
             padding: 20px;
             color: #7f8c8d;
             font-size: 0.9rem;
+        }
+        
+        .error-message {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
         }
         
         @media (max-width: 768px) {
@@ -304,6 +327,10 @@
                     <p class="upload-text">Sleep uw STL-bestand hierheen of klik om te uploaden</p>
                     <input type="file" id="file-input" accept=".stl" class="hidden">
                     <button class="btn" id="upload-btn">Bestand selecteren</button>
+                </div>
+                
+                <div class="error-message" id="error-message">
+                    Er is een fout opgetreden bij het uploaden. Probeer opnieuw.
                 </div>
                 
                 <div class="loading" id="loading">
@@ -371,9 +398,12 @@
                 <h2 class="section-title">3D Model Viewer</h2>
                 <div class="viewer-container">
                     <div id="model-viewer">
-                        <p style="text-align: center; margin-top: 180px; color: #7f8c8d;">
-                            Upload een STL-bestand om het 3D-model te bekijken
-                        </p>
+                        <div class="no-file-message">
+                            <p>📁 Upload een STL-bestand om het 3D-model te bekijken</p>
+                            <p style="margin-top: 10px; font-size: 0.9rem; color: #95a5a6;">
+                                Gebruik de knop "Bestand selecteren" of sleep een bestand naar het upload gebied
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="viewer-controls">
@@ -413,7 +443,7 @@
         </div>
         
         <footer>
-            <p>© 2023 3D Print Service | Alle prijzen zijn exclusief BTW</p>
+            <p>© 2023 3DRonny | 3D Print Service | Alle prijzen zijn exclusief BTW</p>
         </footer>
     </div>
 
@@ -422,14 +452,18 @@
         let scene, camera, renderer, controls, model;
         let stlFile = null;
         let axesHelper, gridHelper;
+        let isViewerInitialized = false;
         
         // Initialisatie van de 3D viewer
         function initViewer() {
-            const container = document.getElementById('model-viewer');
+            if (isViewerInitialized) return;
             
-            // Scene
+            const container = document.getElementById('model-viewer');
+            container.innerHTML = ''; // Leeg het container element
+            
+            // Scene met WITTE achtergrond
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf8f9fa);
+            scene.background = new THREE.Color(0xffffff); // Witte achtergrond
             
             // Camera
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -438,7 +472,6 @@
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
-            container.innerHTML = '';
             container.appendChild(renderer.domElement);
             
             // Controls
@@ -446,16 +479,20 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
             
-            // Licht
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            // Licht - belangrijk voor witte achtergrond
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
             directionalLight.position.set(1, 1, 1);
             scene.add(directionalLight);
             
-            // Grid helper
-            gridHelper = new THREE.GridHelper(10, 10);
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight2.position.set(-1, -1, -1);
+            scene.add(directionalLight2);
+            
+            // Grid helper (lichtgrijs voor witte achtergrond)
+            gridHelper = new THREE.GridHelper(10, 10, 0xcccccc, 0xeeeeee);
             scene.add(gridHelper);
             
             // Assen helper
@@ -476,22 +513,35 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(container.clientWidth, container.clientHeight);
             });
+            
+            isViewerInitialized = true;
         }
         
         // STL-bestand laden
         function loadSTL(file) {
-            if (!file || !file.name.toLowerCase().endsWith('.stl')) {
-                alert('Alleen STL-bestanden worden ondersteund.');
+            if (!file) {
+                showError('Geen bestand geselecteerd.');
+                return;
+            }
+            
+            if (!file.name.toLowerCase().endsWith('.stl')) {
+                showError('Alleen STL-bestanden worden ondersteund.');
                 return;
             }
             
             // Toon laadindicator
             document.getElementById('loading').style.display = 'block';
+            hideError();
             
             const reader = new FileReader();
             
             reader.onload = function(event) {
                 try {
+                    // Initialiseer viewer als dat nog niet gebeurd is
+                    if (!isViewerInitialized) {
+                        initViewer();
+                    }
+                    
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(event.target.result);
                     
@@ -500,11 +550,12 @@
                         scene.remove(model);
                     }
                     
-                    // Materiaal
+                    // Materiaal met contrasterende kleur voor witte achtergrond
                     const material = new THREE.MeshPhongMaterial({ 
-                        color: 0x6a11cb, 
+                        color: 0x6a11cb, // Paarse kleur
                         specular: 0x111111, 
-                        shininess: 200 
+                        shininess: 100,
+                        flatShading: false
                     });
                     
                     // Mesh
@@ -531,15 +582,16 @@
                     
                     // Verberg laadindicator
                     document.getElementById('loading').style.display = 'none';
+                    
                 } catch (error) {
                     console.error('Fout bij het laden van STL-bestand:', error);
-                    alert('Er is een fout opgetreden bij het laden van het STL-bestand. Controleer of het bestand geldig is.');
+                    showError('Er is een fout opgetreden bij het laden van het STL-bestand. Controleer of het bestand geldig is.');
                     document.getElementById('loading').style.display = 'none';
                 }
             };
             
             reader.onerror = function() {
-                alert('Fout bij het lezen van het bestand.');
+                showError('Fout bij het lezen van het bestand.');
                 document.getElementById('loading').style.display = 'none';
             };
             
@@ -568,6 +620,9 @@
                 volume: volume,
                 dimensions: size
             };
+            
+            // Bereken automatisch de prijs
+            calculatePrice();
         }
         
         // Bestandsgrootte formatteren
@@ -579,10 +634,26 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
+        // Foutmelding tonen
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        // Foutmelding verbergen
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
         // Prijs berekenen
         function calculatePrice() {
             if (!stlFile) {
-                alert('Upload eerst een STL-bestand om de kosten te berekenen.');
+                // Toon standaardwaarden als er geen bestand is
+                document.getElementById('material-cost').textContent = '€0.00';
+                document.getElementById('print-time').textContent = '0 uur';
+                document.getElementById('machine-cost').textContent = '€0.00';
+                document.getElementById('total-price').textContent = '€5.00'; // Alleen setup kosten
                 return;
             }
             
@@ -638,15 +709,12 @@
         
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialiseer de 3D viewer
-            initViewer();
-            
             // Upload knop
             document.getElementById('upload-btn').addEventListener('click', function() {
                 document.getElementById('file-input').click();
             });
             
-            // Bestand input
+            // Bestand input - FIX: direct event listener
             document.getElementById('file-input').addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     loadSTL(e.target.files[0]);
@@ -658,6 +726,7 @@
             
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
             });
             
             function preventDefaults(e) {
@@ -695,7 +764,9 @@
             
             // Viewer controls
             document.getElementById('reset-view').addEventListener('click', function() {
-                controls.reset();
+                if (controls) {
+                    controls.reset();
+                }
             });
             
             document.getElementById('toggle-wireframe').addEventListener('click', function() {
@@ -705,12 +776,21 @@
             });
             
             document.getElementById('toggle-axes').addEventListener('click', function() {
-                axesHelper.visible = !axesHelper.visible;
+                if (axesHelper) {
+                    axesHelper.visible = !axesHelper.visible;
+                }
             });
             
             document.getElementById('toggle-grid').addEventListener('click', function() {
-                gridHelper.visible = !gridHelper.visible;
+                if (gridHelper) {
+                    gridHelper.visible = !gridHelper.visible;
+                }
             });
+            
+            // Formulier wijzigingen triggeren automatisch berekening
+            document.getElementById('material').addEventListener('change', calculatePrice);
+            document.getElementById('quality').addEventListener('change', calculatePrice);
+            document.getElementById('infill').addEventListener('change', calculatePrice);
             
             // Bereken initiële prijs
             calculatePrice();
