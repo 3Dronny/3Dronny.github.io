@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Print Prijs Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -608,111 +608,99 @@
         let scene, camera, renderer, controls;
         let modelMesh = null;
         let isWireframe = false;
+        let isViewerInitialized = false;
         
         // Initialiseer de 3D viewer
         function initViewer() {
+            if (isViewerInitialized) return;
+            
             const container = document.getElementById('modelViewer');
             
-            // Wacht even om zeker te zijn dat de container gerenderd is
-            setTimeout(() => {
-                // Scene
-                scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xf8f9fa);
-                
-                // Camera
-                camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-                camera.position.z = 5;
-                
-                // Renderer
-                renderer = new THREE.WebGLRenderer({ antialias: true });
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                container.innerHTML = ''; // Leeg de container eerst
-                container.appendChild(renderer.domElement);
-                
-                // Probeer OrbitControls te initialiseren
-                try {
-                    controls = new THREE.OrbitControls(camera, renderer.domElement);
-                    controls.enableDamping = true;
-                    controls.dampingFactor = 0.25;
-                } catch (error) {
-                    console.warn('OrbitControls niet beschikbaar, gebruik basis camera');
-                    // Basis camera controls als fallback
-                    initBasicControls();
-                }
-                
-                // Licht
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-                scene.add(ambientLight);
-                
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(1, 1, 1);
-                scene.add(directionalLight);
-                
-                // Grid helper
-                const gridHelper = new THREE.GridHelper(10, 10);
-                scene.add(gridHelper);
-                
-                // Animatie
-                function animate() {
-                    requestAnimationFrame(animate);
-                    if (controls) controls.update();
-                    renderer.render(scene, camera);
-                }
-                animate();
-                
-                // Resize handler
-                window.addEventListener('resize', function() {
-                    camera.aspect = container.clientWidth / container.clientHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(container.clientWidth, container.clientHeight);
-                });
-            }, 100);
-        }
-        
-        // Basis camera controls als fallback
-        function initBasicControls() {
-            const container = document.getElementById('modelViewer');
-            let isMouseDown = false;
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8f9fa);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Controls - vereenvoudigd zonder OrbitControls
+            let isDragging = false;
             let previousMousePosition = { x: 0, y: 0 };
             
             container.addEventListener('mousedown', (e) => {
-                isMouseDown = true;
+                isDragging = true;
                 previousMousePosition = { x: e.clientX, y: e.clientY };
             });
             
             container.addEventListener('mouseup', () => {
-                isMouseDown = false;
+                isDragging = false;
             });
             
             container.addEventListener('mousemove', (e) => {
-                if (!isMouseDown || !modelMesh) return;
-                
-                const deltaMove = {
-                    x: e.clientX - previousMousePosition.x,
-                    y: e.clientY - previousMousePosition.y
-                };
-                
-                modelMesh.rotation.y += deltaMove.x * 0.01;
-                modelMesh.rotation.x += deltaMove.y * 0.01;
-                
-                previousMousePosition = { x: e.clientX, y: e.clientY };
+                if (isDragging && modelMesh) {
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+                    
+                    modelMesh.rotation.y += deltaX * 0.01;
+                    modelMesh.rotation.x += deltaY * 0.01;
+                    
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                }
             });
             
-            // Zoom met muiswiel
             container.addEventListener('wheel', (e) => {
                 camera.position.z += e.deltaY * 0.01;
                 camera.position.z = Math.max(1, Math.min(20, camera.position.z));
             });
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+            
+            // Axes helper
+            const axesHelper = new THREE.AxesHelper(3);
+            scene.add(axesHelper);
+            
+            // Animatie
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            isViewerInitialized = true;
+            console.log('3D Viewer geïnitialiseerd');
         }
         
-        // Laad een demo model (een eenvoudige kubus als placeholder)
+        // Laad een demo model
         function loadDemoModel() {
+            console.log('Demo model laden...');
+            
             const loadingIndicator = document.getElementById('loadingIndicator');
             const modelPreview = document.getElementById('modelPreview');
             const fileDetails = document.getElementById('fileDetails');
             
             loadingIndicator.style.display = 'block';
             modelPreview.style.display = 'none';
+            
+            // Zorg dat viewer geïnitialiseerd is
+            if (!isViewerInitialized) {
+                initViewer();
+            }
             
             // Verwijder vorig model
             if (modelMesh) {
@@ -730,12 +718,7 @@
             modelMesh = new THREE.Mesh(geometry, material);
             scene.add(modelMesh);
             
-            // Update camera
-            if (controls) {
-                controls.reset();
-            }
-            
-            // Centreer het model
+            // Centreer camera
             camera.position.set(0, 0, 5);
             camera.lookAt(0, 0, 0);
             
@@ -757,7 +740,8 @@
                 
                 // Update prijsberekening
                 updatePriceCalculation(25.5, 31.88, 180);
-            }, 1500);
+                console.log('Demo model geladen en weergegeven');
+            }, 1000);
         }
         
         // Bestand upload functionaliteit
@@ -823,8 +807,7 @@
             `;
             fileDetails.style.display = 'block';
             
-            // Voor nu gebruiken we een demo model omdat STL laden complex is
-            // In een echte implementatie zou je hier een STL loader gebruiken
+            // Gebruik demo model voor nu
             setTimeout(() => {
                 loadDemoModel();
             }, 1000);
@@ -888,8 +871,10 @@
         
         // Viewer controls
         document.getElementById('resetView').addEventListener('click', function() {
-            if (controls) {
-                controls.reset();
+            if (modelMesh) {
+                modelMesh.rotation.x = 0;
+                modelMesh.rotation.y = 0;
+                modelMesh.rotation.z = 0;
             }
             camera.position.set(0, 0, 5);
             camera.lookAt(0, 0, 0);
@@ -915,21 +900,29 @@
         const formInputs = document.querySelectorAll('select, input[type="checkbox"]');
         formInputs.forEach(input => {
             input.addEventListener('change', () => {
-                // Als er een model is geüpload, update de prijsberekening
                 if (fileDetails.style.display !== 'none') {
-                    // Gebruik de eerder gegenereerde waarden voor demonstratie
-                    const volume = 25.5; // Voorbeeldwaarde
-                    const weight = 31.88; // Voorbeeldwaarde
-                    const printTime = 180; // Voorbeeldwaarde
+                    const volume = 25.5;
+                    const weight = 31.88;
+                    const printTime = 180;
                     updatePriceCalculation(volume, weight, printTime);
                 }
             });
         });
         
-        // Initialiseer de 3D viewer wanneer de pagina geladen is
-        window.addEventListener('DOMContentLoaded', (event) => {
+        // Initialiseer wanneer de pagina geladen is
+        window.addEventListener('load', function() {
+            console.log('Pagina geladen, initialiseer viewer...');
             initViewer();
             updatePriceCalculation(0, 0, 0);
+            
+            // Voeg een standaard model toe voor demonstratie
+            setTimeout(() => {
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+                console.log('Standaard kubus toegevoegd aan scene');
+            }, 500);
         });
     </script>
 </body>
