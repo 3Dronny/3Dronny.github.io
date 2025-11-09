@@ -7,34 +7,486 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <style>
-        /* [Alle CSS blijft hetzelfde] */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .viewer-section {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #6a11cb;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: #fafafa;
+        }
+        
+        .upload-area:hover {
+            background-color: #f0f4ff;
+        }
+        
+        .upload-area.dragover {
+            background-color: #e1e8ff;
+            border-color: #2575fc;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #6a11cb;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a0db3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #3498db;
+        }
+        
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+        
+        .viewer-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 400px;
+            background: white;
+        }
+        
+        #model-viewer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .calculator-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: white;
+        }
+        
+        .result-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #6a11cb;
+            margin: 20px 0;
+        }
+        
+        .price-breakdown {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .breakdown-item {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .breakdown-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .breakdown-value {
+            font-size: 1.2rem;
+            color: #6a11cb;
+        }
+        
+        .file-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .file-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .file-info-label {
+            font-weight: 600;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #6a11cb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .no-file-message {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 50px 20px;
+            font-size: 1.1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .error-message {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #55efc4;
+            color: #00b894;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .viewer-controls {
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- [Alle HTML blijft hetzelfde] -->
+        <header>
+            <h1>3D Print Kosten Calculator</h1>
+            <p class="subtitle">Upload uw STL-bestand en ontvang direct een prijsopgave</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <h2 class="section-title">Upload STL-bestand</h2>
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">Sleep uw STL-bestand hierheen of klik om te uploaden</p>
+                    <input type="file" id="file-input" accept=".stl" class="hidden">
+                    <button class="btn" id="upload-btn">Bestand selecteren</button>
+                </div>
+                
+                <div class="error-message" id="error-message">
+                    Er is een fout opgetreden bij het uploaden. Probeer opnieuw.
+                </div>
+                
+                <div class="success-message" id="success-message">
+                    Bestand succesvol geüpload!
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>STL-bestand wordt geladen...</p>
+                </div>
+                
+                <div class="file-info" id="file-info">
+                    <div class="file-info-item">
+                        <span class="file-info-label">Bestandsnaam:</span>
+                        <span id="file-name">-</span>
+                    </div>
+                    <div class="file-info-item">
+                        <span class="file-info-label">Bestandsgrootte:</span>
+                        <span id="file-size">-</span>
+                    </div>
+                    <div class="file-info-item">
+                        <span class="file-info-label">Volume:</span>
+                        <span id="file-volume">-</span>
+                    </div>
+                    <div class="file-info-item">
+                        <span class="file-info-label">Gewicht (30% infill):</span>
+                        <span id="file-weight">-</span>
+                    </div>
+                    <div class="file-info-item">
+                        <span class="file-info-label">Afmetingen:</span>
+                        <span id="file-dimensions">-</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="material">Materiaal</label>
+                    <select id="material">
+                        <option value="pla">PLA (€0.05 per cm³)</option>
+                        <option value="petg">PETG (€0.07 per cm³)</option>
+                        <option value="abs">ABS (€0.06 per cm³)</option>
+                        <option value="tpu">TPU (€0.09 per cm³)</option>
+                        <option value="nylon">Nylon (€0.11 per cm³)</option>
+                        <option value="resin">Resin (€0.15 per cm³)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quality">Printkwaliteit</label>
+                    <select id="quality">
+                        <option value="draft">Draft (0.3mm)</option>
+                        <option value="standard" selected>Standaard (0.2mm)</option>
+                        <option value="high">Hoog (0.1mm)</option>
+                        <option value="ultra">Ultra (0.05mm)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="infill">Infill Percentage</label>
+                    <select id="infill">
+                        <option value="10">10% (Zeer licht)</option>
+                        <option value="20">20% (Licht)</option>
+                        <option value="30" selected>30% (Medium)</option>
+                        <option value="50">50% (Sterk)</option>
+                        <option value="80">80% (Zeer sterk)</option>
+                        <option value="100">100% (Massief)</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-secondary" id="calculate-btn">Bereken Prijs</button>
+            </div>
+            
+            <div class="viewer-section">
+                <h2 class="section-title">3D Model Viewer</h2>
+                <div class="viewer-container">
+                    <div id="model-viewer">
+                        <div class="no-file-message" id="no-file-message">
+                            <p>📁 Upload een STL-bestand om het 3D-model te bekijken</p>
+                            <p style="margin-top: 10px; font-size: 0.9rem; color: #95a5a6;">
+                                Gebruik de knop "Bestand selecteren" of sleep een bestand naar het upload gebied
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="viewer-controls">
+                    <button class="btn" id="reset-view">Reset Weergave</button>
+                    <button class="btn" id="toggle-wireframe">Draadmodel</button>
+                    <button class="btn" id="auto-orient">Auto Oriëntatie</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="calculator-section">
+            <h2 class="section-title">Kostenberekening</h2>
+            <div class="result-section">
+                <p>Uw geschatte printkosten:</p>
+                <div class="price" id="total-price">€0.00</div>
+                
+                <div class="price-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-title">Gewicht (<span id="current-infill">30</span>% infill)</div>
+                        <div class="breakdown-value" id="print-weight">0 g</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-title">Materiaalkosten</div>
+                        <div class="breakdown-value" id="material-cost">€0.00</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-title">Printtijd</div>
+                        <div class="breakdown-value" id="print-time">0 uur</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-title">Machinekosten</div>
+                        <div class="breakdown-value" id="machine-cost">€0.00</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-title">Instelkosten</div>
+                        <div class="breakdown-value" id="setup-cost">€5.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 3DRonny | 3D Print Service | Alle prijzen zijn exclusief BTW</p>
+        </footer>
     </div>
 
     <script>
-        // Materiaal dichtheden in g/cm³ - GECORRIGEERD met factor 1.749
+        // Materiaal dichtheden in g/cm³ - CORRECTIE voor juist gewicht
         const materialDensities = {
-            'pla': 1.24 * 1.749,    // 74.9% zwaarder
-            'petg': 1.27 * 1.749,   // 74.9% zwaarder
-            'abs': 1.05 * 1.749,    // 74.9% zwaarder
-            'tpu': 1.21 * 1.749,    // 74.9% zwaarder
-            'nylon': 1.14 * 1.749,  // 74.9% zwaarder
-            'resin': 1.12 * 1.749   // 74.9% zwaarder
+            'pla': 1.24 * 1.749,
+            'petg': 1.27 * 1.749,
+            'abs': 1.05 * 1.749,
+            'tpu': 1.21 * 1.749,
+            'nylon': 1.14 * 1.749,
+            'resin': 1.12 * 1.749
         };
 
-        // [De rest van de JavaScript code blijft exact hetzelfde]
-        // Alleen de dichtheden zijn aangepast
-
-        // Eenvoudige STL Parser voor zowel ASCII als Binary STL
+        // Eenvoudige STL Parser
         class SimpleSTLParser {
             static parseSTL(arrayBuffer) {
                 const dataView = new DataView(arrayBuffer);
-                
-                // Check if it's ASCII STL
                 const header = new TextDecoder().decode(arrayBuffer.slice(0, 80));
                 const isASCII = header.toLowerCase().includes('solid') && 
                                !header.toLowerCase().includes('endsolid');
@@ -83,10 +535,7 @@
                 
                 let offset = 84;
                 for (let i = 0; i < faces; i++) {
-                    // Skip normal
                     offset += 12;
-                    
-                    // Read vertices
                     for (let j = 0; j < 3; j++) {
                         const x = dataView.getFloat32(offset, true);
                         const y = dataView.getFloat32(offset + 4, true);
@@ -95,8 +544,6 @@
                         facesArray.push(vertices.length / 3 - 1);
                         offset += 12;
                     }
-                    
-                    // Skip attribute byte count
                     offset += 2;
                 }
                 
@@ -104,7 +551,7 @@
             }
         }
 
-        // NIEUW: Nauwkeurige volume berekening voor STL
+        // Volume berekening voor STL
         function calculateSTLVolume(geometry) {
             const positions = geometry.attributes.position.array;
             const indices = geometry.index ? geometry.index.array : null;
@@ -112,7 +559,6 @@
             let volume = 0;
             
             if (indices) {
-                // Gebruik indices voor geïndexeerde geometry
                 for (let i = 0; i < indices.length; i += 3) {
                     const i1 = indices[i] * 3;
                     const i2 = indices[i + 1] * 3;
@@ -122,11 +568,9 @@
                     const v2 = new THREE.Vector3(positions[i2], positions[i2 + 1], positions[i2 + 2]);
                     const v3 = new THREE.Vector3(positions[i3], positions[i3 + 1], positions[i3 + 2]);
                     
-                    // Volume van tetrahedron (1/6 van de scalar triple product)
                     volume += v1.dot(v2.cross(v3)) / 6;
                 }
             } else {
-                // Niet-geïndexeerde geometry
                 for (let i = 0; i < positions.length; i += 9) {
                     const v1 = new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]);
                     const v2 = new THREE.Vector3(positions[i + 3], positions[i + 4], positions[i + 5]);
@@ -136,12 +580,10 @@
                 }
             }
             
-            // STL gebruikt mm, dus volume is in mm³
-            // Converteren naar cm³ (1 cm³ = 1000 mm³)
             return Math.abs(volume) / 1000;
         }
 
-        // Update het infill percentage in de weergave
+        // Update infill display
         function updateInfillDisplay() {
             const infillValue = document.getElementById('infill').value;
             document.getElementById('current-infill').textContent = infillValue;
@@ -157,20 +599,15 @@
             if (isViewerInitialized) return;
             
             const container = document.getElementById('model-viewer');
-            
-            // Verberg het "geen bestand" bericht
             document.getElementById('no-file-message').style.display = 'none';
             
-            // Scene met WITTE achtergrond
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xffffff);
             
-            // Camera
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 5, 10);
             camera.lookAt(0, 0, 0);
             
-            // Renderer
             renderer = new THREE.WebGLRenderer({ 
                 antialias: true,
                 preserveDrawingBuffer: true
@@ -179,23 +616,19 @@
             renderer.setClearColor(0xffffff, 1);
             container.appendChild(renderer.domElement);
             
-            // Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
             controls.minDistance = 1;
             controls.maxDistance = 50;
             
-            // Licht - alleen ambient light voor zachte verlichting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
             
-            // Directional light voor betere diepte
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
             directionalLight.position.set(5, 10, 5);
             scene.add(directionalLight);
             
-            // Animatie
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update();
@@ -203,7 +636,6 @@
             }
             animate();
             
-            // Responsive
             window.addEventListener('resize', function() {
                 if (container.clientWidth > 0 && container.clientHeight > 0) {
                     camera.aspect = container.clientWidth / container.clientHeight;
@@ -215,44 +647,34 @@
             isViewerInitialized = true;
         }
         
-        // Automatische oriëntatie functie met 180 graden rotatie
+        // Automatische oriëntatie
         function autoOrientModel() {
             if (!model) return;
             
-            // Reset rotatie
             model.rotation.set(0, 0, 0);
             
-            // Bereken bounding box
             const box = new THREE.Box3().setFromObject(model);
             const size = new THREE.Vector3();
             box.getSize(size);
             
-            // Vind de langste as en zet die verticaal
             const maxAxis = Math.max(size.x, size.y, size.z);
             
             if (maxAxis === size.x) {
-                // Draai 90 graden rond Z-as als X de langste is
                 model.rotation.z = Math.PI / 2;
             } else if (maxAxis === size.z) {
-                // Draai 90 graden rond X-as als Z de langste is
                 model.rotation.x = Math.PI / 2;
             }
-            // Als Y de langste is, blijft het model zoals het is
             
-            // NIEUW: Draai het model 180 graden rond de Y-as
             model.rotation.y += Math.PI;
             
-            // Centreer het model op de oorsprong
             const center = new THREE.Vector3();
             box.getCenter(center);
             model.position.sub(center);
             
-            // Zet het model op de "vloer" (y = 0)
             box.setFromObject(model);
             const minY = box.min.y;
             model.position.y -= minY;
             
-            // Update controls
             controls.update();
         }
         
@@ -268,7 +690,6 @@
                 return;
             }
             
-            // Toon laadindicator
             document.getElementById('loading').style.display = 'block';
             hideError();
             hideSuccess();
@@ -277,26 +698,21 @@
             
             reader.onload = function(event) {
                 try {
-                    // Gebruik onze eigen STL parser
                     const stlData = SimpleSTLParser.parseSTL(event.target.result);
                     
-                    // Initialiseer viewer als dat nog niet gebeurd is
                     if (!isViewerInitialized) {
                         initViewer();
                     }
                     
-                    // Verwijder vorig model
                     if (model) {
                         scene.remove(model);
                     }
                     
-                    // Creëer geometry
                     const geometry = new THREE.BufferGeometry();
                     geometry.setAttribute('position', new THREE.BufferAttribute(stlData.vertices, 3));
                     geometry.setIndex(new THREE.BufferAttribute(stlData.faces, 1));
                     geometry.computeVertexNormals();
                     
-                    // Materiaal
                     const material = new THREE.MeshPhongMaterial({ 
                         color: 0x6a11cb,
                         specular: 0x111111, 
@@ -304,24 +720,19 @@
                         flatShading: false
                     });
                     
-                    // Mesh
                     model = new THREE.Mesh(geometry, material);
                     
-                    // NIEUW: Bereken optimale schaal met 20% vergroting
                     geometry.computeBoundingBox();
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = (8 / maxDim) * 1.2; // 20% groter
+                    const scale = (8 / maxDim) * 1.2;
                     
                     model.scale.set(scale, scale, scale);
-                    
                     scene.add(model);
                     
-                    // Automatische oriëntatie met 180 graden rotatie
                     autoOrientModel();
                     
-                    // NIEUW: Verbeterde camera positioning voor betere centrering
                     const box = new THREE.Box3().setFromObject(model);
                     const center = new THREE.Vector3();
                     box.getCenter(center);
@@ -330,17 +741,14 @@
                     box.getSize(newSize);
                     const maxSize = Math.max(newSize.x, newSize.y, newSize.z);
                     
-                    // Camera position based on model size for better framing
                     const cameraDistance = maxSize * 2;
                     camera.position.set(cameraDistance, cameraDistance * 0.7, cameraDistance);
                     camera.lookAt(center);
                     controls.target.copy(center);
                     controls.update();
                     
-                    // Update bestandsinformatie met CORRECTE volume berekening
                     updateFileInfo(file, geometry);
                     
-                    // Verberg laadindicator en toon succes
                     document.getElementById('loading').style.display = 'none';
                     showSuccess('Bestand succesvol geladen en weergegeven!');
                     
@@ -359,30 +767,26 @@
             reader.readAsArrayBuffer(file);
         }
         
-        // Bestandsinformatie bijwerken met gewichtsberekening
+        // Bestandsinformatie bijwerken
         function updateFileInfo(file, geometry) {
             document.getElementById('file-name').textContent = file.name;
             document.getElementById('file-size').textContent = formatFileSize(file.size);
             
-            // Bereken afmetingen (in mm)
             geometry.computeBoundingBox();
             const size = new THREE.Vector3();
             geometry.boundingBox.getSize(size);
             
-            // NIEUW: Gebruik nauwkeurige volume berekening
             const volume = calculateSTLVolume(geometry);
             
             document.getElementById('file-volume').textContent = volume.toFixed(2) + ' cm³';
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // NIEUW: Bereken en toon gewicht met 74.9% correctie bij 30% infill
             const material = document.getElementById('material').value;
             const density = materialDensities[material];
-            const weight = volume * density * 0.30; // 30% infill
+            const weight = volume * density * 0.30;
             document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
             
-            // Sla modelgegevens op voor berekening
             stlFile = {
                 file: file,
                 volume: volume,
@@ -390,7 +794,6 @@
                 weight: weight
             };
             
-            // Bereken automatisch de prijs
             calculatePrice();
         }
         
@@ -427,7 +830,7 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen met gewichtsberekening
+        // Prijs berekenen
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -448,10 +851,8 @@
             const infill = parseInt(document.getElementById('infill').value) / 100;
             const volume = stlFile.volume;
             
-            // Update infill display
             updateInfillDisplay();
             
-            // NIEUW: Bereken gewicht met infill en 74.9% correctie
             const weight = volume * infill * density;
             document.getElementById('print-weight').textContent = weight.toFixed(1) + ' g';
             
@@ -476,19 +877,16 @@
         
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Upload knop
             document.getElementById('upload-btn').addEventListener('click', function() {
                 document.getElementById('file-input').click();
             });
             
-            // Bestand input
             document.getElementById('file-input').addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     loadSTL(e.target.files[0]);
                 }
             });
             
-            // Drag and drop
             const dropArea = document.getElementById('drop-area');
             
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -525,7 +923,6 @@
                 }
             });
             
-            // Viewer controls
             document.getElementById('reset-view').addEventListener('click', function() {
                 if (controls) {
                     controls.reset();
@@ -542,13 +939,11 @@
                 autoOrientModel();
             });
             
-            // Formulier wijzigingen
             document.getElementById('material').addEventListener('change', function() {
                 if (stlFile) {
-                    // Update gewicht wanneer materiaal verandert
                     const material = this.value;
                     const density = materialDensities[material];
-                    const weight = stlFile.volume * density * 0.30; // 30% infill
+                    const weight = stlFile.volume * density * 0.30;
                     document.getElementById('file-weight').textContent = weight.toFixed(1) + ' g';
                 }
                 calculatePrice();
@@ -560,7 +955,6 @@
                 calculatePrice();
             });
             
-            // Bereken initiële prijs
             updateInfillDisplay();
             calculatePrice();
         });
