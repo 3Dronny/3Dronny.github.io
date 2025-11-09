@@ -429,6 +429,7 @@
                     <button class="btn" id="toggle-wireframe">Draadmodel</button>
                     <button class="btn" id="toggle-axes">Assen</button>
                     <button class="btn" id="toggle-grid">Raster</button>
+                    <button class="btn" id="auto-orient">Auto Oriëntatie</button>
                 </div>
             </div>
         </div>
@@ -562,7 +563,8 @@
             
             // Camera
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.z = 5;
+            camera.position.set(0, 5, 10);
+            camera.lookAt(0, 0, 0);
             
             // Renderer
             renderer = new THREE.WebGLRenderer({ 
@@ -577,25 +579,29 @@
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
+            controls.minDistance = 1;
+            controls.maxDistance = 50;
             
             // Licht
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
             const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight1.position.set(1, 1, 1);
+            directionalLight1.position.set(5, 10, 5);
             scene.add(directionalLight1);
             
             const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
-            directionalLight2.position.set(-1, -1, 1);
+            directionalLight2.position.set(-5, -5, -5);
             scene.add(directionalLight2);
             
-            // Grid helper
-            gridHelper = new THREE.GridHelper(10, 10, 0xcccccc, 0xeeeeee);
+            // Grid helper - groter en op de "vloer"
+            gridHelper = new THREE.GridHelper(20, 20, 0xcccccc, 0xeeeeee);
+            gridHelper.rotation.x = Math.PI / 2; // Draai het grid naar horizontaal
+            gridHelper.position.y = -5; // Zet het grid onder het model
             scene.add(gridHelper);
             
             // Assen helper
-            axesHelper = new THREE.AxesHelper(5);
+            axesHelper = new THREE.AxesHelper(8);
             scene.add(axesHelper);
             
             // Animatie
@@ -616,6 +622,44 @@
             });
             
             isViewerInitialized = true;
+        }
+        
+        // Automatische oriëntatie functie
+        function autoOrientModel() {
+            if (!model) return;
+            
+            // Reset rotatie
+            model.rotation.set(0, 0, 0);
+            
+            // Bereken bounding box
+            const box = new THREE.Box3().setFromObject(model);
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            
+            // Vind de langste as en zet die verticaal
+            const maxAxis = Math.max(size.x, size.y, size.z);
+            
+            if (maxAxis === size.x) {
+                // Draai 90 graden rond Z-as als X de langste is
+                model.rotation.z = Math.PI / 2;
+            } else if (maxAxis === size.z) {
+                // Draai 90 graden rond X-as als Z de langste is
+                model.rotation.x = Math.PI / 2;
+            }
+            // Als Y de langste is, blijft het model zoals het is
+            
+            // Centreer het model op de oorsprong
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            model.position.sub(center);
+            
+            // Zet het model op de "vloer" (y = 0)
+            box.setFromObject(model);
+            const minY = box.min.y;
+            model.position.y -= minY;
+            
+            // Update controls
+            controls.update();
         }
         
         // STL-bestand laden
@@ -669,23 +713,27 @@
                     // Mesh
                     model = new THREE.Mesh(geometry, material);
                     
-                    // Centreer en schaal het model
+                    // Bereken optimale schaal - groter dan voorheen
                     geometry.computeBoundingBox();
-                    const center = new THREE.Vector3();
-                    geometry.boundingBox.getCenter(center);
-                    
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 4 / maxDim;
+                    const scale = 8 / maxDim; // Grotere schaal voor betere zichtbaarheid
                     
                     model.scale.set(scale, scale, scale);
-                    model.position.sub(center.multiplyScalar(scale));
                     
                     scene.add(model);
                     
-                    // Update camera positie
-                    camera.position.set(0, 0, maxDim * 1.5);
+                    // Automatische oriëntatie
+                    autoOrientModel();
+                    
+                    // Update camera positie voor betere weergave
+                    const box = new THREE.Box3().setFromObject(model);
+                    const newSize = new THREE.Vector3();
+                    box.getSize(newSize);
+                    const cameraDistance = Math.max(newSize.x, newSize.y, newSize.z) * 1.8;
+                    
+                    camera.position.set(cameraDistance, cameraDistance * 0.5, cameraDistance);
                     camera.lookAt(0, 0, 0);
                     controls.update();
                     
@@ -883,6 +931,10 @@
                 if (gridHelper) {
                     gridHelper.visible = !gridHelper.visible;
                 }
+            });
+            
+            document.getElementById('auto-orient').addEventListener('click', function() {
+                autoOrientModel();
             });
             
             // Formulier wijzigingen
