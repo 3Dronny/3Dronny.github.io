@@ -433,7 +433,7 @@
                     <div class="form-group">
                         <label for="filament-price">Filament prijs (per kilogram)</label>
                         <input type="number" id="filament-price" value="25.00" step="0.01" min="0">
-                        <small style="color: #666; display: block; margin-top: 5px;">Voer de prijs in van een kilogram filament</small>
+                        <small style="color: #666; display: block; margin-top: 5px;">Voer de prijs in van een kilogram filament (1.75mm)</small>
                     </div>
                     
                     <div class="form-group">
@@ -444,6 +444,7 @@
                     <div class="form-group">
                         <label for="setup-cost">Instelkosten</label>
                         <input type="number" id="setup-cost" value="5.00" step="0.01" min="0">
+                        <small style="color: #666; display: block; margin-top: 5px;">Vaste kosten voor voorbereiding en instelling</small>
                     </div>
                 </div>
                 
@@ -456,7 +457,7 @@
                 </div>
                 
                 <div class="slicer-data-group" id="slicer-data-group" style="display: none;">
-                    <h3>📊 Slicer Gegevens</h3>
+                    <h3>📊 Slicer Gegevens (1.75mm filament)</h3>
                     <div class="form-group">
                         <label for="slicer-volume">Volume (cm³)</label>
                         <input type="number" id="slicer-volume" placeholder="Volume uit slicer" step="0.1" min="0">
@@ -470,6 +471,7 @@
                     <div class="form-group">
                         <label for="slicer-filament">Filament lengte (meter)</label>
                         <input type="number" id="slicer-filament" placeholder="Filament lengte uit slicer" step="0.1" min="0">
+                        <small style="color: #666; display: block; margin-top: 5px;">Voor 1.75mm filament</small>
                     </div>
                     
                     <div class="form-group">
@@ -551,6 +553,17 @@
         // Dichtheden voor automatische berekening
         const materialDensities = {
             'pla': 1.24, 'petg': 1.27, 'abs': 1.05, 'tpu': 1.21, 'nylon': 1.14, 'resin': 1.12, 'custom': 1.25
+        };
+
+        // Gram per meter voor 1.75mm filament
+        const gramsPerMeter175 = {
+            'pla': 2.98,   // 1.24 * 2.405
+            'petg': 3.05,  // 1.27 * 2.405
+            'abs': 2.52,   // 1.05 * 2.405
+            'tpu': 2.91,   // 1.21 * 2.405
+            'nylon': 2.74, // 1.14 * 2.405
+            'resin': 2.69, // 1.12 * 2.405
+            'custom': 3.01 // 1.25 * 2.405
         };
 
         // Eenvoudige STL Parser
@@ -888,7 +901,7 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen - MET AANPASBARE KOSTEN
+        // Prijs berekenen - MET ALLE SLICER GEGEVENS VOOR 1.75MM FILAMENT
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -912,35 +925,46 @@
             const material = document.getElementById('material').value;
             const useSlicerData = document.getElementById('use-slicer-data').checked;
             
-            let weight, printTime, calculationSource;
+            let weight, printTime, calculationSource, usedFilamentLength;
             
             if (useSlicerData) {
                 // Gebruik exacte slicer gegevens
                 const slicerWeight = parseFloat(document.getElementById('slicer-weight').value) || 0;
                 const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
+                const slicerFilament = parseFloat(document.getElementById('slicer-filament').value) || 0;
+                const slicerVolume = parseFloat(document.getElementById('slicer-volume').value) || 0;
                 
-                if (slicerWeight > 0 && slicerTime > 0) {
+                // Bepaal gewicht - prioriteit: slicerWeight > slicerFilament > slicerVolume > automatisch
+                if (slicerWeight > 0) {
                     weight = slicerWeight;
-                    printTime = slicerTime;
-                    calculationSource = `Exacte slicer gegevens: ${weight}g, ${printTime} uur`;
-                } else if (slicerWeight > 0) {
-                    weight = slicerWeight;
-                    // Schat printtijd op basis van gewicht
-                    printTime = weight * 0.03; // Empirische formule: 0.03 uur per gram
-                    calculationSource = `Exact gewicht (${weight}g) uit slicer, geschatte tijd`;
-                } else if (slicerTime > 0) {
-                    printTime = slicerTime;
-                    // Schat gewicht op basis van volume
+                    calculationSource = `Exact gewicht (${weight}g) uit slicer`;
+                } else if (slicerFilament > 0) {
+                    // Bereken gewicht uit filament lengte voor 1.75mm filament
+                    usedFilamentLength = slicerFilament;
+                    weight = slicerFilament * gramsPerMeter175[material];
+                    calculationSource = `Gewicht berekend uit filament lengte (${slicerFilament}m 1.75mm ${material.toUpperCase()})`;
+                } else if (slicerVolume > 0) {
+                    // Gebruik slicer volume met 30% infill voor gewicht
                     const density = materialDensities[material];
-                    weight = stlFile.volume * density * 0.30; // 30% infill
-                    calculationSource = `Exacte tijd (${printTime} uur) uit slicer, geschat gewicht`;
+                    weight = slicerVolume * density * 0.30;
+                    calculationSource = `Gewicht berekend uit slicer volume (${slicerVolume}cm³)`;
                 } else {
                     // Geen slicer gegevens, val terug op automatisch
                     const density = materialDensities[material];
                     weight = stlFile.volume * density * 0.30;
-                    printTime = stlFile.volume * 0.05;
-                    calculationSource = 'Automatische berekening (geen slicer gegevens ingevuld)';
+                    calculationSource = 'Gewicht geschat uit STL volume';
                 }
+                
+                // Bepaal printtijd - prioriteit: slicerTime > geschat op basis van gewicht
+                if (slicerTime > 0) {
+                    printTime = slicerTime;
+                    calculationSource += `, exacte tijd (${printTime} uur) uit slicer`;
+                } else {
+                    // Schat printtijd op basis van gewicht
+                    printTime = weight * 0.03; // Empirische formule: 0.03 uur per gram
+                    calculationSource += `, geschatte tijd`;
+                }
+                
             } else {
                 // Automatische berekening
                 const density = materialDensities[material];
@@ -964,10 +988,17 @@
             document.getElementById('calculation-source').textContent = calculationSource;
             
             // Toon kostenberekeningsdetails
-            document.getElementById('cost-calculation-details').innerHTML = 
+            let costDetails = 
                 `Materiaalkosten: ${weight.toFixed(2)}g × €${filamentPricePerGram.toFixed(4)}/g = €${materialCost.toFixed(2)}<br>` +
                 `Machinekosten: ${printTime.toFixed(2)} uur × €${machineCostPerHour.toFixed(2)}/uur = €${machineCost.toFixed(2)}<br>` +
                 `Instelkosten: €${setupCost.toFixed(2)}`;
+            
+            if (usedFilamentLength) {
+                costDetails += `<br>Filament gebruikt: ${usedFilamentLength.toFixed(2)} meter (1.75mm ${material.toUpperCase()})`;
+                costDetails += `<br>Gewicht per meter: ${gramsPerMeter175[material].toFixed(2)}g/m`;
+            }
+            
+            document.getElementById('cost-calculation-details').innerHTML = costDetails;
         }
         
         // Event listeners
