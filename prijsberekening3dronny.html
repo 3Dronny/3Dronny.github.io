@@ -380,6 +380,20 @@
             color: #666;
         }
         
+        .infill-settings {
+            background: #fff0f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #e84393;
+        }
+        
+        .infill-settings h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
         /* Responsive verbeteringen */
         @media (max-width: 1024px) {
             .main-content {
@@ -571,6 +585,20 @@
                     </select>
                     <div class="material-info" id="material-info">
                         PLA: €25/kg - Goed voor algemeen gebruik, makkelijk te printen
+                    </div>
+                </div>
+                
+                <div class="infill-settings">
+                    <h3>🔄 Infill Instellingen</h3>
+                    <div class="form-group">
+                        <label for="infill-percentage">Infill Percentage (%)</label>
+                        <input type="range" id="infill-percentage" min="0" max="100" value="20" step="5">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>0%</span>
+                            <span id="infill-value">20%</span>
+                            <span>100%</span>
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 5px;">Hoger percentage = sterker maar duurder</small>
                     </div>
                 </div>
                 
@@ -1091,7 +1119,54 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen
+        // Verbeterde printtijd schatting
+        function estimatePrintTime(weight, volume) {
+            // Empirische formules gebaseerd op praktijkervaring:
+            
+            // Basis tijd voor opwarmen en calibratie
+            let baseTime = 0.2; // 12 minuten
+            
+            // Tijd gebaseerd op gewicht (materiaal stroom)
+            let weightBasedTime = weight * 0.04; // 0.04 uur per gram
+            
+            // Tijd gebaseerd op volume (complexiteit en lagen)
+            let volumeBasedTime = volume * 0.03; // 0.03 uur per cm³
+            
+            // Neem het maximum van de twee methodes + basis tijd
+            return baseTime + Math.max(weightBasedTime, volumeBasedTime);
+        }
+        
+        // Update display functie voor betere organisatie
+        function updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, calculationSource, usedFilamentLength, material, filamentPricePerGram, machineCostPerHour) {
+            document.getElementById('print-weight').textContent = weight.toFixed(2) + ' g';
+            document.getElementById('material-cost').textContent = '€' + materialCost.toFixed(2);
+            document.getElementById('print-time').textContent = printTime.toFixed(2) + ' uur';
+            document.getElementById('machine-cost').textContent = '€' + machineCost.toFixed(2);
+            document.getElementById('setup-cost-display').textContent = '€' + setupCost.toFixed(2);
+            document.getElementById('total-price').textContent = '€' + totalCost.toFixed(2);
+            document.getElementById('calculation-source').textContent = calculationSource;
+            
+            // Toon gedetailleerde kostenberekening
+            let costDetails = 
+                `Materiaalkosten: ${weight.toFixed(2)}g × €${filamentPricePerGram.toFixed(4)}/g = €${materialCost.toFixed(2)}<br>` +
+                `Machinekosten: ${printTime.toFixed(2)} uur × €${machineCostPerHour.toFixed(2)}/uur = €${machineCost.toFixed(2)}<br>` +
+                `Instelkosten: €${setupCost.toFixed(2)}`;
+            
+            if (usedFilamentLength) {
+                costDetails += `<br>Filament gebruikt: ${usedFilamentLength.toFixed(2)}m (1.75mm ${material.toUpperCase()})`;
+                costDetails += `<br>Gewicht per meter: ${gramsPerMeter175[material].toFixed(2)}g/m`;
+                costDetails += `<br>Totaal gewicht: ${weight.toFixed(2)}g`;
+            } else {
+                const infillPercentage = document.getElementById('infill-percentage').value;
+                costDetails += `<br>Geschat gewicht: ${weight.toFixed(2)}g (volume × dichtheid × ${infillPercentage}% infill)`;
+            }
+            
+            costDetails += `<br>Geschatte printtijd: ${printTime.toFixed(2)} uur`;
+            
+            document.getElementById('cost-calculation-details').innerHTML = costDetails;
+        }
+        
+        // Prijs berekenen - CONSISTENT OP BASIS VAN GEWICHT
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -1114,71 +1189,58 @@
             
             const material = document.getElementById('material').value;
             const useSlicerData = document.getElementById('use-slicer-data').checked;
+            const infillPercentage = document.getElementById('infill-percentage').value / 100; // omzetten naar decimaal
             
             let weight, printTime, calculationSource, usedFilamentLength;
+            let materialCost, machineCost, totalCost;
             
             if (useSlicerData) {
-                // Gebruik exacte slicer gegevens
+                // OPTIE 1: Gebruiker heeft slicer gegevens ingevoerd
                 const slicerFilament = parseFloat(document.getElementById('slicer-filament').value) || 0;
                 const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
                 
-                // Bepaal gewicht - prioriteit: slicerFilament > automatisch
                 if (slicerFilament > 0) {
                     // Bereken gewicht uit filament lengte voor 1.75mm filament
                     usedFilamentLength = slicerFilament;
                     weight = slicerFilament * gramsPerMeter175[material];
                     calculationSource = `Gewicht berekend uit filament lengte (${slicerFilament}m 1.75mm ${material.toUpperCase()})`;
                 } else {
-                    // Geen slicer gegevens, val terug op automatisch
+                    // Geen filament lengte, val terug op automatische berekening
                     const density = materialDensities[material];
-                    weight = stlFile.volume * density * 0.30;
-                    calculationSource = 'Gewicht geschat uit STL volume';
+                    weight = stlFile.volume * density * infillPercentage;
+                    calculationSource = `Gewicht geschat uit STL volume (${(infillPercentage * 100)}% infill)`;
                 }
                 
-                // Bepaal printtijd - prioriteit: slicerTime > geschat op basis van gewicht
+                // Printtijd: gebruik slicer tijd of schat automatisch
                 if (slicerTime > 0) {
                     printTime = slicerTime;
                     calculationSource += `, exacte tijd (${printTime} uur) uit slicer`;
                 } else {
-                    // Schat printtijd op basis van gewicht
-                    printTime = weight * 0.03; // Empirische formule: 0.03 uur per gram
+                    // Schat printtijd op basis van gewicht en complexiteit
+                    printTime = estimatePrintTime(weight, stlFile.volume);
                     calculationSource += `, geschatte tijd`;
                 }
                 
             } else {
-                // Automatische berekening
+                // OPTIE 2: Automatische berekening zonder slicer gegevens
                 const density = materialDensities[material];
-                weight = stlFile.volume * density * 0.30; // 30% infill
-                printTime = stlFile.volume * 0.05; // Empirische formule
-                calculationSource = 'Automatische berekening op basis van STL volume';
+                
+                // Bereken gewicht op basis van volume, dichtheid en infill
+                weight = stlFile.volume * density * infillPercentage;
+                
+                // Schat printtijd op basis van gewicht en complexiteit
+                printTime = estimatePrintTime(weight, stlFile.volume);
+                
+                calculationSource = `Automatische berekening op basis van STL volume (${(infillPercentage * 100)}% infill)`;
             }
             
             // Kosten berekenen
-            const materialCost = weight * filamentPricePerGram;
-            const machineCost = printTime * machineCostPerHour;
-            const totalCost = materialCost + machineCost + setupCost;
+            materialCost = weight * filamentPricePerGram;
+            machineCost = printTime * machineCostPerHour;
+            totalCost = materialCost + machineCost + setupCost;
             
             // Resultaten tonen
-            document.getElementById('print-weight').textContent = weight.toFixed(2) + ' g';
-            document.getElementById('material-cost').textContent = '€' + materialCost.toFixed(2);
-            document.getElementById('print-time').textContent = printTime.toFixed(2) + ' uur';
-            document.getElementById('machine-cost').textContent = '€' + machineCost.toFixed(2);
-            document.getElementById('setup-cost-display').textContent = '€' + setupCost.toFixed(2);
-            document.getElementById('total-price').textContent = '€' + totalCost.toFixed(2);
-            document.getElementById('calculation-source').textContent = calculationSource;
-            
-            // Toon kostenberekeningsdetails
-            let costDetails = 
-                `Materiaalkosten: ${weight.toFixed(2)}g × €${filamentPricePerGram.toFixed(4)}/g = €${materialCost.toFixed(2)}<br>` +
-                `Machinekosten: ${printTime.toFixed(2)} uur × €${machineCostPerHour.toFixed(2)}/uur = €${machineCost.toFixed(2)}<br>` +
-                `Instelkosten: €${setupCost.toFixed(2)}`;
-            
-            if (usedFilamentLength) {
-                costDetails += `<br>Filament gebruikt: ${usedFilamentLength.toFixed(2)} meter (1.75mm ${material.toUpperCase()})`;
-                costDetails += `<br>Gewicht per meter: ${gramsPerMeter175[material].toFixed(2)}g/m`;
-            }
-            
-            document.getElementById('cost-calculation-details').innerHTML = costDetails;
+            updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, calculationSource, usedFilamentLength, material, filamentPricePerGram, machineCostPerHour);
         }
         
         // Event listeners
@@ -1270,6 +1332,12 @@
                 const material = this.value;
                 document.getElementById('filament-price').value = defaultMaterialPrices[material];
                 document.getElementById('material-info').textContent = materialDescriptions[material];
+                calculatePrice();
+            });
+            
+            // Infill percentage slider
+            document.getElementById('infill-percentage').addEventListener('input', function() {
+                document.getElementById('infill-value').textContent = this.value + '%';
                 calculatePrice();
             });
             
