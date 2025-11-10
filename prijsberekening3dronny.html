@@ -394,6 +394,48 @@
             font-size: 1.1rem;
         }
         
+        .input-method-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-method-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .input-method-option.active {
+            border-color: #6a11cb;
+            background-color: #f0f4ff;
+        }
+        
+        .input-method-option input {
+            display: none;
+        }
+        
+        .input-group {
+            display: none;
+        }
+        
+        .input-group.active {
+            display: block;
+        }
+        
+        .estimation-note {
+            background: #e8f4fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #2980b9;
+        }
+        
         /* Responsive verbeteringen */
         @media (max-width: 1024px) {
             .main-content {
@@ -452,6 +494,10 @@
             
             .viewer-container {
                 min-height: 350px;
+            }
+            
+            .input-method-selector {
+                flex-direction: column;
             }
         }
         
@@ -632,17 +678,40 @@
                 </div>
                 
                 <div class="slicer-data-group" id="slicer-data-group" style="display: none;">
-                    <h3>📊 Slicer Gegevens (1.75mm filament)</h3>
+                    <h3>📊 Slicer Gegevens</h3>
                     
-                    <div class="form-group">
-                        <label for="slicer-filament">Filament lengte (meter)</label>
-                        <input type="number" id="slicer-filament" placeholder="Filament lengte uit slicer" step="0.1" min="0">
-                        <small style="color: #666; display: block; margin-top: 5px;">Voor 1.75mm filament</small>
+                    <div class="input-method-selector">
+                        <label class="input-method-option active" id="weight-option">
+                            <input type="radio" name="input-method" value="weight" checked> Gewicht (gram)
+                        </label>
+                        <label class="input-method-option" id="length-option">
+                            <input type="radio" name="input-method" value="length"> Lengte (meter)
+                        </label>
+                    </div>
+                    
+                    <div class="input-group active" id="weight-input-group">
+                        <div class="form-group">
+                            <label for="slicer-weight">Filament gewicht (gram)</label>
+                            <input type="number" id="slicer-weight" placeholder="Gewicht uit slicer" step="0.1" min="0">
+                            <small style="color: #666; display: block; margin-top: 5px;">Voer het exacte gewicht in grammen in</small>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group" id="length-input-group">
+                        <div class="form-group">
+                            <label for="slicer-length">Filament lengte (meter)</label>
+                            <input type="number" id="slicer-length" placeholder="Lengte uit slicer" step="0.1" min="0">
+                            <small style="color: #666; display: block; margin-top: 5px;">Voor 1.75mm filament</small>
+                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="slicer-time">Printtijd (uren)</label>
                         <input type="number" id="slicer-time" placeholder="Printtijd uit slicer" step="0.1" min="0">
+                    </div>
+                    
+                    <div class="estimation-note" id="estimation-note">
+                        <strong>Let op:</strong> Deze waarden worden automatisch ingevuld op basis van je STL-bestand en instellingen. Je kunt ze aanpassen voor een preciezere berekening.
                     </div>
                 </div>
                 
@@ -786,11 +855,16 @@
                 const vertices = [];
                 const faces = [];
                 let currentFace = [];
-                
+                let inFacet = false;
+
                 for (const line of lines) {
                     const trimmed = line.trim();
-                    if (trimmed.startsWith('vertex')) {
-                        const parts = trimmed.split(/\s+/);
+                    
+                    if (trimmed.startsWith('facet normal')) {
+                        inFacet = true;
+                        currentFace = [];
+                    } else if (trimmed.startsWith('vertex')) {
+                        const parts = trimmed.split(/\s+/).filter(part => part !== '');
                         if (parts.length >= 4) {
                             const x = parseFloat(parts[1]);
                             const y = parseFloat(parts[2]);
@@ -798,10 +872,11 @@
                             currentFace.push(vertices.length);
                             vertices.push(x, y, z);
                         }
-                    } else if (trimmed.startsWith('endloop')) {
+                    } else if (trimmed.startsWith('endfacet')) {
                         if (currentFace.length === 3) {
                             faces.push(...currentFace);
                         }
+                        inFacet = false;
                         currentFace = [];
                     }
                 }
@@ -831,6 +906,7 @@
                 
                 return { vertices: new Float32Array(vertices), faces: new Uint32Array(facesArray) };
             }
+
         }
 
         // Volume berekening voor STL
@@ -980,6 +1056,13 @@
                 return;
             }
             
+            // File size limiet
+            const maxSize = 50 * 1024 * 1024; // 50MB
+            if (file.size > maxSize) {
+                showError('Bestand is te groot. Maximale grootte: 50MB');
+                return;
+            }
+            
             document.getElementById('loading').style.display = 'block';
             hideError();
             hideSuccess();
@@ -990,13 +1073,16 @@
                 try {
                     const stlData = SimpleSTLParser.parseSTL(event.target.result);
                     
+                    if (!stlData.vertices.length || !stlData.faces.length) {
+                        throw new Error('STL bestand bevat geen geldige geometrie');
+                    }
+                    
                     if (!isViewerInitialized) {
                         initViewer();
                     }
                     
-                    if (model) {
-                        scene.remove(model);
-                    }
+                    // Cleanup vorige model
+                    cleanupPreviousModel();
                     
                     const geometry = new THREE.BufferGeometry();
                     geometry.setAttribute('position', new THREE.BufferAttribute(stlData.vertices, 3));
@@ -1062,6 +1148,20 @@
             reader.readAsArrayBuffer(file);
         }
         
+        // Cleanup oude geometry
+        function cleanupPreviousModel() {
+            if (model) {
+                scene.remove(model);
+                if (model.geometry) {
+                    model.geometry.dispose();
+                }
+                if (model.material) {
+                    model.material.dispose();
+                }
+                model = null;
+            }
+        }
+        
         // Bestandsinformatie bijwerken
         function updateFileInfo(file, geometry) {
             document.getElementById('file-name').textContent = file.name;
@@ -1083,7 +1183,23 @@
                 dimensions: size
             };
             
+            // Vul automatisch de slicer gegevens in met geschatte waarden
+            autoFillSlicerData(volume);
+            
             calculatePrice();
+        }
+        
+        // Automatisch slicer data invullen
+        function autoFillSlicerData(volume) {
+            const material = document.getElementById('material').value;
+            const infillPercentage = document.getElementById('infill-percentage').value / 100;
+            const density = materialDensities[material];
+            const estimatedWeight = volume * density * infillPercentage;
+            const estimatedTime = estimatePrintTime(estimatedWeight, volume);
+            
+            document.getElementById('slicer-weight').value = estimatedWeight.toFixed(1);
+            document.getElementById('slicer-length').value = (estimatedWeight / gramsPerMeter175[material]).toFixed(1);
+            document.getElementById('slicer-time').value = estimatedTime.toFixed(1);
         }
         
         // Bestandsgrootte formatteren
@@ -1136,8 +1252,19 @@
             return baseTime + Math.max(weightBasedTime, volumeBasedTime);
         }
         
+        // Reset prijs display
+        function resetPriceDisplay() {
+            document.getElementById('material-cost').textContent = '€0.00';
+            document.getElementById('print-time').textContent = '0 uur';
+            document.getElementById('machine-cost').textContent = '€0.00';
+            document.getElementById('print-weight').textContent = '0 g';
+            document.getElementById('total-price').textContent = '€5.00';
+            document.getElementById('calculation-source').textContent = 'Geen model geladen';
+            document.getElementById('cost-calculation-details').innerHTML = '';
+        }
+        
         // Update display functie voor betere organisatie
-        function updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, calculationSource, usedFilamentLength, material, filamentPricePerGram, machineCostPerHour) {
+        function updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, calculationSource, material, filamentPricePerGram, machineCostPerHour) {
             document.getElementById('print-weight').textContent = weight.toFixed(2) + ' g';
             document.getElementById('material-cost').textContent = '€' + materialCost.toFixed(2);
             document.getElementById('print-time').textContent = printTime.toFixed(2) + ' uur';
@@ -1152,15 +1279,7 @@
                 `Machinekosten: ${printTime.toFixed(2)} uur × €${machineCostPerHour.toFixed(2)}/uur = €${machineCost.toFixed(2)}<br>` +
                 `Instelkosten: €${setupCost.toFixed(2)}`;
             
-            if (usedFilamentLength) {
-                costDetails += `<br>Filament gebruikt: ${usedFilamentLength.toFixed(2)}m (1.75mm ${material.toUpperCase()})`;
-                costDetails += `<br>Gewicht per meter: ${gramsPerMeter175[material].toFixed(2)}g/m`;
-                costDetails += `<br>Totaal gewicht: ${weight.toFixed(2)}g`;
-            } else {
-                const infillPercentage = document.getElementById('infill-percentage').value;
-                costDetails += `<br>Geschat gewicht: ${weight.toFixed(2)}g (volume × dichtheid × ${infillPercentage}% infill)`;
-            }
-            
+            costDetails += `<br>Geschat gewicht: ${weight.toFixed(2)}g`;
             costDetails += `<br>Geschatte printtijd: ${printTime.toFixed(2)} uur`;
             
             document.getElementById('cost-calculation-details').innerHTML = costDetails;
@@ -1169,78 +1288,99 @@
         // Prijs berekenen - CONSISTENT OP BASIS VAN GEWICHT
         function calculatePrice() {
             if (!stlFile) {
-                document.getElementById('material-cost').textContent = '€0.00';
-                document.getElementById('print-time').textContent = '0 uur';
-                document.getElementById('machine-cost').textContent = '€0.00';
-                document.getElementById('print-weight').textContent = '0 g';
-                document.getElementById('total-price').textContent = '€5.00';
-                document.getElementById('calculation-source').textContent = 'Geen model geladen';
-                document.getElementById('cost-calculation-details').innerHTML = '';
+                resetPriceDisplay();
                 return;
             }
-            
+
             // Haal kosteninstellingen op
             const filamentPricePerKg = parseFloat(document.getElementById('filament-price').value) || 25.00;
             const machineCostPerHour = parseFloat(document.getElementById('machine-cost-per-hour').value) || 2.00;
             const setupCost = parseFloat(document.getElementById('setup-cost').value) || 5.00;
-            
-            // Bereken prijs per gram (filamentprijs per kg / 1000)
             const filamentPricePerGram = filamentPricePerKg / 1000;
-            
+
             const material = document.getElementById('material').value;
             const useSlicerData = document.getElementById('use-slicer-data').checked;
-            const infillPercentage = document.getElementById('infill-percentage').value / 100; // omzetten naar decimaal
-            
-            let weight, printTime, calculationSource, usedFilamentLength;
-            let materialCost, machineCost, totalCost;
-            
+            const infillPercentage = document.getElementById('infill-percentage').value / 100;
+
+            let weight, printTime, calculationSource;
+
             if (useSlicerData) {
                 // OPTIE 1: Gebruiker heeft slicer gegevens ingevoerd
-                const slicerFilament = parseFloat(document.getElementById('slicer-filament').value) || 0;
-                const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
+                const inputMethod = document.querySelector('input[name="input-method"]:checked').value;
                 
-                if (slicerFilament > 0) {
-                    // Bereken gewicht uit filament lengte voor 1.75mm filament
-                    usedFilamentLength = slicerFilament;
-                    weight = slicerFilament * gramsPerMeter175[material];
-                    calculationSource = `Gewicht berekend uit filament lengte (${slicerFilament}m 1.75mm ${material.toUpperCase()})`;
+                let slicerWeight = parseFloat(document.getElementById('slicer-weight').value) || 0;
+                const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
+
+                if (inputMethod === 'length') {
+                    // Lengte naar gewicht converteren
+                    const slicerLength = parseFloat(document.getElementById('slicer-length').value) || 0;
+                    if (slicerLength > 0) {
+                        slicerWeight = slicerLength * gramsPerMeter175[material];
+                        calculationSource = `Gewicht berekend uit ${slicerLength}m filament (${material.toUpperCase()})`;
+                    }
+                } else if (slicerWeight > 0) {
+                    calculationSource = `Exact gewicht uit slicer: ${slicerWeight}g`;
+                }
+
+                if (slicerWeight > 0) {
+                    weight = slicerWeight;
                 } else {
-                    // Geen filament lengte, val terug op automatische berekening
+                    // Fallback naar automatische berekening
                     const density = materialDensities[material];
                     weight = stlFile.volume * density * infillPercentage;
                     calculationSource = `Gewicht geschat uit STL volume (${(infillPercentage * 100)}% infill)`;
                 }
-                
-                // Printtijd: gebruik slicer tijd of schat automatisch
+
+                // Printtijd
                 if (slicerTime > 0) {
                     printTime = slicerTime;
-                    calculationSource += `, exacte tijd (${printTime} uur) uit slicer`;
+                    calculationSource += `, exacte tijd uit slicer`;
                 } else {
-                    // Schat printtijd op basis van gewicht en complexiteit
                     printTime = estimatePrintTime(weight, stlFile.volume);
                     calculationSource += `, geschatte tijd`;
                 }
-                
+
             } else {
-                // OPTIE 2: Automatische berekening zonder slicer gegevens
+                // OPTIE 2: Automatische berekening
                 const density = materialDensities[material];
-                
-                // Bereken gewicht op basis van volume, dichtheid en infill
                 weight = stlFile.volume * density * infillPercentage;
-                
-                // Schat printtijd op basis van gewicht en complexiteit
                 printTime = estimatePrintTime(weight, stlFile.volume);
-                
-                calculationSource = `Automatische berekening op basis van STL volume (${(infillPercentage * 100)}% infill)`;
+                calculationSource = `Automatische berekening (${(infillPercentage * 100)}% infill)`;
             }
-            
+
             // Kosten berekenen
-            materialCost = weight * filamentPricePerGram;
-            machineCost = printTime * machineCostPerHour;
-            totalCost = materialCost + machineCost + setupCost;
-            
+            const materialCost = weight * filamentPricePerGram;
+            const machineCost = printTime * machineCostPerHour;
+            const totalCost = materialCost + machineCost + setupCost;
+
             // Resultaten tonen
-            updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, calculationSource, usedFilamentLength, material, filamentPricePerGram, machineCostPerHour);
+            updateDisplay(weight, materialCost, printTime, machineCost, setupCost, totalCost, 
+                         calculationSource, material, filamentPricePerGram, machineCostPerHour);
+        }
+
+        
+        // Input method toggle
+        function setupInputMethodToggle() {
+            const weightOption = document.getElementById('weight-option');
+            const lengthOption = document.getElementById('length-option');
+            const weightGroup = document.getElementById('weight-input-group');
+            const lengthGroup = document.getElementById('length-input-group');
+            
+            weightOption.addEventListener('click', function() {
+                weightOption.classList.add('active');
+                lengthOption.classList.remove('active');
+                weightGroup.classList.add('active');
+                lengthGroup.classList.remove('active');
+                calculatePrice();
+            });
+            
+            lengthOption.addEventListener('click', function() {
+                lengthOption.classList.add('active');
+                weightOption.classList.remove('active');
+                lengthGroup.classList.add('active');
+                weightGroup.classList.remove('active');
+                calculatePrice();
+            });
         }
         
         // Event listeners
@@ -1332,12 +1472,24 @@
                 const material = this.value;
                 document.getElementById('filament-price').value = defaultMaterialPrices[material];
                 document.getElementById('material-info').textContent = materialDescriptions[material];
+                
+                // Update slicer data als er een STL geladen is
+                if (stlFile) {
+                    autoFillSlicerData(stlFile.volume);
+                }
+                
                 calculatePrice();
             });
             
             // Infill percentage slider
             document.getElementById('infill-percentage').addEventListener('input', function() {
                 document.getElementById('infill-value').textContent = this.value + '%';
+                
+                // Update slicer data als er een STL geladen is
+                if (stlFile) {
+                    autoFillSlicerData(stlFile.volume);
+                }
+                
                 calculatePrice();
             });
             
@@ -1347,8 +1499,12 @@
             document.getElementById('setup-cost').addEventListener('input', calculatePrice);
             
             // Slicer data input events
-            document.getElementById('slicer-filament').addEventListener('input', calculatePrice);
+            document.getElementById('slicer-weight').addEventListener('input', calculatePrice);
+            document.getElementById('slicer-length').addEventListener('input', calculatePrice);
             document.getElementById('slicer-time').addEventListener('input', calculatePrice);
+            
+            // Setup input method toggle
+            setupInputMethodToggle();
             
             calculatePrice();
         });
