@@ -340,6 +340,20 @@
             font-size: 1.1rem;
         }
         
+        .cost-settings-group {
+            background: #f0fff0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .cost-settings-group h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -403,13 +417,34 @@
                 <div class="form-group">
                     <label for="material">Materiaal</label>
                     <select id="material">
-                        <option value="pla">PLA (€0.05 per gram)</option>
-                        <option value="petg">PETG (€0.07 per gram)</option>
-                        <option value="abs">ABS (€0.06 per gram)</option>
-                        <option value="tpu">TPU (€0.09 per gram)</option>
-                        <option value="nylon">Nylon (€0.11 per gram)</option>
-                        <option value="resin">Resin (€0.15 per gram)</option>
+                        <option value="pla">PLA</option>
+                        <option value="petg">PETG</option>
+                        <option value="abs">ABS</option>
+                        <option value="tpu">TPU</option>
+                        <option value="nylon">Nylon</option>
+                        <option value="resin">Resin</option>
+                        <option value="custom">Aangepast materiaal</option>
                     </select>
+                </div>
+                
+                <div class="cost-settings-group">
+                    <h3>💰 Kosten Instellingen</h3>
+                    
+                    <div class="form-group">
+                        <label for="filament-price">Filament prijs (per kilogram)</label>
+                        <input type="number" id="filament-price" value="25.00" step="0.01" min="0">
+                        <small style="color: #666; display: block; margin-top: 5px;">Voer de prijs in van een kilogram filament</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="machine-cost-per-hour">Machinekosten per uur</label>
+                        <input type="number" id="machine-cost-per-hour" value="2.00" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="setup-cost">Instelkosten</label>
+                        <input type="number" id="setup-cost" value="5.00" step="0.01" min="0">
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -491,7 +526,7 @@
                     </div>
                     <div class="breakdown-item">
                         <div class="breakdown-title">Instelkosten</div>
-                        <div class="breakdown-value" id="setup-cost">€5.00</div>
+                        <div class="breakdown-value" id="setup-cost-display">€5.00</div>
                     </div>
                 </div>
                 
@@ -499,6 +534,9 @@
                     <h4 style="color: #2c3e50; margin-bottom: 10px;">📋 Gebruikte gegevens:</h4>
                     <div id="calculation-source" style="color: #666; font-size: 0.9rem;">
                         Automatische berekening op basis van STL volume
+                    </div>
+                    <div id="cost-calculation-details" style="color: #666; font-size: 0.9rem; margin-top: 5px;">
+                        <!-- Hier komen de kostenberekeningsdetails -->
                     </div>
                 </div>
             </div>
@@ -510,23 +548,10 @@
     </div>
 
     <script>
-        // Materiaal prijzen per GRAM
-        const materialPricesPerGram = {
-            'pla': 0.05,   // €0.05 per gram
-            'petg': 0.07,  // €0.07 per gram
-            'abs': 0.06,   // €0.06 per gram
-            'tpu': 0.09,   // €0.09 per gram
-            'nylon': 0.11, // €0.11 per gram
-            'resin': 0.15  // €0.15 per gram
-        };
-
         // Dichtheden voor automatische berekening
         const materialDensities = {
-            'pla': 1.24, 'petg': 1.27, 'abs': 1.05, 'tpu': 1.21, 'nylon': 1.14, 'resin': 1.12
+            'pla': 1.24, 'petg': 1.27, 'abs': 1.05, 'tpu': 1.21, 'nylon': 1.14, 'resin': 1.12, 'custom': 1.25
         };
-
-        // Machinekosten per uur
-        const machineCostPerHour = 2.00; // €2 per uur
 
         // Eenvoudige STL Parser
         class SimpleSTLParser {
@@ -863,7 +888,7 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen - NU MET SLICER GEGEVENS
+        // Prijs berekenen - MET AANPASBARE KOSTEN
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -872,11 +897,19 @@
                 document.getElementById('print-weight').textContent = '0 g';
                 document.getElementById('total-price').textContent = '€5.00';
                 document.getElementById('calculation-source').textContent = 'Geen model geladen';
+                document.getElementById('cost-calculation-details').innerHTML = '';
                 return;
             }
             
+            // Haal kosteninstellingen op
+            const filamentPricePerKg = parseFloat(document.getElementById('filament-price').value) || 25.00;
+            const machineCostPerHour = parseFloat(document.getElementById('machine-cost-per-hour').value) || 2.00;
+            const setupCost = parseFloat(document.getElementById('setup-cost').value) || 5.00;
+            
+            // Bereken prijs per gram (filamentprijs per kg / 1000)
+            const filamentPricePerGram = filamentPricePerKg / 1000;
+            
             const material = document.getElementById('material').value;
-            const materialPricePerGram = materialPricesPerGram[material];
             const useSlicerData = document.getElementById('use-slicer-data').checked;
             
             let weight, printTime, calculationSource;
@@ -917,9 +950,8 @@
             }
             
             // Kosten berekenen
-            const materialCost = weight * materialPricePerGram;
+            const materialCost = weight * filamentPricePerGram;
             const machineCost = printTime * machineCostPerHour;
-            const setupCost = 5.00;
             const totalCost = materialCost + machineCost + setupCost;
             
             // Resultaten tonen
@@ -927,8 +959,15 @@
             document.getElementById('material-cost').textContent = '€' + materialCost.toFixed(2);
             document.getElementById('print-time').textContent = printTime.toFixed(2) + ' uur';
             document.getElementById('machine-cost').textContent = '€' + machineCost.toFixed(2);
+            document.getElementById('setup-cost-display').textContent = '€' + setupCost.toFixed(2);
             document.getElementById('total-price').textContent = '€' + totalCost.toFixed(2);
             document.getElementById('calculation-source').textContent = calculationSource;
+            
+            // Toon kostenberekeningsdetails
+            document.getElementById('cost-calculation-details').innerHTML = 
+                `Materiaalkosten: ${weight.toFixed(2)}g × €${filamentPricePerGram.toFixed(4)}/g = €${materialCost.toFixed(2)}<br>` +
+                `Machinekosten: ${printTime.toFixed(2)} uur × €${machineCostPerHour.toFixed(2)}/uur = €${machineCost.toFixed(2)}<br>` +
+                `Instelkosten: €${setupCost.toFixed(2)}`;
         }
         
         // Event listeners
@@ -1001,6 +1040,11 @@
                 slicerDataGroup.style.display = this.checked ? 'block' : 'none';
                 calculatePrice();
             });
+            
+            // Kosteninstellingen input events
+            document.getElementById('filament-price').addEventListener('input', calculatePrice);
+            document.getElementById('machine-cost-per-hour').addEventListener('input', calculatePrice);
+            document.getElementById('setup-cost').addEventListener('input', calculatePrice);
             
             // Slicer data input events
             document.getElementById('slicer-volume').addEventListener('input', calculatePrice);
