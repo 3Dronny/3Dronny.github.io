@@ -138,6 +138,11 @@
             background: #2980b9;
         }
         
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
         .viewer-container {
             flex: 1;
             border: 1px solid #ddd;
@@ -146,7 +151,7 @@
             margin-bottom: 20px;
             position: relative;
             min-height: 400px;
-            background: white;
+            background: #1a1a1a;
         }
         
         #model-viewer {
@@ -279,7 +284,7 @@
         
         .no-file-message {
             text-align: center;
-            color: #7f8c8d;
+            color: #bdc3c7;
             padding: 50px 20px;
             font-size: 1.1rem;
             position: absolute;
@@ -354,13 +359,144 @@
             font-size: 1.1rem;
         }
         
+        .viewer-stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+        
+        .material-info {
+            background: #fff8e1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Responsive verbeteringen */
+        @media (max-width: 1024px) {
+            .main-content {
+                gap: 20px;
+            }
+            
+            .upload-section, .viewer-section {
+                padding: 20px;
+            }
+            
+            .price-breakdown {
+                gap: 10px;
+            }
+            
+            .breakdown-item {
+                min-width: 170px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
+                gap: 20px;
             }
             
             .viewer-controls {
-                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .price {
+                font-size: 2rem;
+            }
+            
+            .price-breakdown {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .breakdown-item {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .viewer-container {
+                min-height: 350px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .upload-section, .viewer-section, .calculator-section, .result-section {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .upload-area {
+                padding: 30px 15px;
+            }
+            
+            .viewer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            .viewer-container {
+                min-height: 300px;
+            }
+            
+            .price {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .upload-icon {
+                font-size: 36px;
+            }
+            
+            .viewer-container {
+                min-height: 250px;
             }
         }
     </style>
@@ -417,14 +553,25 @@
                 <div class="form-group">
                     <label for="material">Materiaal</label>
                     <select id="material">
-                        <option value="pla">PLA</option>
+                        <option value="pla">PLA (Standard)</option>
+                        <option value="pla_plus">PLA+ (Premium)</option>
                         <option value="petg">PETG</option>
                         <option value="abs">ABS</option>
-                        <option value="tpu">TPU</option>
-                        <option value="nylon">Nylon</option>
-                        <option value="resin">Resin</option>
+                        <option value="asa">ASA</option>
+                        <option value="tpu">TPU (Flexibel)</option>
+                        <option value="hips">HIPS</option>
+                        <option value="nylon">Nylon (PA)</option>
+                        <option value="pc">Polycarbonaat (PC)</option>
+                        <option value="carbon">Carbon Fiber Versterkt</option>
+                        <option value="wood">Hout-PLA</option>
+                        <option value="metal">Metaal-PLA</option>
+                        <option value="glow">Glow-in-the-dark</option>
+                        <option value="resin">Resin (SLA)</option>
                         <option value="custom">Aangepast materiaal</option>
                     </select>
+                    <div class="material-info" id="material-info">
+                        PLA: €25/kg - Goed voor algemeen gebruik, makkelijk te printen
+                    </div>
                 </div>
                 
                 <div class="cost-settings-group">
@@ -458,15 +605,6 @@
                 
                 <div class="slicer-data-group" id="slicer-data-group" style="display: none;">
                     <h3>📊 Slicer Gegevens (1.75mm filament)</h3>
-                    <div class="form-group">
-                        <label for="slicer-volume">Volume (cm³)</label>
-                        <input type="number" id="slicer-volume" placeholder="Volume uit slicer" step="0.1" min="0">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="slicer-weight">Gewicht (gram)</label>
-                        <input type="number" id="slicer-weight" placeholder="Gewicht uit slicer" step="0.1" min="0">
-                    </div>
                     
                     <div class="form-group">
                         <label for="slicer-filament">Filament lengte (meter)</label>
@@ -494,11 +632,17 @@
                             </p>
                         </div>
                     </div>
+                    <div class="viewer-stats" id="viewer-stats" style="display: none;">
+                        Driehoeken: <span id="triangle-count">0</span><br>
+                        Vertices: <span id="vertex-count">0</span>
+                    </div>
                 </div>
                 <div class="viewer-controls">
-                    <button class="btn" id="reset-view">Reset Weergave</button>
-                    <button class="btn" id="toggle-wireframe">Draadmodel</button>
-                    <button class="btn" id="auto-orient">Auto Oriëntatie</button>
+                    <button class="btn btn-small" id="reset-view">Reset Weergave</button>
+                    <button class="btn btn-small" id="toggle-wireframe">Draadmodel</button>
+                    <button class="btn btn-small" id="auto-orient">Auto Oriëntatie</button>
+                    <button class="btn btn-small" id="toggle-grid">Raster Aan/Uit</button>
+                    <button class="btn btn-small" id="toggle-axes">Assen Aan/Uit</button>
                 </div>
             </div>
         </div>
@@ -550,20 +694,47 @@
     </div>
 
     <script>
-        // Dichtheden voor automatische berekening
+        // Uitgebreide materiaal dichtheden
         const materialDensities = {
-            'pla': 1.24, 'petg': 1.27, 'abs': 1.05, 'tpu': 1.21, 'nylon': 1.14, 'resin': 1.12, 'custom': 1.25
+            'pla': 1.24, 'pla_plus': 1.25, 'petg': 1.27, 'abs': 1.05, 
+            'asa': 1.07, 'tpu': 1.21, 'hips': 1.03, 'nylon': 1.14,
+            'pc': 1.20, 'carbon': 1.30, 'wood': 1.20, 'metal': 1.30,
+            'glow': 1.28, 'resin': 1.12, 'custom': 1.25
         };
 
         // Gram per meter voor 1.75mm filament
         const gramsPerMeter175 = {
-            'pla': 2.98,   // 1.24 * 2.405
-            'petg': 3.05,  // 1.27 * 2.405
-            'abs': 2.52,   // 1.05 * 2.405
-            'tpu': 2.91,   // 1.21 * 2.405
-            'nylon': 2.74, // 1.14 * 2.405
-            'resin': 2.69, // 1.12 * 2.405
-            'custom': 3.01 // 1.25 * 2.405
+            'pla': 2.98,   'pla_plus': 3.01, 'petg': 3.05,  'abs': 2.52,   
+            'asa': 2.57,   'tpu': 2.91,      'hips': 2.48,   'nylon': 2.74,
+            'pc': 2.89,    'carbon': 3.13,   'wood': 2.89,   'metal': 3.13,
+            'glow': 3.08,  'resin': 2.69,    'custom': 3.01
+        };
+
+        // Standaard materiaal prijzen
+        const defaultMaterialPrices = {
+            'pla': 25.00, 'pla_plus': 30.00, 'petg': 28.00, 'abs': 26.00,
+            'asa': 35.00, 'tpu': 40.00, 'hips': 32.00, 'nylon': 45.00,
+            'pc': 55.00, 'carbon': 65.00, 'wood': 35.00, 'metal': 50.00,
+            'glow': 38.00, 'resin': 60.00, 'custom': 25.00
+        };
+
+        // Materiaal beschrijvingen
+        const materialDescriptions = {
+            'pla': "PLA: €25/kg - Goed voor algemeen gebruik, makkelijk te printen",
+            'pla_plus': "PLA+: €30/kg - Sterker en duurzamer dan standaard PLA",
+            'petg': "PETG: €28/kg - Sterk, flexibel en hittebestendig",
+            'abs': "ABS: €26/kg - Hittebestendig maar moeilijker te printen",
+            'asa': "ASA: €35/kg - UV-bestendig ABS alternatief voor buiten",
+            'tpu': "TPU: €40/kg - Flexibel materiaal voor buigzame onderdelen",
+            'hips': "HIPS: €32/kg - Oplosbare support materiaal",
+            'nylon': "Nylon: €45/kg - Zeer sterk en slijtvast",
+            'pc': "Polycarbonaat: €55/kg - Uitzonderlijk sterk en hittebestendig",
+            'carbon': "Carbon Fiber: €65/kg - Zeer stijf en licht",
+            'wood': "Hout-PLA: €35/kg - Ziet eruit en voelt aan als hout",
+            'metal': "Metaal-PLA: €50/kg - Metaalachtig uiterlijk en gewicht",
+            'glow': "Glow-in-the-dark: €38/kg - Gloeit in het donker",
+            'resin': "Resin: €60/kg - Voor SLA printers, hoge details",
+            'custom': "Aangepast: €25/kg - Voer zelf de prijs in"
         };
 
         // Eenvoudige STL Parser
@@ -668,6 +839,7 @@
 
         // Globale variabelen
         let scene, camera, renderer, controls, model;
+        let gridHelper, axesHelper;
         let stlFile = null;
         let isViewerInitialized = false;
         
@@ -679,7 +851,7 @@
             document.getElementById('no-file-message').style.display = 'none';
             
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff);
+            scene.background = new THREE.Color(0x1a1a1a);
             
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 5, 10);
@@ -690,7 +862,7 @@
                 preserveDrawingBuffer: true
             });
             renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0xffffff, 1);
+            renderer.setClearColor(0x1a1a1a, 1);
             container.appendChild(renderer.domElement);
             
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -699,12 +871,25 @@
             controls.minDistance = 1;
             controls.maxDistance = 50;
             
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            // Verbeterde verlichting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            directionalLight.position.set(5, 10, 5);
-            scene.add(directionalLight);
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(5, 10, 5);
+            scene.add(directionalLight1);
+            
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+            directionalLight2.position.set(-5, -5, -5);
+            scene.add(directionalLight2);
+            
+            // Grid helper
+            gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+            scene.add(gridHelper);
+            
+            // Axes helper
+            axesHelper = new THREE.AxesHelper(5);
+            scene.add(axesHelper);
             
             function animate() {
                 requestAnimationFrame(animate);
@@ -826,6 +1011,11 @@
                     
                     updateFileInfo(file, geometry);
                     
+                    // Toon viewer statistieken
+                    document.getElementById('viewer-stats').style.display = 'block';
+                    document.getElementById('triangle-count').textContent = stlData.faces.length / 3;
+                    document.getElementById('vertex-count').textContent = stlData.vertices.length / 3;
+                    
                     document.getElementById('loading').style.display = 'none';
                     showSuccess('Bestand succesvol geladen en weergegeven!');
                     
@@ -901,7 +1091,7 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen - MET ALLE SLICER GEGEVENS VOOR 1.75MM FILAMENT
+        // Prijs berekenen
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -929,25 +1119,15 @@
             
             if (useSlicerData) {
                 // Gebruik exacte slicer gegevens
-                const slicerWeight = parseFloat(document.getElementById('slicer-weight').value) || 0;
-                const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
                 const slicerFilament = parseFloat(document.getElementById('slicer-filament').value) || 0;
-                const slicerVolume = parseFloat(document.getElementById('slicer-volume').value) || 0;
+                const slicerTime = parseFloat(document.getElementById('slicer-time').value) || 0;
                 
-                // Bepaal gewicht - prioriteit: slicerWeight > slicerFilament > slicerVolume > automatisch
-                if (slicerWeight > 0) {
-                    weight = slicerWeight;
-                    calculationSource = `Exact gewicht (${weight}g) uit slicer`;
-                } else if (slicerFilament > 0) {
+                // Bepaal gewicht - prioriteit: slicerFilament > automatisch
+                if (slicerFilament > 0) {
                     // Bereken gewicht uit filament lengte voor 1.75mm filament
                     usedFilamentLength = slicerFilament;
                     weight = slicerFilament * gramsPerMeter175[material];
                     calculationSource = `Gewicht berekend uit filament lengte (${slicerFilament}m 1.75mm ${material.toUpperCase()})`;
-                } else if (slicerVolume > 0) {
-                    // Gebruik slicer volume met 30% infill voor gewicht
-                    const density = materialDensities[material];
-                    weight = slicerVolume * density * 0.30;
-                    calculationSource = `Gewicht berekend uit slicer volume (${slicerVolume}cm³)`;
                 } else {
                     // Geen slicer gegevens, val terug op automatisch
                     const density = materialDensities[material];
@@ -1049,6 +1229,7 @@
                 }
             });
             
+            // Viewer controls
             document.getElementById('reset-view').addEventListener('click', function() {
                 if (controls) {
                     controls.reset();
@@ -1065,10 +1246,30 @@
                 autoOrientModel();
             });
             
+            document.getElementById('toggle-grid').addEventListener('click', function() {
+                if (gridHelper) {
+                    gridHelper.visible = !gridHelper.visible;
+                }
+            });
+            
+            document.getElementById('toggle-axes').addEventListener('click', function() {
+                if (axesHelper) {
+                    axesHelper.visible = !axesHelper.visible;
+                }
+            });
+            
             // Slicer data toggle
             document.getElementById('use-slicer-data').addEventListener('change', function() {
                 const slicerDataGroup = document.getElementById('slicer-data-group');
                 slicerDataGroup.style.display = this.checked ? 'block' : 'none';
+                calculatePrice();
+            });
+            
+            // Materiaal selectie
+            document.getElementById('material').addEventListener('change', function() {
+                const material = this.value;
+                document.getElementById('filament-price').value = defaultMaterialPrices[material];
+                document.getElementById('material-info').textContent = materialDescriptions[material];
                 calculatePrice();
             });
             
@@ -1078,12 +1279,8 @@
             document.getElementById('setup-cost').addEventListener('input', calculatePrice);
             
             // Slicer data input events
-            document.getElementById('slicer-volume').addEventListener('input', calculatePrice);
-            document.getElementById('slicer-weight').addEventListener('input', calculatePrice);
             document.getElementById('slicer-filament').addEventListener('input', calculatePrice);
             document.getElementById('slicer-time').addEventListener('input', calculatePrice);
-            
-            document.getElementById('material').addEventListener('change', calculatePrice);
             
             calculatePrice();
         });
