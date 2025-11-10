@@ -4,66 +4,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
-    <!-- SEO Meta Tags - Geoptimaliseerd -->
-    <meta name="description" content="Bekijk ons 3D print portfolio in België met functionele prints, creatieve projecten en prototypes. PETG, PLA, PC materialen met Qidi en Creality printers.">
+    <meta name="description" content="Bereken de kostprijs voor jouw 3D print project in België. Eenvoudige, transparante calculator voor filament, printtijd en afwerking.">
     
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="3D Print Portfolio België | 3DRonny - Onze Projecten & Resultaten">
-    <meta property="og:description" content="Bekijk onze 3D print projecten in België. Functionele onderdelen, creatieve ontwerpen en prototypes met professionele kwaliteit.">
-    <meta property="og:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
-    <meta property="og:url" content="https://3dronny.github.io/gallery.html">
+    <meta property="og:title" content="3D Print Prijsberekening België | Transparante Kostprijs Calculator">
+    <meta property="og:description" content="Bereken eenvoudig de kostprijs van jouw 3D print project. Inzicht in filamentkosten, printtijd en afwerkingstarieven.">
+    <meta property="og:image" content="https://3dronny.github.io/fotos/filament-calculator.jpg">
+    <meta property="og:url" content="https://3dronny.github.io/prijsberekening.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="3DRonny">
     <meta property="og:locale" content="nl_BE">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="3D Print Portfolio België | 3DRonny Projecten">
-    <meta name="twitter:description" content="Bekijk onze 3D print projecten in België. Functionele onderdelen en creatieve ontwerpen met professionele printers.">
-    <meta name="twitter:image" content="https://3dronny.github.io/fotos/opslag-systeem.jpg">
+    <meta name="twitter:title" content="3D Print Prijsberekening België | Kostprijs Calculator">
+    <meta name="twitter:description" content="Eenvoudige kostprijs berekening voor jouw 3D print project met 3DRonny.">
+    <meta name="twitter:image" content="https://3dronny.github.io/fotos/filament-calculator.jpg">
 
-    <!-- Additional Meta Tags -->
     <meta name="author" content="Ronny - 3D Print Specialist België">
     <meta name="robots" content="index, follow">
     <meta name="language" content="NL">
 
-    <!-- Preconnect voor betere performance -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
-    <title>3D Print Portfolio België | 3DRonny - Onze Projecten & Resultaten</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+    <title>3D Print Prijsberekening België | Transparante Kostprijs Calculator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Structured Data voor Gallery -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "3D Print Portfolio België - 3DRonny",
-      "description": "Portfolio van 3D print projecten en resultaten in België met Qidi en Creality printers",
-      "url": "https://3dronny.github.io/gallery.html",
-      "mainEntity": {
-        "@type": "ItemList",
-        "numberOfItems": 13,
-        "itemListElement": [
-          {
-            "@type": "CreativeWork",
-            "name": "Balpen Organizer PETG",
-            "description": "Modulaire 3D geprinte desktop pen organizer in PETG materiaal"
-          },
-          {
-            "@type": "CreativeWork",
-            "name": "Waterproof Container PETG-TPU",
-            "description": "Waterdichte container met TPU afdichting voor strand en vochtige omgeving"
-          },
-          {
-            "@type": "CreativeWork",
-            "name": "Bezemhouder Polycarbonaat",
-            "description": "Stevige bezemhouder geprint in PC materiaal voor dagelijks gebruik"
-          }
-        ]
+      "@type": "WebPage",
+      "name": "3D Print Prijsberekening België - Kostencalculator",
+      "description": "Transparante tool voor het berekenen van de kosten van een 3D print project in België.",
+      "url": "https://3dronny.github.io/prijsberekening.html",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://3dronny.github.io/prijsberekening.html?query={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
     }
     </script>
@@ -226,73 +204,53 @@
         }
         
         .card:hover {
-            transform: translateY(-5px);
+            /* transform: translateY(-5px); */ /* Uitgeschakeld voor calculator */
             border-color: var(--accent-color);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            /* box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); */ /* Uitgeschakeld voor calculator */
         }
         
-        .material-badge {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+        /* Specifieke stijlen voor de calculator */
+        .calculator-input, .calculator-select {
+            background-color: #374151; /* gray-700 */
+            border: 1px solid #4b5563; /* gray-600 */
+            color: #d1d5db; /* gray-300 */
+            padding: 10px;
+            border-radius: 6px;
+            width: 100%;
+            transition: border-color 0.3s ease;
         }
         
-        .gallery-item {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .gallery-item:hover {
-            transform: scale(1.02);
-        }
-        
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #d1d5db;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            min-height: 44px;
-        }
-        
-        .filter-btn.active, .filter-btn:hover, .filter-btn:focus {
-            background: var(--accent-color);
-            color: white;
+        .calculator-input:focus, .calculator-select:focus {
             border-color: var(--accent-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
         }
         
-        /* Image loading states */
-        .image-container {
-            position: relative;
-            overflow: hidden;
+        .result-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+
         }
         
-        .image-loading {
-            position: absolute;
-            inset: 0;
+        .result-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            background: #374151;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
         }
         
-        .image-loaded {
-            opacity: 1;
-            transition: opacity 0.3s ease;
+        .result-item:last-child {
+            border-bottom: none;
         }
         
-        /* Focus styles voor accessibility */
-        a:focus, button:focus {
-            outline: 2px solid #10b981;
-            outline-offset: 2px;
+        .result-total {
+            background: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         
         /* Print styles */
@@ -300,52 +258,18 @@
             .no-print {
                 display: none !important;
             }
-            
-            .filter-buttons {
-                display: none !important;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
         }
         
         /* Responsive improvements */
-        @media (max-width: 768px) {
-            .filter-buttons {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .filter-btn {
-                flex: 1;
-                min-width: 120px;
-                margin: 4px;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
         @media (max-width: 640px) {
             .hero-title {
                 font-size: 2.5rem !important;
             }
-            
-            .filter-btn {
-                min-width: 100px;
-                font-size: 0.875rem;
-                padding: 8px 16px;
-            }
         }
     </style>
-</head>
+    </head>
 <body class="text-gray-200 min-h-screen relative overflow-x-hidden">
-    <!-- Skip link voor keyboard users - VERWIJDERD -->
-
     <div class="relative z-10">
-        <!-- Navigation -->
         <nav class="bg-gray-800/80 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50 no-print" aria-label="Hoofdnavigatie">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -380,8 +304,8 @@
                             <a href="index.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
                                 <i class="fa-solid fa-house-chimney mr-2"></i>Home
                             </a>
-                            <a href="gallery.html" class="nav-link text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 bg-emerald-600/20">
-                                <i class="fas fa-images mr-2" aria-hidden="true"></i>Gallerij
+                            <a href="gallery.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">
+                                <i  aria-hidden="true"></i>Gallerij
                             </a>
                             <a href="projecten.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Projecten</a>
                             <a href="materialen.html" class="nav-link text-gray-300 hover:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2">Materialen</a>
@@ -396,8 +320,6 @@
                 </div>
             </div>
         </nav>
-
-        <!-- Breadcrumb Navigation - TOEGEVOEGD -->
         <nav class="breadcrumb no-print" aria-label="Breadcrumb">
             <ol>
                 <li>
@@ -408,74 +330,114 @@
                 </li>
                 <li class="separator">/</li>
                 <li aria-current="page">
-                    <i class="fas fa-images" aria-hidden="true"></i>
-                    Portfolio Gallerij
+                    <i class="fas fa-calculator" aria-hidden="true"></i>
+                    Prijsberekening
                 </li>
             </ol>
         </nav>
-
-        <!-- Main Content -->
         <main id="main-content">
-            <!-- Hero Section -->
-            <section class="relative px-4 hero-section" style="padding-bottom: 5rem;" aria-labelledby="gallery-title">
+            <section class="relative px-4 hero-section" style="padding-bottom: 5rem;" aria-labelledby="calculator-title">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h1 id="gallery-title" class="text-5xl lg:text-6xl font-bold text-white mb-6">
-                        3D Print <span class="text-emerald-400">Portfolio België</span>
+                    <h1 id="calculator-title" class="text-5xl lg:text-6xl font-bold text-white mb-6">
+                        3D Print <span class="text-emerald-400">Prijsberekening</span>
                     </h1>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                        Ontdek onze 3D print projecten in België. Van functionele onderdelen tot creatieve ontwerpen, 
-                        allemaal geprint met een professionele Qidi printer voor optimale kwaliteit.
+                        Bereken hier eenvoudig en transparant de geschatte kostprijs voor jouw 3D print project in België. 
+                        Vul de parameters in en zie direct de opbouw van de prijs.
                     </p>
                 </div>
             </section>
 
-            <!-- Filter Buttons -->
-            <section class="py-8 px-4" aria-labelledby="filter-title">
-                <div class="max-w-7xl mx-auto">
-                    <h2 id="filter-title" class="sr-only">Filter 3D print projecten</h2>
-                    <div class="filter-buttons flex flex-wrap justify-center gap-4 mb-12">
-                        <button class="filter-btn active" data-filter="all" aria-pressed="true">
-                            <i class="fas fa-layer-group mr-2" aria-hidden="true"></i>Alle Projecten
-                        </button>
-                        <button class="filter-btn" data-filter="functioneel" aria-pressed="false">
-                            <i class="fas fa-tools mr-2" aria-hidden="true"></i>Functionele Prints
-                        </button>
-                        <button class="filter-btn" data-filter="creatief" aria-pressed="false">
-                            <i class="fas fa-palette mr-2" aria-hidden="true"></i>Creatieve Projecten
-                        </button>
-                        <button class="filter-btn" data-filter="prototype" aria-pressed="false">
-                            <i class="fas fa-cube mr-2" aria-hidden="true"></i>Prototypes
-                        </button>
-                        <button class="filter-btn" data-filter="gereedschap" aria-pressed="false">
-                            <i class="fas fa-wrench mr-2" aria-hidden="true"></i>Gereedschap
-                        </button>
+            <section class="py-8 px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card p-8 lg:p-12 mb-12">
+                        <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-4">Invoer Parameters</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label for="print-time" class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-clock mr-2 text-emerald-400"></i>Geschatte Printtijd (uren)
+                                </label>
+                                <input type="number" id="print-time" value="3" min="0.1" step="0.1" class="calculator-input" aria-describedby="time-help">
+                                <p id="time-help" class="text-xs text-gray-500 mt-1">Vul de printtijd in Slicer in. Minimum is 0.1 uur.</p>
+                            </div>
+
+                            <div>
+                                <label for="material-weight" class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-weight-hanging mr-2 text-emerald-400"></i>Materiaalgewicht (gram)
+                                </label>
+                                <input type="number" id="material-weight" value="50" min="1" step="1" class="calculator-input" aria-describedby="weight-help">
+                                <p id="weight-help" class="text-xs text-gray-500 mt-1">Vul het benodigde filamentgewicht in gram. Minimum is 1 gram.</p>
+                            </div>
+
+                            <div>
+                                <label for="material-type" class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-palette mr-2 text-emerald-400"></i>Materiaal Type
+                                </label>
+                                <select id="material-type" class="calculator-select">
+                                    <option value="petg" data-price="25">PETG (Standaard)</option>
+                                    <option value="pla" data-price="20">PLA (Standaard)</option>
+                                    <option value="pc" data-price="40">PC (Polycarbonaat - Hoge Sterkte)</option>
+                                    <option value="tpu" data-price="30">TPU (Flexibel)</option>
+                                    <option value="abs" data-price="22">ABS (Standaard)</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">De prijs per kg filament is inbegrepen in het tarief.</p>
+                            </div>
+
+                            <div class="flex items-center pt-4">
+                                <input id="post-processing" type="checkbox" class="h-4 w-4 text-emerald-600 bg-gray-700 border-gray-600 rounded focus:ring-emerald-500">
+                                <label for="post-processing" class="ml-3 text-sm font-medium text-gray-300">
+                                    <i class="fas fa-hand-sparkles mr-2 text-emerald-400"></i>Nabewerking / Afwerking (meerprijs per uur)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center">
+                            <button id="calculate-btn" class="btn-primary no-underline w-full md:w-auto" aria-live="polite">
+                                <i class="fas fa-calculator mr-2" aria-hidden="true"></i>
+                                Prijs Berekenen
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Gallery Grid -->
-                    <div class="gallery-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="3D print projecten portfolio">
-                        <!-- Items hier... -->
-                    </div>
-                </div>
-            </section>
+                    <div id="result-container" class="card result-box p-8 lg:p-12 hidden" role="region" aria-live="polite">
+                        <h2 class="text-3xl font-bold text-white mb-6">Geschatte Kostprijs</h2>
+                        
+                        <div class="space-y-3 mb-6 text-gray-300">
+                            <div class="result-item">
+                                <span class="font-medium">Kosten Printtijd (0.50 €/uur):</span>
+                                <span id="cost-time" class="text-white font-semibold">€ 0.00</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="font-medium">Kosten Materiaal (<span id="material-rate-display">€ 0.00</span>/kg):</span>
+                                <span id="cost-material" class="text-white font-semibold">€ 0.00</span>
+                            </div>
+                            <div class="result-item" id="post-processing-row">
+                                <span class="font-medium">Kosten Nabewerking (15.00 €/uur):</span>
+                                <span id="cost-post-processing" class="text-white font-semibold">€ 0.00</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="font-medium">Opstartkosten (Vaste kost):</span>
+                                <span id="cost-setup" class="text-white font-semibold">€ 2.00</span>
+                            </div>
+                        </div>
 
-            <!-- CTA Section -->
-            <section class="py-16 px-4" aria-labelledby="cta-title">
-                <div class="max-w-4xl mx-auto text-center">
-                    <div class="card p-12">
-                        <h2 id="cta-title" class="text-4xl font-bold text-white mb-6">Geïnspireerd door onze 3D prints?</h2>
-                        <p class="text-xl text-gray-300 mb-8">
-                            Heeft u een eigen idee voor een 3D print project in België? Neem contact op voor een vrijblijvende offerte!
+                        <div class="result-total flex justify-between items-center mt-6">
+                            <span>TOTAAL (Excl. Verzendkosten):</span>
+                            <span id="total-price">€ 0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="max-w-3xl mx-auto text-center mt-8 p-4 bg-gray-700/50 rounded-lg border border-gray-700">
+                        <p class="text-sm text-gray-400">
+                            **Disclaimer:** Dit is een **schatting** en dient ter indicatie. De definitieve prijs wordt bepaald na analyse van het 3D-model (STL/STEP-bestand), de gekozen afwerking en eventuele complexiteit. **Neem contact op** voor een gedetailleerde en definitieve offerte.
                         </p>
-                        <a href="contact.html" class="btn-primary no-underline">
-                            <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                            Vraag Nu Offerte Aan
-                        </a>
                     </div>
+
                 </div>
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="bg-gray-900 border-t border-gray-800 py-12 no-print" role="contentinfo">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid md:grid-cols-4 gap-8">
@@ -510,7 +472,7 @@
                         <h3 class="font-semibold text-white mb-4">Pagina's</h3>
                         <ul class="space-y-2 text-gray-400 text-sm">
                             <li><a href="index.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Home</a></li>
-                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1" aria-current="page">Gallerij</a></li>
+                            <li><a href="gallery.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Gallerij</a></li>
                             <li><a href="projecten.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Projecten</a></li>
                             <li><a href="materialen.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Materialen</a></li>
                             <li><a href="qidi-x-max3.html" class="hover:text-emerald-400 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1">Qidi X-Max 3</a></li>
@@ -530,12 +492,12 @@
                     </div>
                     <div>
                       <h3 class="font-semibold text-white mb-4">Contact in België</h3>
-    <ul class="space-y-2 text-gray-400 text-sm">
-        <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
-        <li><i class="fas fa-phone mr-2 text-emerald-400"></i><a href="tel:+32485123456" class="hover:text-emerald-400 transition-colors">+32 prive</a></li>
-        <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Stuur bericht</a></li>
-        <li><i class="fas fa-map-marker-alt mr-2 text-emerald-400"></i>Genk, België</li>
-    </ul>  
+        <ul class="space-y-2 text-gray-400 text-sm">
+            <li><i class="fas fa-envelope mr-2 text-emerald-400"></i><a href="mailto:3Dronny@gmail.com" class="hover:text-emerald-400 transition-colors">3Dronny@gmail.com</a></li>
+            <li><i class="fas fa-phone mr-2 text-emerald-400"></i><a href="tel:+32485123456" class="hover:text-emerald-400 transition-colors">+32 prive</a></li>
+            <li><i class="fas fa-comments mr-2 text-emerald-400"></i><a href="contact.html" class="hover:text-emerald-400 transition-colors">Stuur bericht</a></li>
+            <li><i class="fas fa-map-marker-alt mr-2 text-emerald-400"></i>Genk, België</li>
+        </ul>  
                     </div>
                 </div>
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
@@ -549,6 +511,102 @@
                 </div>
             </div>
         </footer>
-    </div>
+        </div>
+
+    <script>
+        // Start van JavaScript voor de calculator (behouden van de originele functionaliteit)
+        document.addEventListener('DOMContentLoaded', function() {
+            const printTimeInput = document.getElementById('print-time');
+            const materialWeightInput = document.getElementById('material-weight');
+            const materialTypeSelect = document.getElementById('material-type');
+            const postProcessingCheckbox = document.getElementById('post-processing');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultContainer = document.getElementById('result-container');
+
+            const costTimeSpan = document.getElementById('cost-time');
+            const costMaterialSpan = document.getElementById('cost-material');
+            const costPostProcessingSpan = document.getElementById('cost-post-processing');
+            const materialRateDisplaySpan = document.getElementById('material-rate-display');
+            const totalPriceSpan = document.getElementById('total-price');
+
+            // Vaste tarieven
+            const RATE_TIME_PER_HOUR = 0.50; // € per uur (stroom, slijtage, afschrijving)
+            const RATE_POST_PROCESSING_PER_HOUR = 15.00; // € per uur voor nabewerking
+            const COST_SETUP = 2.00; // Vaste opstartkost
+
+            function formatCurrency(value) {
+                return `€ ${value.toFixed(2)}`;
+            }
+
+            function calculatePrice() {
+                // 1. Haal de invoerwaarden op
+                let printTime = parseFloat(printTimeInput.value) || 0;
+                let materialWeight = parseFloat(materialWeightInput.value) || 0;
+                let materialPricePerKg = parseFloat(materialTypeSelect.options[materialTypeSelect.selectedIndex].getAttribute('data-price')) || 0;
+                let isPostProcessing = postProcessingCheckbox.checked;
+
+                // Zorg ervoor dat printtijd en gewicht positief zijn
+                printTime = Math.max(0, printTime);
+                materialWeight = Math.max(0, materialWeight);
+                
+                // 2. Bereken de kostencomponenten
+
+                // A. Kosten Printtijd (minimaal 1 uur voor de berekening, zelfs als de invoer lager is, of 0.5 euro als minimum)
+                // We gebruiken 0.50 €/uur. 
+                let costTime = printTime * RATE_TIME_PER_HOUR;
+                costTime = Math.max(0.50, costTime); // Minimale kost voor printtijd
+
+                // B. Kosten Materiaal (Gewicht in kg * Prijs per kg)
+                // 1000 gram = 1 kg
+                let materialWeightKg = materialWeight / 1000;
+                let costMaterial = materialWeightKg * materialPricePerKg;
+                costMaterial = Math.max(0.01, costMaterial); // Minimum kost is 1 cent
+
+                // C. Kosten Nabewerking
+                // Voor deze eenvoudige calculator gaan we uit van 1 uur nabewerking als de optie is aangevinkt
+                let costPostProcessing = isPostProcessing ? RATE_POST_PROCESSING_PER_HOUR : 0.00;
+                let postProcessingTime = isPostProcessing ? 1 : 0; // 1 uur voor deze demo
+
+                // D. Opstartkosten (Vast)
+                let costSetup = COST_SETUP;
+
+                // 3. Totale Prijs
+                let totalPrice = costTime + costMaterial + costPostProcessing + costSetup;
+
+                // 4. Update de resultaatweergave
+                costTimeSpan.textContent = formatCurrency(costTime);
+                costMaterialSpan.textContent = formatCurrency(costMaterial);
+                costPostProcessingSpan.textContent = formatCurrency(costPostProcessing);
+                materialRateDisplaySpan.textContent = formatCurrency(materialPricePerKg);
+                totalPriceSpan.textContent = formatCurrency(totalPrice);
+                
+                // Pas de weergave van de nabewerkingsrij aan
+                const postProcessingRow = document.getElementById('post-processing-row');
+                if (isPostProcessing) {
+                    postProcessingRow.style.display = 'flex';
+                } else {
+                    postProcessingRow.style.display = 'none';
+                }
+
+
+                // Toon de resultaatcontainer
+                resultContainer.classList.remove('hidden');
+            }
+
+            // Event Listeners
+            calculateBtn.addEventListener('click', calculatePrice);
+            
+            // Bereken automatisch bij wijziging van de invoervelden
+            const inputs = [printTimeInput, materialWeightInput, materialTypeSelect, postProcessingCheckbox];
+            inputs.forEach(input => {
+                input.addEventListener('change', calculatePrice);
+                input.addEventListener('keyup', calculatePrice);
+            });
+
+            // Initieel berekenen bij het laden van de pagina met default waarden
+            calculatePrice();
+        });
+        // Einde van JavaScript
+    </script>
 </body>
 </html>
