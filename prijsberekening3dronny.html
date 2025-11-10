@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <style>
+        /* [Behoud alle bestaande CSS styles] */
         * {
             margin: 0;
             padding: 0;
@@ -315,6 +316,17 @@
             display: none;
         }
         
+        .manual-weight-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .manual-weight-toggle input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -382,12 +394,12 @@
                 <div class="form-group">
                     <label for="material">Materiaal</label>
                     <select id="material">
-                        <option value="pla">PLA (€0.05 per cm³)</option>
-                        <option value="petg">PETG (€0.07 per cm³)</option>
-                        <option value="abs">ABS (€0.06 per cm³)</option>
-                        <option value="tpu">TPU (€0.09 per cm³)</option>
-                        <option value="nylon">Nylon (€0.11 per cm³)</option>
-                        <option value="resin">Resin (€0.15 per cm³)</option>
+                        <option value="pla">PLA (€0.05 per gram)</option>
+                        <option value="petg">PETG (€0.07 per gram)</option>
+                        <option value="abs">ABS (€0.06 per gram)</option>
+                        <option value="tpu">TPU (€0.09 per gram)</option>
+                        <option value="nylon">Nylon (€0.11 per gram)</option>
+                        <option value="resin">Resin (€0.15 per gram)</option>
                     </select>
                 </div>
                 
@@ -402,21 +414,12 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="infill">Infill Percentage</label>
-                    <select id="infill">
-                        <option value="10">10% (Zeer licht)</option>
-                        <option value="20">20% (Licht)</option>
-                        <option value="30" selected>30% (Medium)</option>
-                        <option value="50">50% (Sterk)</option>
-                        <option value="80">80% (Zeer sterk)</option>
-                        <option value="100">100% (Massief)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="volume-correction">Volume Correctie Factor</label>
-                    <input type="number" id="volume-correction" value="2.67" step="0.01" min="0.1" max="10">
-                    <small style="color: #666; font-size: 0.9rem;">Pas deze factor aan als het volume niet overeenkomt met je slicer</small>
+                    <div class="manual-weight-toggle">
+                        <input type="checkbox" id="use-manual-weight">
+                        <label for="use-manual-weight" style="margin-bottom: 0;">Handmatig gewicht invoeren</label>
+                    </div>
+                    <input type="number" id="manual-weight" placeholder="Voer gewicht in gram in" step="0.1" min="0" disabled>
+                    <small style="color: #666; display: block; margin-top: 5px;">Vink aan om het gewicht uit je slicer in te voeren voor perfecte berekening</small>
                 </div>
                 
                 <button class="btn btn-secondary" id="calculate-btn">Bereken Prijs</button>
@@ -450,7 +453,7 @@
                 
                 <div class="price-breakdown">
                     <div class="breakdown-item">
-                        <div class="breakdown-title">Gewicht (<span id="current-infill">30</span>% infill)</div>
+                        <div class="breakdown-title">Gewicht</div>
                         <div class="breakdown-value" id="print-weight">0 g</div>
                     </div>
                     <div class="breakdown-item">
@@ -479,17 +482,22 @@
     </div>
 
     <script>
-        // CORRECTIE: Materiaal dichtheden in g/cm³ - zonder onnodige vermenigvuldiging
-        const materialDensities = {
-            'pla': 1.24,    // PLA: 1.24 g/cm³
-            'petg': 1.27,   // PETG: 1.27 g/cm³
-            'abs': 1.05,    // ABS: 1.05 g/cm³
-            'tpu': 1.21,    // TPU: 1.21 g/cm³
-            'nylon': 1.14,  // Nylon: 1.14 g/cm³
-            'resin': 1.12   // Resin: 1.12 g/cm³
+        // Materiaal prijzen per GRAM (niet per cm³)
+        const materialPricesPerGram = {
+            'pla': 0.05 / 1.24,   // €0.05 per cm³ => €0.0403 per gram
+            'petg': 0.07 / 1.27,  // €0.07 per cm³ => €0.0551 per gram
+            'abs': 0.06 / 1.05,   // €0.06 per cm³ => €0.0571 per gram
+            'tpu': 0.09 / 1.21,   // €0.09 per cm³ => €0.0744 per gram
+            'nylon': 0.11 / 1.14, // €0.11 per cm³ => €0.0965 per gram
+            'resin': 0.15 / 1.12  // €0.15 per cm³ => €0.1339 per gram
         };
 
-        // Eenvoudige STL Parser
+        // Dichtheden voor referentie
+        const materialDensities = {
+            'pla': 1.24, 'petg': 1.27, 'abs': 1.05, 'tpu': 1.21, 'nylon': 1.14, 'resin': 1.12
+        };
+
+        // Eenvoudige STL Parser (zelfde als voorheen)
         class SimpleSTLParser {
             static parseSTL(arrayBuffer) {
                 const dataView = new DataView(arrayBuffer);
@@ -557,7 +565,7 @@
             }
         }
 
-        // VERBETERDE Volume berekening voor STL
+        // Volume berekening voor STL
         function calculateSTLVolume(geometry) {
             const positions = geometry.attributes.position.array;
             const indices = geometry.index ? geometry.index.array : null;
@@ -586,38 +594,28 @@
                 }
             }
             
-            // CORRECTIE: Gebruik de correctiefactor
-            const correctionFactor = parseFloat(document.getElementById('volume-correction').value) || 1;
-            return Math.abs(volume) / 1000 * correctionFactor;
-        }
-
-        // Update infill display
-        function updateInfillDisplay() {
-            const infillValue = document.getElementById('infill').value;
-            document.getElementById('current-infill').textContent = infillValue;
-            document.getElementById('current-infill-display').textContent = infillValue;
-            
-            // Update ook het gewicht in file-info als er een model geladen is
-            if (stlFile) {
-                updateWeightDisplay();
-            }
+            return Math.abs(volume) / 1000;
         }
 
         // Update gewichtsdisplay
         function updateWeightDisplay() {
             if (!stlFile) return;
             
-            const material = document.getElementById('material').value;
-            const density = materialDensities[material];
-            const infill = parseInt(document.getElementById('infill').value) / 100;
-            const volume = stlFile.volume;
+            const useManualWeight = document.getElementById('use-manual-weight').checked;
             
-            // CORRECTIE: Gebruik het juiste infill percentage
-            const weight = volume * density * infill;
-            document.getElementById('file-weight').textContent = weight.toFixed(2) + ' g';
-            
-            // Update ook het globale stlFile object
-            stlFile.weight = weight;
+            if (useManualWeight) {
+                const manualWeight = parseFloat(document.getElementById('manual-weight').value) || 0;
+                document.getElementById('file-weight').textContent = manualWeight.toFixed(2) + ' g (handmatig)';
+                stlFile.weight = manualWeight;
+            } else {
+                const material = document.getElementById('material').value;
+                const density = materialDensities[material];
+                const volume = stlFile.volume;
+                const weight = volume * density * 0.30; // 30% infill voor display
+                
+                document.getElementById('file-weight').textContent = weight.toFixed(2) + ' g (geschat)';
+                stlFile.weight = weight;
+            }
         }
 
         // Globale variabelen
@@ -625,7 +623,7 @@
         let stlFile = null;
         let isViewerInitialized = false;
         
-        // Initialisatie van de 3D viewer
+        // Initialisatie van de 3D viewer (zelfde als voorheen)
         function initViewer() {
             if (isViewerInitialized) return;
             
@@ -678,7 +676,7 @@
             isViewerInitialized = true;
         }
         
-        // Automatische oriëntatie
+        // Automatische oriëntatie (zelfde als voorheen)
         function autoOrientModel() {
             if (!model) return;
             
@@ -709,7 +707,7 @@
             controls.update();
         }
         
-        // STL-bestand laden
+        // STL-bestand laden (zelfde als voorheen)
         function loadSTL(file) {
             if (!file) {
                 showError('Geen bestand geselecteerd.');
@@ -813,7 +811,6 @@
             document.getElementById('file-dimensions').textContent = 
                 `${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
             
-            // CORRECTIE: Gebruik het geselecteerde infill percentage voor gewichtsberekening
             updateWeightDisplay();
             
             stlFile = {
@@ -858,7 +855,7 @@
             document.getElementById('success-message').style.display = 'none';
         }
         
-        // Prijs berekenen
+        // Prijs berekenen - NU GEBASEERD OP GEWICHT
         function calculatePrice() {
             if (!stlFile) {
                 document.getElementById('material-cost').textContent = '€0.00';
@@ -869,32 +866,35 @@
                 return;
             }
             
-
-            const materialPrices = {
-                'pla': 0.05, 'petg': 0.07, 'abs': 0.06, 'tpu': 0.09, 'nylon': 0.11, 'resin': 0.15
-            };
-            
             const material = document.getElementById('material').value;
-            const materialPrice = materialPrices[material];
-            const density = materialDensities[material];
-            const infill = parseInt(document.getElementById('infill').value) / 100;
-            const volume = stlFile.volume;
+            const materialPricePerGram = materialPricesPerGram[material];
             
-            updateInfillDisplay();
+            // Bepaal gewicht - handmatig of automatisch
+            const useManualWeight = document.getElementById('use-manual-weight').checked;
+            let weight;
             
-            // CORRECTIE: Gebruik hetzelfde gewicht als in file-info
-            const weight = volume * infill * density;
+            if (useManualWeight) {
+                weight = parseFloat(document.getElementById('manual-weight').value) || 0;
+            } else {
+                // Automatische berekening op basis van volume
+                const density = materialDensities[material];
+                const volume = stlFile.volume;
+                weight = volume * density * 0.30; // 30% infill voor kostenberekening
+            }
+            
             document.getElementById('print-weight').textContent = weight.toFixed(2) + ' g';
             
-            const materialCost = volume * infill * materialPrice;
+            // Materiaalkosten direct op basis van gewicht
+            const materialCost = weight * materialPricePerGram;
             
+            // Printtijd gebaseerd op volume (blijft hetzelfde)
             const qualityMultipliers = {
                 'draft': 0.7, 'standard': 1, 'high': 1.5, 'ultra': 2.5
             };
             
             const quality = document.getElementById('quality').value;
             const qualityMultiplier = qualityMultipliers[quality];
-            const printTime = volume * 0.05 * qualityMultiplier;
+            const printTime = stlFile.volume * 0.05 * qualityMultiplier;
             const machineCost = printTime * 2;
             const setupCost = 5.00;
             const totalCost = materialCost + machineCost + setupCost;
@@ -969,27 +969,32 @@
                 autoOrientModel();
             });
             
+            // Handmatig gewicht toggle
+            document.getElementById('use-manual-weight').addEventListener('change', function() {
+                const manualWeightInput = document.getElementById('manual-weight');
+                manualWeightInput.disabled = !this.checked;
+                
+                if (this.checked) {
+                    manualWeightInput.focus();
+                }
+                
+                updateWeightDisplay();
+                calculatePrice();
+            });
+            
+            // Handmatig gewicht input
+            document.getElementById('manual-weight').addEventListener('input', function() {
+                updateWeightDisplay();
+                calculatePrice();
+            });
+            
             document.getElementById('material').addEventListener('change', function() {
                 updateWeightDisplay();
                 calculatePrice();
             });
             
             document.getElementById('quality').addEventListener('change', calculatePrice);
-            document.getElementById('infill').addEventListener('change', function() {
-                updateWeightDisplay();
-                calculatePrice();
-            });
-
-            // NIEUW: Event listener voor volume correctie
-            document.getElementById('volume-correction').addEventListener('change', function() {
-                if (stlFile) {
-                    // Herbereken volume met nieuwe correctiefactor
-                    const geometry = model.geometry;
-                    updateFileInfo(stlFile.file, geometry);
-                }
-            });
             
-            updateInfillDisplay();
             calculatePrice();
         });
     </script>
