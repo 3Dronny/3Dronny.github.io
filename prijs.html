@@ -160,7 +160,7 @@
             shininess: 30 
         });
 
-        // *** 1. Prijsberekening Logica (ongewijzigd) ***
+        // *** 1. Prijsberekening Logica *** (ongewijzigd)
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -184,7 +184,8 @@
         });
 
 
-        // *** 2. Professionele 3D Viewer Logica (AANGEPAST) ***
+        // --- 2. Professionele 3D Viewer Logica ---
+
         const viewerContainer = document.getElementById('viewer-container');
         const fileUpload = document.getElementById('file-upload');
         const resetButton = document.getElementById('reset-view-btn'); 
@@ -254,26 +255,23 @@
         function resetView() {
             if (!controls || !object) return;
 
-            let geometryToBound = object.isMesh ? object.geometry : new THREE.Box3().setFromObject(object);
+            // Bounding Box berekening van het hele object
+            const box = new THREE.Box3().setFromObject(object);
 
-            if (geometryToBound.isBox3) { // 3MF (Group)
-                const size = new THREE.Vector3();
-                geometryToBound.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const distance = maxDim * 1.5; 
-                defaultCameraDistance = distance;
-            } else { // STL (Geometry)
-                if (!geometryToBound.boundingBox) geometryToBound.computeBoundingBox();
-                const size = new THREE.Vector3();
-                geometryToBound.boundingBox.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const distance = maxDim * 1.5; 
-                defaultCameraDistance = distance;
-            }
+            if (box.isEmpty()) return; // Geen object geladen
+
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            const maxDim = Math.max(size.x, size.y, size.z);
+            
+            // Stel de afstand in op basis van de grootste dimensie
+            const distance = maxDim * 1.5; 
+            defaultCameraDistance = distance;
 
             // Reset de camera positie en target
             controls.reset();
-            camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.5, defaultCameraDistance * 1.5);
+            // Plaats de camera op een optimale afstand en hoek
+            camera.position.set(distance, distance * 0.5, distance * 1.5);
             controls.target.set(0, 0, 0);
             controls.update();
         }
@@ -289,7 +287,6 @@
             // Verwijder vorig model
             if (object) {
                 scene.remove(object);
-                // Object materialen en geometrie opruimen is belangrijk
                 object.traverse(child => {
                     if (child.isMesh) {
                         if (child.geometry) child.geometry.dispose();
@@ -309,28 +306,36 @@
 
             reader.onload = function(e) {
                 let model;
-                let geometryToBound; // Referentie voor de Bounding Box berekening
                 
                 if (fileName.endsWith('.stl')) {
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(e.target.result);
                     
+                    // STL Geometrie centreren
+                    geometry.computeBoundingBox();
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    geometry.translate(-center.x, -center.y, -center.z);
+
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
-                    geometryToBound = geometry; // STL gebruikt de geometrie voor centreren
 
                 } else if (fileName.endsWith('.3mf')) {
                     const loader = new THREE.ThreeMFLoader();
                     model = loader.parse(e.target.result);
                     
-                    // *** FIX: LOOP DOOR ELK ONDERDEEL OM MATERIAAL TE GARANDEREN ***
+                    // *** FIX V2: Garandeer dat elk mesh de accentkleur krijgt ***
                     model.traverse(function(child) {
                         if (child.isMesh) {
-                            // Dwing de accentkleur af
+                            // Dwing het materiaal af, negeer de ingebouwde kleur van de 3MF
                             child.material = DEFAULT_MESH_MATERIAL; 
                         }
                     });
-                    
-                    geometryToBound = new THREE.Box3().setFromObject(model); // 3MF gebruikt de Group (Box3)
+
+                    // Centrering van de Group (3MF)
+                    const box = new THREE.Box3().setFromObject(model);
+                    const center = new THREE.Vector3();
+                    box.getCenter(center);
+                    model.position.sub(center); 
 
                 } else {
                     alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
@@ -339,19 +344,7 @@
                 
                 // Model toevoegen
                 scene.add(model);
-                object = model; // Houd de referentie vast
-                
-                // Centreren 
-                if (geometryToBound.isBox3) { // 3MF (Group)
-                    const center = new THREE.Vector3();
-                    geometryToBound.getCenter(center);
-                    object.position.sub(center); 
-                } else { // STL (Geometry)
-                    geometryToBound.computeBoundingBox();
-                    const center = new THREE.Vector3();
-                    geometryToBound.boundingBox.getCenter(center);
-                    geometryToBound.translate(-center.x, -center.y, -center.z);
-                }
+                object = model; 
                 
                 // Roep resetView aan om de camera optimaal in te stellen na het laden
                 resetView();
@@ -361,6 +354,5 @@
             reader.readAsArrayBuffer(file);
         });
     </script>
-
 </body>
 </html>
