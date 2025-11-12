@@ -179,11 +179,11 @@
         // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
-        // Standaard materiaal voor modellen - NU WIT voor maximale zichtbaarheid!
+        // Standaard materiaal voor modellen - WIT voor maximale zichtbaarheid!
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0xffffff, // Wit
-            specular: 0xcccccc, // Verhoogde speculaire reflectie
-            shininess: 100,      // Scherpe reflectie
+            specular: 0xcccccc, 
+            shininess: 100,      
         });
 
         // Laad-indicator
@@ -231,7 +231,6 @@
 
             // Camera
             camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
-            // Een standaard camerapositie
             camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
             camera.lookAt(scene.position);
 
@@ -247,15 +246,22 @@
             viewerContainer.appendChild(renderer.domElement);
 
             // Belichting - Intensiteit iets verhoogd
-            scene.add(new THREE.AmbientLight(0x666666)); // Hogere Ambient Light
-            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.7); // Hogere intensiteit
+            scene.add(new THREE.AmbientLight(0x666666)); 
+            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.7); 
             scene.add(hemisphereLight);
-            const keyLight = new THREE.DirectionalLight(0xffffff, 2.0); // Hogere Key Light
+            const keyLight = new THREE.DirectionalLight(0xffffff, 2.0); 
             keyLight.position.set(200, 200, 200);
             scene.add(keyLight);
-            const fillLight = new THREE.DirectionalLight(0xffffff, 1.0); // Hogere Fill Light
+            const fillLight = new THREE.DirectionalLight(0xffffff, 1.0); 
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
+
+            // *** DEBUG: Voeg een Grondvlak toe (Grid Helper) ***
+            // Als de viewer werkt, moet je dit rood/witte rooster zien
+            const size = 100;
+            const divisions = 10;
+            const gridHelper = new THREE.GridHelper(size, divisions, 0xff0000, 0xaaaaaa); // Rood en grijs
+            scene.add(gridHelper);
 
             // Camera Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -263,7 +269,7 @@
             controls.dampingFactor = 0.15;
             controls.screenSpacePanning = true; 
             controls.minDistance = 5;
-            controls.maxDistance = 1000; 
+            controls.maxDistance = 5000; // Maximale afstand verhoogd
 
             // Animate Loop
             function animate() {
@@ -285,12 +291,14 @@
         }
         
         function resetView() {
-            // Als er geen object is, reset dan naar een standaardpositie
             if (!controls || !object) {
-                 controls.reset();
-                 camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
-                 controls.target.set(0, 0, 0);
-                 controls.update();
+                 // Reset naar de standaardpositie, essentieel als er nog geen object is
+                 if (controls) {
+                     controls.reset();
+                     camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
+                     controls.target.set(0, 0, 0);
+                     controls.update();
+                 }
                  return;
             }
 
@@ -309,8 +317,8 @@
 
             // Reset de camera positie en target
             controls.reset();
-            camera.position.set(distance, distance * 0.75, distance * 1.5); // Iets hogere startpositie
-            controls.target.set(0, 0, 0);
+            controls.target.set(box.min.x + size.x / 2, box.min.y + size.y / 2, box.min.z + size.z / 2); // Target het midden van de box
+            camera.position.set(distance, distance * 0.75, distance * 1.5); 
             controls.update();
         }
         
@@ -324,7 +332,7 @@
 
             if (!renderer) {
                  console.error("3D viewer nog niet klaar.");
-                 alert("Fout: De 3D viewer is nog niet correct gestart. Wacht tot de pagina volledig geladen is.");
+                 alert("Fout: De 3D viewer is nog niet correct gestart.");
                  return;
             }
             
@@ -352,7 +360,6 @@
             let model = null;
 
             try {
-                // Lees het bestand als ArrayBuffer
                 const reader = new FileReader();
                 const data = await new Promise((resolve, reject) => {
                     reader.onload = (e) => resolve(e.target.result);
@@ -408,22 +415,29 @@
                 if (model) {
                     scene.add(model);
                     object = model; 
-                    resetView(); // Zorgt ervoor dat de camera inzoomt op het nieuwe object
+                    
+                    // *** DEBUG: Modelafmetingen loggen ***
+                    const box = new THREE.Box3().setFromObject(object);
+                    const size = new THREE.Vector3();
+                    box.getSize(size);
+                    console.log(`✅ Model succesvol geladen! Afmetingen (X, Y, Z): ${size.x.toFixed(2)}, ${size.y.toFixed(2)}, ${size.z.toFixed(2)}`);
+
+                    resetView(); 
                 }
 
             } catch (error) {
-                console.error("Fout bij het laden van het 3D-model:", error);
+                console.error("❌ FOUT BIJ HET LADEN VAN HET 3D-MODEL:", error);
                 
                 let detailedMessage = error.message;
                 alert(`Er is een fout opgetreden bij het laden van het model. (Details: ${detailedMessage})`); 
             } finally {
-                loadingIndicator.classList.add('hidden'); // Verberg laad-indicator
+                loadingIndicator.classList.add('hidden'); 
             }
         });
 
-        // Start de viewer pas als alles is geladen
-        window.addEventListener('load', initViewer);
-        window.addEventListener('load', resetView); // Voer een reset uit bij de start
+        // *** FIX: Gebruik DOMContentLoaded voor snellere, betrouwbare initialisatie ***
+        document.addEventListener('DOMContentLoaded', initViewer);
+        // We roepen resetView() aan direct na initViewer() in het DOMContentLoaded event
     </script>
 </body>
 </html>
