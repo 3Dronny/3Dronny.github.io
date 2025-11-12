@@ -172,15 +172,15 @@
         } else {
             console.log("Three.js, OrbitControls en STLLoader zijn succesvol geladen.");
 
-            // Kleurcode ophalen
-            const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+            // Definitieve Groene Kleur: Heldermintgroen (vast)
+            const MODEL_COLOR = 0x00ff88; 
 
-            // Standaard materiaal voor modellen (Groen en glanzend)
+            // Standaard materiaal voor modellen
             const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-                color: new THREE.Color(ACCENT_COLOR_HEX), // Gebruik de groene accentkleur
-                emissive: new THREE.Color(0x05100c),      // Subtiele donkergroene gloed voor diepte (verminderd)
-                specular: new THREE.Color(0x66ccaa),      // Glanzende highlights, lichtgroen voor een metaalachtige look
-                shininess: 100,                           // Glans intensiteit
+                color: new THREE.Color(MODEL_COLOR), 
+                emissive: new THREE.Color(0x05100c),      
+                specular: new THREE.Color(0xffffff),      // Specular ingesteld op wit voor neutrale glans
+                shininess: 120,                           // Glans intensiteit
             });
 
             // Elementen
@@ -203,9 +203,9 @@
                 const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
                 const vulling = parseFloat(document.getElementById('vulling').value);
                 
-                // CONSTANTES: Pas deze waarden aan naar uw bedrijfskosten
-                const COST_PER_GRAM_FILAMENT = 0.10; // €0.10 per gram (materiaal)
-                const COST_PER_HOUR_PRINTER = 4.00; // €4.00 per uur (afschrijving, stroom, arbeid)
+                // CONSTANTES
+                const COST_PER_GRAM_FILAMENT = 0.10; 
+                const COST_PER_HOUR_PRINTER = 4.00; 
 
                 if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
 
@@ -246,23 +246,25 @@
                 }
                 viewerContainer.appendChild(renderer.domElement);
 
-                // Belichting - Verhoogde intensiteit voor meer contrast
-                scene.add(new THREE.AmbientLight(0x404040, 3.5)); // Omgevingslicht
+                // --- Belichting Optimalisatie ---
+                scene.add(new THREE.AmbientLight(0xffffff, 0.7)); // Subtiel wit omgevingslicht, iets sterker
                 
-                const mainLight = new THREE.DirectionalLight(0xffffff, 4.5); // Hoofdlicht (sterker)
+                // Hoofdlicht: Krachtig en van boven/rechts
+                const mainLight = new THREE.DirectionalLight(0xffffff, 4.0); 
                 mainLight.position.set(200, 300, 200);
                 scene.add(mainLight);
                 
-                const fillLight = new THREE.DirectionalLight(0xddddff, 3.0); // Invullicht (sterker)
-                fillLight.position.set(-200, -300, -200);
+                // Secundair licht: Contrast en reliëf (van onder/links/achter)
+                const fillLight = new THREE.DirectionalLight(0xffffff, 2.5); 
+                fillLight.position.set(-200, -200, -200);
                 scene.add(fillLight);
-
-                // DEBUG VISUAL: Grondrooster (NU VERWIJDERD)
-                // const size = 100;
-                // const divisions = 10;
-                // const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
-                // scene.add(gridHelper);
                 
+                // Extra licht voor highlights aan de voorkant (subtiel)
+                const rimLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                rimLight.position.set(0, 0, 300);
+                scene.add(rimLight);
+                // --------------------------------
+
                 // Camera Controls 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true; 
@@ -280,7 +282,7 @@
                 animate();
                 
                 window.addEventListener('resize', onWindowResize, false);
-                console.log("Stap 2: Viewer gestart. Grid verwijderd, verbeterde verlichting.");
+                console.log("Stap 2: Viewer gestart. Geoptimaliseerde belichting.");
             }
             
             function onWindowResize() {
