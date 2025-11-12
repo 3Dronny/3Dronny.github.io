@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/3MFLoader.js"></script>
     <style>
         /* Jouw Gewenste Groene Accentkleur */
         :root {
@@ -32,7 +33,7 @@
         #viewer-container {
             width: 100%;
             height: 600px;
-            background-color: #0f172a; /* Zwart-blauwe professionele achtergrond */
+            background-color: #0f172a; 
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -82,16 +83,16 @@
                 </h2>
                 
                 <div id="viewer-container">
-                    <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL-bestand om de 3D-viewer te starten.</p>
+                    <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL- of 3MF-bestand om de 3D-viewer te starten.</p>
                 </div>
                 
                 <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                    <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
+                    <input type="file" id="file-upload" accept=".stl,.3mf" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
                     <button id="reset-view-btn" class="btn-reset p-2 rounded-lg font-semibold whitespace-nowrap">
                         <i class="fas fa-sync-alt mr-2"></i>Reset View
                     </button>
                 </div>
-                <p class="text-sm text-gray-400 mt-2">Ondersteund formaat: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
+                <p class="text-sm text-gray-400 mt-2">Ondersteunde formaten: **STL** en **3MF**. Gebruik de muis om te draaien, zoomen en pannen.</p>
             </div>
 
             <div class="lg:col-span-2 lg:order-2">
@@ -152,7 +153,7 @@
         // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
-        // *** 1. Prijsberekening Logica ***
+        // *** 1. Prijsberekening Logica (ongewijzigd) ***
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -176,13 +177,13 @@
         });
 
 
-        // *** 2. Professionele 3D Viewer Logica ***
+        // *** 2. Professionele 3D Viewer Logica (AANGEPAST) ***
         const viewerContainer = document.getElementById('viewer-container');
         const fileUpload = document.getElementById('file-upload');
-        const resetButton = document.getElementById('reset-view-btn'); // Nieuwe knop
+        const resetButton = document.getElementById('reset-view-btn'); 
         let scene, camera, renderer, controls;
         let object; 
-        let defaultCameraDistance = 100; // Standaardafstand voor de camera
+        let defaultCameraDistance = 100; 
 
         function initViewer() {
             // Scene
@@ -191,7 +192,7 @@
 
             // Camera
             camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
-            camera.position.set(defaultCameraDistance, defaultCameraDistance, defaultCameraDistance); // Initiele positie
+            camera.position.set(defaultCameraDistance, defaultCameraDistance, defaultCameraDistance); 
             camera.lookAt(scene.position);
 
             // Renderer
@@ -215,7 +216,6 @@
             const fillLight = new THREE.DirectionalLight(0xffffff, 0.7);
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
-
 
             // Camera Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -244,14 +244,14 @@
             }
         }
         
-        // Functie om de camera te resetten naar de beginpositie
         function resetView() {
             if (!controls || !object) return;
 
-            // Als er een object is geladen, bereken opnieuw de optimale afstand
             if (object) {
-                const geometry = object.geometry;
-                geometry.computeBoundingBox();
+                // Bereken de maat van het object (Bounding Box)
+                let geometry = object.geometry;
+                if (!geometry.boundingBox) geometry.computeBoundingBox();
+                
                 const size = new THREE.Vector3();
                 geometry.boundingBox.getSize(size);
                 const maxDim = Math.max(size.x, size.y, size.z);
@@ -266,7 +266,7 @@
             controls.update();
         }
         
-        // Event listener voor de nieuwe reset knop
+
         resetButton.addEventListener('click', resetView);
         
         initViewer(); 
@@ -282,36 +282,74 @@
                 object.material.dispose();
             }
 
+            const fileName = file.name.toLowerCase();
             const reader = new FileReader();
-            reader.onload = function(e) {
-                if (file.name.toLowerCase().endsWith('.stl')) {
-                    
-                    const loader = new THREE.STLLoader();
-                    const geometry = loader.parse(e.target.result);
-                    
-                    // Bereken bounding box en centreer de geometrie
-                    geometry.computeBoundingBox();
-                    const center = new THREE.Vector3();
-                    geometry.boundingBox.getCenter(center);
-                    geometry.translate(-center.x, -center.y, -center.z);
 
-                    // Materiaal met JOUW ACCENTKLEUR
-                    const material = new THREE.MeshPhongMaterial({ 
-                        color: new THREE.Color(ACCENT_COLOR_HEX), // NU GEEL IN PLAATS VAN WIT
+            reader.onload = function(e) {
+                let model;
+                let material;
+                let geometry;
+                
+                if (fileName.endsWith('.stl')) {
+                    const loader = new THREE.STLLoader();
+                    geometry = loader.parse(e.target.result);
+                    
+                    // Materiaal met accentkleur voor STL
+                    material = new THREE.MeshPhongMaterial({ 
+                        color: new THREE.Color(ACCENT_COLOR_HEX),
                         specular: 0x444444, 
                         shininess: 30 
                     });
                     
-                    object = new THREE.Mesh(geometry, material);
-                    scene.add(object);
+                    model = new THREE.Mesh(geometry, material);
+
+                } else if (fileName.endsWith('.3mf')) {
+                    const loader = new THREE.ThreeMFLoader();
+                    model = loader.parse(e.target.result);
+                    // 3MF modellen kunnen al materiaal/kleurinformatie bevatten.
+                    // Als het geen eigen kleur heeft, overschrijven we het met de accentkleur.
+                    if (!model.children.length || !model.children[0].material) {
+                        model.traverse(function(child) {
+                            if (child.isMesh) {
+                                child.material = new THREE.MeshPhongMaterial({ 
+                                    color: new THREE.Color(ACCENT_COLOR_HEX), 
+                                    specular: 0x444444, 
+                                    shininess: 30 
+                                });
+                            }
+                        });
+                    }
                     
-                    // Roep resetView aan om de camera optimaal in te stellen na het laden
-                    resetView();
+                    // Gebruik de bounding box van de hele Group (model)
+                    geometry = new THREE.Box3().setFromObject(model);
 
                 } else {
-                    alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL-bestand.");
+                    alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
+                    return;
                 }
+                
+                // Model toevoegen
+                scene.add(model);
+                object = model; // Houd de referentie vast
+                
+                // Centreren en Camera aanpassen
+                if (geometry.isBox3) { // 3MF
+                    const center = new THREE.Vector3();
+                    geometry.getCenter(center);
+                    object.position.sub(center); // Model centreren
+                } else { // STL
+                    geometry.computeBoundingBox();
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    geometry.translate(-center.x, -center.y, -center.z);
+                }
+                
+                // Roep resetView aan om de camera optimaal in te stellen na het laden
+                resetView();
+
             };
+            
+            // Lees het bestand als ArrayBuffer voor Three.js Loaders
             reader.readAsArrayBuffer(file);
         });
     </script>
