@@ -180,7 +180,7 @@
         // Laad-indicator
         const loadingIndicator = document.getElementById('loading-indicator');
 
-        // *** 1. Prijsberekening Logica *** (ongewijzigd)
+        // *** 1. Prijsberekening Logica ***
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -327,13 +327,16 @@
             let model = null;
 
             try {
-                if (fileName.endsWith('.stl')) {
-                    const reader = new FileReader();
-                    const data = await new Promise(resolve => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.readAsArrayBuffer(file);
-                    });
+                // Lees het bestand als ArrayBuffer, dit is essentieel voor zowel STL als 3MF parse methodes
+                const reader = new FileReader();
+                const data = await new Promise((resolve, reject) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(new Error("Fout bij het lezen van het bestand."));
+                    reader.readAsArrayBuffer(file);
+                });
 
+
+                if (fileName.endsWith('.stl')) {
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     
@@ -347,36 +350,26 @@
                     
                 } else if (fileName.endsWith('.3mf')) {
                     
-                    // *** NIEUWE AANPAK: Gebruik van de .load methode met een Object URL ***
-                    const objectURL = URL.createObjectURL(file);
+                    // *** FIX V5: Terug naar de stabiele ArrayBuffer en .parse() ***
                     const loader = new THREE.ThreeMFLoader();
                     
-                    model = await new Promise((resolve, reject) => {
-                        loader.load(objectURL, 
-                            function (group) {
-                                // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid
-                                group.traverse(function(child) {
-                                    if (child.isMesh) {
-                                        child.material = DEFAULT_MESH_MATERIAL;
-                                    }
-                                });
+                    // De .parse() methode is nu direct de bron van de fout.
+                    // Als dit faalt, ligt het aan de bestandsstructuur en de loader-versie.
+                    model = loader.parse(data); 
 
-                                // 2. Centrering van de Group
-                                const box = new THREE.Box3().setFromObject(group);
-                                const center = new THREE.Vector3();
-                                box.getCenter(center);
-                                group.position.sub(center); 
-                                
-                                resolve(group);
-                            },
-                            undefined, // Progress is niet nodig
-                            function (error) {
-                                reject(error);
-                            }
-                        );
+                    // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid
+                    model.traverse(function(child) {
+                        if (child.isMesh) {
+                            // Dwing nieuw groen materiaal af
+                            child.material = DEFAULT_MESH_MATERIAL;
+                        }
                     });
-                    
-                    URL.revokeObjectURL(objectURL); // Opschonen
+
+                    // 2. Centrering van de Group (model)
+                    const box = new THREE.Box3().setFromObject(model);
+                    const center = new THREE.Vector3();
+                    box.getCenter(center);
+                    model.position.sub(center); 
                     
                 } else {
                     alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
@@ -390,8 +383,9 @@
                 }
 
             } catch (error) {
-                console.error("Fout bij het laden van het 3D-model:", error);
-                alert("Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is.");
+                console.error("Fout bij het laden van het 3D-model (3MF):", error);
+                // Toon de specifieke foutmelding
+                alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${error.message})`); 
             } finally {
                 loadingIndicator.classList.add('hidden'); // Verberg laad-indicator
             }
