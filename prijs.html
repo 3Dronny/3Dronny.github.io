@@ -8,17 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js"></script> 
-
-    <script type="module">
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
-
-        // Maak de geïmporteerde modules globaal beschikbaar
-        window.THREE.OrbitControls = OrbitControls;
-        window.THREE.STLLoader = STLLoader;
-    </script>
-    
     <style>
         /* Jouw Gewenste Groene Accentkleur */
         :root {
@@ -47,7 +36,7 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
         }
 
-        /* Overige styles... (rest van de CSS is hetzelfde gebleven) */
+        /* Overige styles */
         .btn-primary {
             background-color: var(--accent-color);
             transition: background-color 0.3s;
@@ -129,6 +118,7 @@
                         <input type="number" id="printtijd" step="0.1" min="0" value="5.0"
                                class="w-full input-field p-3 rounded-lg" placeholder="5.0" required>
                     </div>
+
                     <div>
                         <label for="gewicht" class="block mb-2 font-medium text-white">
                             <i class="fas fa-weight-hanging mr-2 accent-text"></i>Gewicht (gram)
@@ -168,33 +158,43 @@
         </div>
     </div>
     
-    <script>
+    <script type="module">
+        // Importeer Three.js modules DIRECT in dit blok. Dit zorgt ervoor dat ze beschikbaar zijn in de scope.
+        import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
+
         // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
-        // **NIEUW MATERIAAL** - De gewenste groene kleur met sterke reflectie
+        // Standaard materiaal voor modellen (Groen en glanzend)
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: new THREE.Color(ACCENT_COLOR_HEX), // Emerald Green
-            emissive: new THREE.Color(0x0a1e16),      // Donkere gloed van dezelfde kleur (subtiel)
-            specular: 0xeeeeee,                       // Sterke witte highlight
-            shininess: 150,                           // Scherpe reflectie
+            emissive: new THREE.Color(0x0a1e16),      
+            specular: 0xeeeeee,                      
+            shininess: 150,                           
         });
 
-        // Laad-indicator
+        // Elementen
         const loadingIndicator = document.getElementById('loading-indicator');
+        const viewerContainer = document.getElementById('viewer-container');
+        const fileUpload = document.getElementById('file-upload');
+        const resetButton = document.getElementById('reset-view-btn'); 
 
-        // --- 1. Prijsberekening Logica (ongewijzigd) ---
-        const form = document.getElementById('price-calculator');
-        const resultContainer = document.getElementById('resultaat-container');
-        const totalPriceElement = document.getElementById('totaal-prijs');
-        const COST_PER_GRAM_FILAMENT = 0.10; 
-        const COST_PER_HOUR_PRINTER = 4.00; 
+        // Viewer variabelen
+        let scene, camera, renderer, controls;
+        let object; 
+        let defaultCameraDistance = 100; 
 
-        form.addEventListener('submit', function(e) {
+        // --- 1. Prijsberekening Logica ---
+        function calculatePrice(e) {
             e.preventDefault();
             const printtijd = parseFloat(document.getElementById('printtijd').value);
             const gewicht = parseFloat(document.getElementById('gewicht').value);
             const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
+            
+            const COST_PER_GRAM_FILAMENT = 0.10; 
+            const COST_PER_HOUR_PRINTER = 4.00; 
 
             if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
 
@@ -202,24 +202,18 @@
             const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
             const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
 
-            totalPriceElement.textContent = `€ ${totalePrijs.toFixed(2)}`;
-            resultContainer.classList.remove('hidden');
-        });
+            document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
+            document.getElementById('resultaat-container').classList.remove('hidden');
+        }
+        document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
 
 
-        // --- 2. Professionele 3D Viewer Logica (HERBOUWDE KERN) ---
-
-        const viewerContainer = document.getElementById('viewer-container');
-        const fileUpload = document.getElementById('file-upload');
-        const resetButton = document.getElementById('reset-view-btn'); 
-        let scene, camera, renderer, controls;
-        let object; 
-        let defaultCameraDistance = 100; 
+        // --- 2. 3D Viewer Logica ---
 
         function initViewer() {
             if (renderer) return;
 
-            console.log("Stap 1: Initialiseer Three.js Scene, Camera, Renderer.");
+            console.log("Stap 1: Initialiseer Three.js (Module Scope).");
 
             // Scene
             scene = new THREE.Scene();
@@ -240,20 +234,20 @@
             }
             viewerContainer.appendChild(renderer.domElement);
 
-            // Belichting (Minimalistisch, maar functioneel)
-            scene.add(new THREE.AmbientLight(0x404040)); // Zachte algehele verlichting
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0); // Sterk hoofdlicht
+            // Belichting
+            scene.add(new THREE.AmbientLight(0x404040)); 
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0); 
             directionalLight.position.set(200, 300, 200);
             scene.add(directionalLight);
 
-            // DEBUG VISUAL: Grondrooster (MOET zichtbaar zijn)
+            // DEBUG VISUAL: Grondrooster (Moet nu zichtbaar zijn)
             const size = 100;
             const divisions = 10;
             const gridHelper = new THREE.GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
             scene.add(gridHelper);
             
-            // Camera Controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            // Camera Controls (Werkt nu, omdat het binnen de module scope is)
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
             controls.screenSpacePanning = true; 
@@ -269,7 +263,7 @@
             animate();
             
             window.addEventListener('resize', onWindowResize, false);
-            console.log("Stap 2: Viewer gestart. Grid zou nu zichtbaar moeten zijn in het venster.");
+            console.log("Stap 2: Viewer gestart. Grid zou nu zichtbaar moeten zijn.");
         }
         
         function onWindowResize() {
@@ -281,11 +275,7 @@
         }
         
         function resetView() {
-            if (!controls) {
-                console.warn("Controls niet beschikbaar voor reset.");
-                return;
-            }
-
+            if (!controls) return;
             if (!object) {
                  controls.reset();
                  camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
@@ -294,24 +284,20 @@
                  return;
             }
 
-            // Bounding Box berekening van het hele object
             const box = new THREE.Box3().setFromObject(object);
-
             if (box.isEmpty()) return;
 
             const size = new THREE.Vector3();
             box.getSize(size);
             const maxDim = Math.max(size.x, size.y, size.z);
-            
             const distance = maxDim * 1.5; 
             defaultCameraDistance = distance;
 
-            // Reset de camera positie en target
             controls.reset();
             controls.target.set(box.min.x + size.x / 2, box.min.y + size.y / 2, box.min.z + size.z / 2); 
             camera.position.set(distance, distance * 0.75, distance * 1.5); 
             controls.update();
-            console.log(`Stap 4: View gereset en gefocust op model. Afmetingen: ${size.x.toFixed(2)}, ${size.y.toFixed(2)}, ${size.z.toFixed(2)}.`);
+            console.log(`Stap 4: View gereset en gefocust op model.`);
         }
         
         resetButton.addEventListener('click', resetView);
@@ -323,13 +309,13 @@
             if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
             
             if (!renderer) {
-                 alert("Fout: 3D viewer is niet gestart.");
+                 console.error("Renderer niet geïnitialiseerd.");
                  return;
             }
             
             loadingIndicator.classList.remove('hidden'); 
 
-            // Verwijder vorig model en opruiming
+            // Opruimen
             if (object) {
                 scene.remove(object);
                 object.traverse(child => {
@@ -350,15 +336,12 @@
                     reader.readAsArrayBuffer(file);
                 });
 
-                const loader = new THREE.STLLoader(); 
+                // STLLoader (Werkt nu, omdat het binnen de module scope is)
+                const loader = new STLLoader(); 
                 const geometry = loader.parse(data);
                 
                 geometry.computeBoundingBox();
-                if (!geometry.boundingBox) {
-                    throw new Error("Kan de afmetingen van het STL-model niet berekenen.");
-                }
                 
-                // Centreer de geometrie
                 const center = new THREE.Vector3();
                 geometry.boundingBox.getCenter(center);
                 geometry.translate(-center.x, -center.y, -center.z);
@@ -378,8 +361,11 @@
             }
         });
 
-        // Start de viewer onmiddellijk wanneer de DOM klaar is
-        document.addEventListener('DOMContentLoaded', initViewer);
+        // Start de viewer
+        document.addEventListener('DOMContentLoaded', () => {
+             initViewer();
+             resetView();
+        });
     </script>
 </body>
 </html>
