@@ -172,15 +172,15 @@
         } else {
             console.log("Three.js, OrbitControls en STLLoader zijn succesvol geladen.");
 
-            // AANGEPAST: Donkerdere, diepere Groene Kleur
+            // Donkerdere, diepere Groene Kleur
             const MODEL_COLOR = 0x007733; 
 
             // Standaard materiaal voor modellen
             const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
                 color: new THREE.Color(MODEL_COLOR), 
-                emissive: new THREE.Color(0x00331a),      // Donkerdere emissie om schaduwen te verdiepen
-                specular: new THREE.Color(0xffffff),      // Glans blijft wit
-                shininess: 30,                            // AANGEPAST: Glans verminderd voor scherper uiterlijk
+                emissive: new THREE.Color(0x00331a),      
+                specular: new THREE.Color(0xffffff),      
+                shininess: 30,                            
             });
 
             // Elementen
@@ -191,10 +191,10 @@
 
             // Viewer variabelen
             let scene, camera, renderer, controls;
-            let object; 
+            let object; // Dit is de cruciale variabele die het geladen 3D-object vasthoudt
             let defaultCameraDistance = 100; 
 
-            // --- 1. Prijsberekening Logica ---
+            // --- 1. Prijsberekening Logica (ongewijzigd) ---
             function calculatePrice(e) {
                 e.preventDefault();
                 
@@ -224,8 +224,6 @@
             function initViewer() {
                 if (renderer) return;
 
-                console.log("Stap 1: Initialiseer Three.js.");
-
                 // Scene 
                 scene = new THREE.Scene();
                 scene.background = new THREE.Color(0x121212); 
@@ -246,24 +244,20 @@
                 }
                 viewerContainer.appendChild(renderer.domElement);
 
-                // --- Belichting Optimalisatie (Lichtere intensiteit voor donkerder model) ---
-                scene.add(new THREE.AmbientLight(0xffffff, 0.4)); // Verlaagd om de scène donkerder te maken
+                // Belichting 
+                scene.add(new THREE.AmbientLight(0xffffff, 0.4)); 
                 
-                // Hoofdlicht
-                const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); // Verlaagd
+                const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); 
                 mainLight.position.set(200, 300, 200);
                 scene.add(mainLight);
                 
-                // Secundair licht
-                const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); // Verlaagd
+                const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); 
                 fillLight.position.set(-200, -200, -200);
                 scene.add(fillLight);
                 
-                // Extra licht voor highlights aan de voorkant (subtiel)
-                const rimLight = new THREE.DirectionalLight(0xffffff, 0.8); // Verlaagd
+                const rimLight = new THREE.DirectionalLight(0xffffff, 0.8); 
                 rimLight.position.set(0, 0, 300);
                 scene.add(rimLight);
-                // --------------------------------
 
                 // Camera Controls 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -282,7 +276,6 @@
                 animate();
                 
                 window.addEventListener('resize', onWindowResize, false);
-                console.log("Stap 2: Viewer gestart. Nieuwe kleur en scherpere weergave geactiveerd.");
             }
             
             function onWindowResize() {
@@ -293,9 +286,11 @@
                 }
             }
             
+            // FUNCTIE MET DE FIX
             function resetView() {
                 if (!controls) return;
                 
+                // Als er nog geen object geladen is (object === null of undefined)
                 if (!object) {
                      controls.reset();
                      camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
@@ -304,6 +299,7 @@
                      return;
                 }
 
+                // ALS object WEL geladen is:
                 const box = new THREE.Box3().setFromObject(object);
                 if (box.isEmpty()) return;
 
@@ -314,15 +310,15 @@
                 defaultCameraDistance = distance;
 
                 const center = new THREE.Vector3();
-                geometry.boundingBox.getCenter(center);
-                geometry.translate(-center.x, -center.y, -center.z);
+                box.getCenter(center); // Haal het middelpunt van het model op
 
                 controls.reset();
-                controls.target.copy(center); 
+                controls.target.copy(center); // Richt de camera op het middelpunt
                 
+                // Verplaats de camera naar een geschikte afstand van het middelpunt
                 camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
                 controls.update();
-                console.log(`Stap 4: View gereset en gefocust op model.`);
+                console.log(`View gereset en gefocust op model.`);
             }
             
             resetButton.addEventListener('click', resetView);
@@ -353,7 +349,6 @@
                 }
 
                 try {
-                    console.log("Stap 3: STL-bestand gelezen.");
                     const reader = new FileReader();
                     const data = await new Promise((resolve, reject) => {
                         reader.onload = (e) => resolve(e.target.result);
@@ -369,18 +364,19 @@
                     // Centreer de geometrie
                     const center = new THREE.Vector3();
                     geometry.boundingBox.getCenter(center);
-                    geometry.translate(-center.x, -center.y, -center.z);
+                    // BELANGRIJK: We vertalen de GEOMETRIE (geen object) zodat het model rond 0,0,0 staat.
+                    geometry.translate(-center.x, -center.y, -center.z); 
 
                     // Maak de Mesh
                     const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                     scene.add(model);
-                    object = model; 
+                    object = model; // HET model is opgeslagen in de globale 'object' variabele
                     resetView(); 
-                    console.log("Stap 5: Model toevoeging en reset voltooid.");
 
                 } catch (error) {
                     console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
+                    // De foutmelding is nu correcter en bevat de oorzaak van de crash
                     alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
                 } finally {
                     loadingIndicator.classList.add('hidden'); 
