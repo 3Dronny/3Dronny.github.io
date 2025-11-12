@@ -8,10 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/3MFLoader.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/loaders/3MFLoader.js"></script> 
     <style>
         /* Jouw Gewenste Groene Accentkleur */
         :root {
@@ -355,9 +355,9 @@
                     // Parsen
                     let parsedModel = loader.parse(data); 
 
-                    // *** FIX V7: Expliciete controle op geldigheid Group-object ***
+                    // Expliciete controle op geldigheid Group-object
                     if (!parsedModel || !parsedModel.isGroup || parsedModel.children.length === 0) {
-                        throw new Error("De 3MF-loader kon de Group-structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand.");
+                        throw new Error("De 3MF-loader kon de Group-structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand. Probeer een andere export.");
                     }
                     model = parsedModel;
                     
@@ -389,10 +389,11 @@
             } catch (error) {
                 console.error("Fout bij het laden van het 3D-model (3MF):", error);
                 
-                // Vang de algemene parse-fout op en geef een duidelijke melding
                 let detailedMessage = error.message;
-                if (detailedMessage.includes("Cannot read properties of null") || detailedMessage.includes("3MF-loader kon de Group-structuur niet volledig lezen")) {
-                    detailedMessage = "De 3MF-loader kon het bestand niet parsen. **Probeer het model in uw slicer opnieuw op te slaan als een STL-bestand** en laad dit in plaats daarvan. Dit is de meest betrouwbare oplossing.";
+                if (detailedMessage.includes("3MF-loader kon de Group-structuur niet volledig lezen")) {
+                    detailedMessage = "De 3MF-loader (nu geüpgraded) kon dit bestand nog steeds niet parsen. Dit bevestigt dat het een zeer ongebruikelijk geëxporteerd 3MF-bestand is. **Probeer de STL-conversie als enige overgebleven optie.**";
+                } else if (detailedMessage.includes("Cannot read properties of null") || detailedMessage.includes("The file is corrupt")) {
+                     detailedMessage = "Fout bij het parsen van de 3MF-data. **Probeer de STL-conversie als enige overgebleven optie.**";
                 }
 
                 alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${detailedMessage})`); 
