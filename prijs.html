@@ -13,12 +13,11 @@
     <script type="module">
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/ThreeMFLoader.js';
 
         // Maak de geïmporteerde modules globaal beschikbaar
         window.THREE.OrbitControls = OrbitControls;
         window.THREE.STLLoader = STLLoader;
-        window.THREE.ThreeMFLoader = ThreeMFLoader; 
+        // ThreeMFLoader is nu NIET meer hier
     </script>
     
     <style>
@@ -106,19 +105,19 @@
                 </h2>
                 
                 <div id="viewer-container">
-                    <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL- of 3MF-bestand om de 3D-viewer te starten.</p>
+                    <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL-bestand om de 3D-viewer te starten.</p>
                     <div id="loading-indicator" class="loading-overlay hidden">
                         <i class="fas fa-spinner fa-spin mr-3"></i> Model laden...
                     </div>
                 </div>
                 
                 <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                    <input type="file" id="file-upload" accept=".stl,.3mf" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
+                    <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
                     <button id="reset-view-btn" class="btn-reset p-2 rounded-lg font-semibold whitespace-nowrap">
                         <i class="fas fa-sync-alt mr-2"></i>Reset View
                     </button>
                 </div>
-                <p class="text-sm text-gray-400 mt-2">Ondersteunde formaten: **STL** en **3MF**. Gebruik de muis om te draaien, zoomen en pannen.</p>
+                <p class="text-sm text-gray-400 mt-2">Ondersteunde formaten: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
             </div>
 
             <div class="lg:col-span-2 lg:order-2">
@@ -179,14 +178,14 @@
         // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
-        // Standaard materiaal voor modellen - WIT voor maximale zichtbaarheid!
+        // Standaard materiaal voor modellen - NU MET JOUW GEWENSTE GROENE KLEUR
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-            color: 0xffffff, // Wit
+            color: new THREE.Color(ACCENT_COLOR_HEX), // Jouw gewenste accentkleur
+            emissive: new THREE.Color(ACCENT_COLOR_HEX).multiplyScalar(0.2), // Lichte gloed
             specular: 0xcccccc, 
             shininess: 100,      
         });
 
-        // Laad-indicator
         const loadingIndicator = document.getElementById('loading-indicator');
 
         // --- 1. Prijsberekening Logica (ongewijzigd) ---
@@ -220,19 +219,19 @@
         const resetButton = document.getElementById('reset-view-btn'); 
         let scene, camera, renderer, controls;
         let object; 
-        let defaultCameraDistance = 100; 
+        let defaultCameraDistance = 100; // Standaard afstand als er geen model is
 
         function initViewer() {
             if (renderer) return;
 
             // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0f172a); 
+            scene.background = new THREE.Color(0x0f172a); // Donkere achtergrond
 
             // Camera
             camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
             camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
-            camera.lookAt(scene.position);
+            camera.lookAt(scene.position); // Kijk naar het midden van de scene
 
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -245,7 +244,7 @@
             }
             viewerContainer.appendChild(renderer.domElement);
 
-            // Belichting - Intensiteit iets verhoogd
+            // Belichting (verhoogde intensiteit voor betere zichtbaarheid)
             scene.add(new THREE.AmbientLight(0x666666)); 
             const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.7); 
             scene.add(hemisphereLight);
@@ -256,8 +255,8 @@
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
 
-            // *** DEBUG: Voeg een Grondvlak toe (Grid Helper) ***
-            // Als de viewer werkt, moet je dit rood/witte rooster zien
+            // DEBUG: Voeg een Grondvlak toe (Grid Helper)
+            // Dit moet ZICHTBAAR zijn als de viewer werkt, zelfs zonder model
             const size = 100;
             const divisions = 10;
             const gridHelper = new THREE.GridHelper(size, divisions, 0xff0000, 0xaaaaaa); // Rood en grijs
@@ -280,6 +279,8 @@
             animate();
             
             window.addEventListener('resize', onWindowResize, false);
+
+            console.log("Viewer geïnitialiseerd. GridHelper zou nu zichtbaar moeten zijn.");
         }
         
         function onWindowResize() {
@@ -299,19 +300,22 @@
                      controls.target.set(0, 0, 0);
                      controls.update();
                  }
+                 console.log("View gereset naar standaardpositie (geen model geladen).");
                  return;
             }
 
             // Bounding Box berekening van het hele object
             const box = new THREE.Box3().setFromObject(object);
 
-            if (box.isEmpty()) return;
+            if (box.isEmpty()) {
+                console.warn("Bounding box van het object is leeg. Kan de weergave niet resetten.");
+                return;
+            }
 
             const size = new THREE.Vector3();
             box.getSize(size);
             const maxDim = Math.max(size.x, size.y, size.z);
             
-            // Bereken de afstand op basis van de grootte van het model
             const distance = maxDim * 1.5; 
             defaultCameraDistance = distance;
 
@@ -320,6 +324,7 @@
             controls.target.set(box.min.x + size.x / 2, box.min.y + size.y / 2, box.min.z + size.z / 2); // Target het midden van de box
             camera.position.set(distance, distance * 0.75, distance * 1.5); 
             controls.update();
+            console.log(`View gereset en gefocust op model met afmetingen: ${size.x.toFixed(2)}, ${size.y.toFixed(2)}, ${size.z.toFixed(2)}`);
         }
         
         resetButton.addEventListener('click', resetView);
@@ -331,8 +336,8 @@
             if (!file) return;
 
             if (!renderer) {
-                 console.error("3D viewer nog niet klaar.");
-                 alert("Fout: De 3D viewer is nog niet correct gestart.");
+                 console.error("3D viewer is niet geïnitialiseerd. De pagina is mogelijk niet correct geladen of er is een diepere fout.");
+                 alert("Fout: De 3D viewer is niet gestart. Probeer de pagina te verversen of gebruik een lokale webserver.");
                  return;
             }
             
@@ -360,6 +365,13 @@
             let model = null;
 
             try {
+                // Alleen .stl toegestaan
+                if (!fileName.endsWith('.stl')) {
+                    alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL-bestand.");
+                    loadingIndicator.classList.add('hidden');
+                    return;
+                }
+
                 const reader = new FileReader();
                 const data = await new Promise((resolve, reject) => {
                     reader.onload = (e) => resolve(e.target.result);
@@ -367,77 +379,49 @@
                     reader.readAsArrayBuffer(file);
                 });
 
-
-                if (fileName.endsWith('.stl')) {
-                    const loader = new THREE.STLLoader(); 
-                    const geometry = loader.parse(data);
-                    
-                    // Centrering en Bounding Box
-                    geometry.computeBoundingBox();
-                    if (!geometry.boundingBox) {
-                        throw new Error("Kan de afmetingen van het STL-model niet berekenen.");
-                    }
-                    
-                    const center = new THREE.Vector3();
-                    geometry.boundingBox.getCenter(center);
-                    geometry.translate(-center.x, -center.y, -center.z);
-
-                    model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
-                    
-                } else if (fileName.endsWith('.3mf')) {
-                    
-                    const loader = new THREE.ThreeMFLoader(); 
-                    let parsedModel = loader.parse(data); 
-
-                    if (!parsedModel || !parsedModel.isGroup || parsedModel.children.length === 0) {
-                        throw new Error("De 3MF-loader kon de structuur niet volledig lezen (leeg/ongeldig).");
-                    }
-                    model = parsedModel;
-                    
-                    // Forceer het standaard WITTE materiaal
-                    model.traverse(function(child) {
-                        if (child.isMesh) {
-                            child.material = DEFAULT_MESH_MATERIAL;
-                        }
-                    });
-
-                    // Centrering van de Group
-                    const box = new THREE.Box3().setFromObject(model);
-                    const center = new THREE.Vector3();
-                    box.getCenter(center);
-                    model.position.sub(center); 
-                    
-                } else {
-                    alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
-                    return;
+                const loader = new THREE.STLLoader(); 
+                const geometry = loader.parse(data);
+                
+                geometry.computeBoundingBox();
+                if (!geometry.boundingBox) {
+                    throw new Error("Kan de afmetingen van het STL-model niet berekenen (lege bounding box).");
                 }
+                
+                const center = new THREE.Vector3();
+                geometry.boundingBox.getCenter(center);
+                geometry.translate(-center.x, -center.y, -center.z);
 
+                model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                
                 if (model) {
                     scene.add(model);
                     object = model; 
                     
-                    // *** DEBUG: Modelafmetingen loggen ***
                     const box = new THREE.Box3().setFromObject(object);
                     const size = new THREE.Vector3();
                     box.getSize(size);
-                    console.log(`✅ Model succesvol geladen! Afmetingen (X, Y, Z): ${size.x.toFixed(2)}, ${size.y.toFixed(2)}, ${size.z.toFixed(2)}`);
+                    console.log(`✅ STL-model succesvol geladen! Afmetingen (X, Y, Z): ${size.x.toFixed(2)}, ${size.y.toFixed(2)}, ${size.z.toFixed(2)} eenheden.`);
+                    console.log("Probeer nu met de muis te draaien en te zoomen.");
 
                     resetView(); 
                 }
 
             } catch (error) {
-                console.error("❌ FOUT BIJ HET LADEN VAN HET 3D-MODEL:", error);
+                console.error("❌ FOUT BIJ HET LADEN VAN HET STL-MODEL:", error);
                 
                 let detailedMessage = error.message;
-                alert(`Er is een fout opgetreden bij het laden van het model. (Details: ${detailedMessage})`); 
+                alert(`Er is een fout opgetreden bij het laden van het STL-model. (Details: ${detailedMessage})`); 
             } finally {
                 loadingIndicator.classList.add('hidden'); 
             }
         });
 
-        // *** FIX: Gebruik DOMContentLoaded voor snellere, betrouwbare initialisatie ***
-        document.addEventListener('DOMContentLoaded', initViewer);
-        // We roepen resetView() aan direct na initViewer() in het DOMContentLoaded event
+        // Gebruik DOMContentLoaded om te zorgen dat de DOM geladen is voordat we Three.js initialiseren
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM geladen. Initialiseer Three.js viewer.");
+            initViewer();
+            resetView(); // Reset de camera direct bij opstarten
+        });
     </script>
 </body>
 </html>
