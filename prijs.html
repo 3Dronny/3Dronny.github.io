@@ -8,10 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="js/three.min.js"></script> 
-    <script src="js/OrbitControls.js"></script>
-    <script src="js/STLLoader.js"></script>
-    
     <style>
         /* CSS Variabelen voor de groene accentkleur */
         :root {
@@ -159,12 +155,22 @@
         </div>
     </div>
     
+    <script src="js/three.min.js"></script> 
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/STLLoader.js"></script>
+    
     <script>
-        // Check of THREE. is geladen. Dit zou moeten werken als de lokale bestanden er zijn.
-        if (typeof THREE === 'undefined') {
-            alert("Kritieke Fout: Three.js kon niet geladen worden. Controleer de map 'js/' en de bestandsnamen.");
+        
+        // Controleer of THREE is gedefinieerd
+        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
+            console.error("Kritieke Fout: Three.js of OrbitControls is niet geladen. Controleer de 'js/' map en de paden.");
+            // Toon foutmelding op de plek van de viewer
+            const container = document.getElementById('viewer-container');
+            if (container) {
+                container.innerHTML = '<div class="absolute inset-0 flex items-center justify-center bg-red-900/50 text-white p-4 rounded-xl"><i class="fas fa-exclamation-triangle mr-2"></i>Fout: 3D Viewer kon niet starten. Controleer de console.</div>';
+            }
         } else {
-            console.log("Three.js is geladen. Start viewer-initialisatie.");
+            console.log("Three.js en OrbitControls zijn succesvol geladen.");
 
             // Kleurcode ophalen
             const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
@@ -188,7 +194,7 @@
             let object; 
             let defaultCameraDistance = 100; 
 
-            // --- 1. Prijsberekening Logica ---
+            // --- 1. Prijsberekening Logica (ongewijzigd) ---
             function calculatePrice(e) {
                 e.preventDefault();
                 
@@ -217,15 +223,7 @@
             function initViewer() {
                 if (renderer) return;
 
-                // FIX: Dubbel controleren of de controls bestaan voordat we ze aanroepen
-                if (typeof THREE.OrbitControls === 'undefined') {
-                     console.error("OrbitControls niet correct geladen. De initViewer stopt.");
-                     // Optioneel: toon een foutmelding aan de gebruiker
-                     // alert("Fout: De 3D controls zijn niet geladen. Controleer uw bestanden.");
-                     return;
-                }
-                
-                console.log("Stap 1: Initialiseer Three.js (Laatste poging).");
+                console.log("Stap 1: Initialiseer Three.js.");
 
                 // Scene 
                 scene = new THREE.Scene();
@@ -264,8 +262,8 @@
                 const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
                 scene.add(gridHelper);
                 
-                // Camera Controls (FAALDE HIER)
-                controls = new THREE.OrbitControls(camera, renderer.domElement); 
+                // Camera Controls 
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true; 
                 controls.dampingFactor = 0.15;
                 controls.screenSpacePanning = true; 
@@ -359,8 +357,7 @@
                         reader.readAsArrayBuffer(file);
                     });
 
-                    // We gebruiken de loader die de lokale STLLoader.js aanmaakt
-                    const loader = new THREE.STLLoader(); 
+                    const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     
                     geometry.computeBoundingBox();
@@ -386,7 +383,7 @@
                 }
             });
 
-            // Start de viewer wanneer het document geladen is
+            // Start de viewer
             document.addEventListener('DOMContentLoaded', () => {
                  initViewer();
                  resetView();
