@@ -340,10 +340,16 @@
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     
-                    // STL Geometrie centreren
+                    // *** FIX V9: Robuuste STL Centrering ***
                     geometry.computeBoundingBox();
+                    if (!geometry.boundingBox) {
+                        throw new Error("Kan de afmetingen van het STL-model niet berekenen.");
+                    }
+                    
                     const center = new THREE.Vector3();
                     geometry.boundingBox.getCenter(center);
+                    
+                    // Vertaal de geometrie om in het midden van de wereld (0,0,0) te staan
                     geometry.translate(-center.x, -center.y, -center.z);
 
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
@@ -357,7 +363,7 @@
 
                     // Expliciete controle op geldigheid Group-object
                     if (!parsedModel || !parsedModel.isGroup || parsedModel.children.length === 0) {
-                        throw new Error("De 3MF-loader kon de Group-structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand. Probeer een andere export.");
+                        throw new Error("De 3MF-loader (r156) kon de structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand.");
                     }
                     model = parsedModel;
                     
@@ -387,13 +393,18 @@
                 }
 
             } catch (error) {
-                console.error("Fout bij het laden van het 3D-model (3MF):", error);
+                console.error("Fout bij het laden van het 3D-model:", error);
                 
                 let detailedMessage = error.message;
-                if (detailedMessage.includes("3MF-loader kon de Group-structuur niet volledig lezen")) {
-                    detailedMessage = "De 3MF-loader (nu geüpgraded) kon dit bestand nog steeds niet parsen. Dit bevestigt dat het een zeer ongebruikelijk geëxporteerd 3MF-bestand is. **Probeer de STL-conversie als enige overgebleven optie.**";
-                } else if (detailedMessage.includes("Cannot read properties of null") || detailedMessage.includes("The file is corrupt")) {
-                     detailedMessage = "Fout bij het parsen van de 3MF-data. **Probeer de STL-conversie als enige overgebleven optie.**";
+                
+                // Vang bekende 3MF-fouten op
+                if (detailedMessage.includes("3MF-loader (r156) kon de structuur niet volledig lezen") || detailedMessage.includes("Cannot read properties of null")) {
+                    detailedMessage = "De 3MF-loader (r156) kon dit bestand niet parsen. Dit bevestigt dat het een zeer ongebruikelijk geëxporteerd 3MF-bestand is. **Probeer de STL-conversie als enige overgebleven optie.**";
+                }
+                
+                // Vang nieuwe STL-fouten op
+                 if (detailedMessage.includes("Kan de afmetingen van het STL-model niet berekenen.")) {
+                    detailedMessage = "Het STL-model lijkt corrupt te zijn of de geometrie bevat geen meetbare vlakken (leeg bestand). Probeer een ander STL-bestand.";
                 }
 
                 alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${detailedMessage})`); 
