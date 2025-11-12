@@ -11,17 +11,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js"></script> 
 
     <script type="module">
-        // Importeer de modules van de Three.js voorbeeldbibliotheek (r156)
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
         import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/3MFLoader.js';
 
-        // Maak de geëxporteerde modules globaal beschikbaar in de THREE-namespace.
-        // Dit is nodig omdat de rest van de code in het <script>-blok ze als globale objecten verwacht.
+        // Maak ze globaal beschikbaar in de THREE-namespace voor de rest van de code
         window.THREE.OrbitControls = OrbitControls;
         window.THREE.STLLoader = STLLoader;
         window.THREE.ThreeMFLoader = ThreeMFLoader; 
     </script>
+    
     <style>
         /* Jouw Gewenste Groene Accentkleur */
         :root {
@@ -190,7 +189,7 @@
         // Laad-indicator
         const loadingIndicator = document.getElementById('loading-indicator');
 
-        // --- 1. Prijsberekening Logica ---
+        // --- 1. Prijsberekening Logica (ongewijzigd) ---
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -224,6 +223,9 @@
         let defaultCameraDistance = 100; 
 
         function initViewer() {
+            // Controleer of de viewer al geïnitialiseerd is (om dubbele initialisatie te voorkomen)
+            if (renderer) return;
+
             // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0f172a); 
@@ -239,11 +241,9 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             
             const placeholder = document.getElementById('viewer-placeholder');
-            if (placeholder) {
-                // Zorg ervoor dat de placeholder verdwijnt wanneer de renderer wordt toegevoegd
-                if (viewerContainer.contains(placeholder)) {
-                    viewerContainer.removeChild(placeholder);
-                }
+            if (placeholder && viewerContainer.contains(placeholder)) {
+                // Verwijder de placeholder zodra de renderer klaar is om de DOM over te nemen
+                viewerContainer.removeChild(placeholder);
             }
             viewerContainer.appendChild(renderer.domElement);
 
@@ -258,8 +258,7 @@
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
 
-            // Camera Controls
-            // De OrbitControls Class is nu beschikbaar door de fix in de <head>
+            // Camera Controls (nu zeker gedefinieerd)
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
@@ -310,14 +309,18 @@
         
         resetButton.addEventListener('click', resetView);
         
-        initViewer(); 
-        
-        // --- HOOFD LAAD FUNCTIE ---
+        // --- HOOFD LAAD FUNCTIE (ongewijzigd) ---
         
         fileUpload.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
+            // Controleer of de viewer is geïnitialiseerd voordat we laden
+            if (!renderer) {
+                 alert("Fout: De 3D viewer is nog niet correct gestart. Wacht tot de pagina volledig geladen is.");
+                 return;
+            }
+            
             loadingIndicator.classList.remove('hidden'); // Toon laad-indicator
 
             // Verwijder vorig model en opruiming
@@ -335,7 +338,6 @@
                         }
                     }
                 });
-                // Wis de referentie
                 object = null; 
             }
 
@@ -343,7 +345,7 @@
             let model = null;
 
             try {
-                // Lees het bestand als ArrayBuffer, dit is essentieel voor zowel STL als 3MF parse methodes
+                // Lees het bestand als ArrayBuffer
                 const reader = new FileReader();
                 const data = await new Promise((resolve, reject) => {
                     reader.onload = (e) => resolve(e.target.result);
@@ -353,7 +355,7 @@
 
 
                 if (fileName.endsWith('.stl')) {
-                    // STLLoader is nu correct gedefinieerd door de fix
+                    // STLLoader is nu correct gedefinieerd
                     const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     
@@ -365,34 +367,29 @@
                     
                     const center = new THREE.Vector3();
                     geometry.boundingBox.getCenter(center);
-                    
-                    // Vertaal de geometrie om in het midden van de wereld (0,0,0) te staan
                     geometry.translate(-center.x, -center.y, -center.z);
 
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (fileName.endsWith('.3mf')) {
                     
-                    // ThreeMFLoader is nu correct gedefinieerd door de fix
+                    // ThreeMFLoader is nu correct gedefinieerd
                     const loader = new THREE.ThreeMFLoader(); 
-                    
-                    // Parsen
                     let parsedModel = loader.parse(data); 
 
-                    // Expliciete controle op geldigheid Group-object
                     if (!parsedModel || !parsedModel.isGroup || parsedModel.children.length === 0) {
-                        throw new Error("De 3MF-loader (r156) kon de structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand.");
+                        throw new Error("De 3MF-loader kon de structuur niet volledig lezen (leeg/ongeldig).");
                     }
                     model = parsedModel;
                     
-                    // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid (overrulet 3MF materialen)
+                    // Forceer het standaard groene materiaal
                     model.traverse(function(child) {
                         if (child.isMesh) {
                             child.material = DEFAULT_MESH_MATERIAL;
                         }
                     });
 
-                    // 2. Centrering van de Group (model)
+                    // Centrering van de Group
                     const box = new THREE.Box3().setFromObject(model);
                     const center = new THREE.Vector3();
                     box.getCenter(center);
@@ -413,22 +410,14 @@
                 console.error("Fout bij het laden van het 3D-model:", error);
                 
                 let detailedMessage = error.message;
-                
-                // Vang bekende 3MF-fouten op
-                if (detailedMessage.includes("3MF-loader (r156) kon de structuur niet volledig lezen")) {
-                    detailedMessage = "De 3MF-loader kon dit bestand niet parsen. Het is mogelijk een ongebruikelijk geëxporteerd 3MF-bestand. Probeer de STL-conversie.";
-                }
-                
-                // Vang nieuwe STL-fouten op
-                if (detailedMessage.includes("Kan de afmetingen van het STL-model niet berekenen.")) {
-                    detailedMessage = "Het STL-model lijkt corrupt te zijn of de geometrie bevat geen meetbare vlakken (leeg bestand). Probeer een ander STL-bestand.";
-                }
-
-                alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${detailedMessage})`); 
+                alert(`Er is een fout opgetreden bij het laden van het model. (Details: ${detailedMessage})`); 
             } finally {
                 loadingIndicator.classList.add('hidden'); // Verberg laad-indicator
             }
         });
+
+        // *** NIEUWE FIX: Start de viewer pas als alles is geladen ***
+        window.addEventListener('load', initViewer);
     </script>
 </body>
 </html>
