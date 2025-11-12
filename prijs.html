@@ -160,223 +160,238 @@
     </div>
     
     <script>
-        // Kleurcode ophalen
-        const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+        // Check of THREE. is geladen. Dit zou moeten werken als de lokale bestanden er zijn.
+        if (typeof THREE === 'undefined') {
+            alert("Kritieke Fout: Three.js kon niet geladen worden. Controleer de map 'js/' en de bestandsnamen.");
+        } else {
+            console.log("Three.js is geladen. Start viewer-initialisatie.");
 
-        // Standaard materiaal voor modellen (Groen en glanzend)
-        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-            color: new THREE.Color(ACCENT_COLOR_HEX), 
-            emissive: new THREE.Color(0x0a1e16),      
-            specular: 0xeeeeee,                      
-            shininess: 150,                           
-        });
+            // Kleurcode ophalen
+            const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
-        // Elementen
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const viewerContainer = document.getElementById('viewer-container');
+            // Standaard materiaal voor modellen (Groen en glanzend)
+            const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
+                color: new THREE.Color(ACCENT_COLOR_HEX), 
+                emissive: new THREE.Color(0x0a1e16),      
+                specular: 0xeeeeee,                      
+                shininess: 150,                           
+            });
 
-        const fileUpload = document.getElementById('file-upload');
-        const resetButton = document.getElementById('reset-view-btn'); 
+            // Elementen
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const viewerContainer = document.getElementById('viewer-container');
+            const fileUpload = document.getElementById('file-upload');
+            const resetButton = document.getElementById('reset-view-btn'); 
 
-        // Viewer variabelen
-        let scene, camera, renderer, controls;
-        let object; 
-        let defaultCameraDistance = 100; 
+            // Viewer variabelen
+            let scene, camera, renderer, controls;
+            let object; 
+            let defaultCameraDistance = 100; 
 
-        // --- 1. Prijsberekening Logica (ongewijzigd) ---
-        function calculatePrice(e) {
-            e.preventDefault();
-            
-            const printtijd = parseFloat(document.getElementById('printtijd').value);
-            const gewicht = parseFloat(document.getElementById('gewicht').value);
-            const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
-            const vulling = parseFloat(document.getElementById('vulling').value);
-            
-            const COST_PER_GRAM_FILAMENT = 0.10; 
-            const COST_PER_HOUR_PRINTER = 4.00; 
+            // --- 1. Prijsberekening Logica ---
+            function calculatePrice(e) {
+                e.preventDefault();
+                
+                const printtijd = parseFloat(document.getElementById('printtijd').value);
+                const gewicht = parseFloat(document.getElementById('gewicht').value);
+                const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
+                const vulling = parseFloat(document.getElementById('vulling').value);
+                
+                const COST_PER_GRAM_FILAMENT = 0.10; 
+                const COST_PER_HOUR_PRINTER = 4.00; 
 
-            if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
+                if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
 
-            const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
-            const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
-            const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
+                const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
+                const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
+                const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
 
-            document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
-            document.getElementById('resultaat-container').classList.remove('hidden');
-        }
-        document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
-
-
-        // --- 2. 3D Viewer Logica ---
-
-        function initViewer() {
-            if (renderer) return;
-            
-            console.log("Stap 1: Initialiseer Three.js (Globale Stijl - Lokale Bestanden).");
-
-            // Scene 
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x121212); 
-
-            // Camera 
-            camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
-            camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
-            
-            // Renderer 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            
-            // Plaats renderer in container
-            const placeholder = document.getElementById('viewer-placeholder');
-            if (placeholder) { 
-                placeholder.remove();
+                document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
+                document.getElementById('resultaat-container').classList.remove('hidden');
             }
-            viewerContainer.appendChild(renderer.domElement);
+            document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
 
-            // Belichting
-            scene.add(new THREE.AmbientLight(0x404040, 3.0)); 
-            
-            const mainLight = new THREE.DirectionalLight(0xffffff, 3.5); 
-            mainLight.position.set(200, 300, 200);
-            scene.add(mainLight);
-            
-            const fillLight = new THREE.DirectionalLight(0xddddff, 2.0); 
-            fillLight.position.set(-200, -300, -200);
-            scene.add(fillLight);
 
-            // DEBUG VISUAL: Grondrooster (Moet nu zichtbaar zijn)
-            const size = 100;
-            const divisions = 10;
-            const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
-            scene.add(gridHelper);
-            
-            // Camera Controls 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; 
-            controls.dampingFactor = 0.15;
-            controls.screenSpacePanning = true; 
-            controls.minDistance = 5;
-            controls.maxDistance = 5000; 
+            // --- 2. 3D Viewer Logica ---
 
-            // Animate Loop
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            animate();
-            
-            window.addEventListener('resize', onWindowResize, false);
-            console.log("Stap 2: Viewer gestart. Grid zou nu zichtbaar moeten zijn.");
-        }
-        
-        function onWindowResize() {
-            if (camera && renderer) {
-                camera.aspect = viewerContainer.clientWidth / viewerContainer.clientHeight;
-                camera.updateProjectionMatrix();
+            function initViewer() {
+                if (renderer) return;
+
+                // FIX: Dubbel controleren of de controls bestaan voordat we ze aanroepen
+                if (typeof THREE.OrbitControls === 'undefined') {
+                     console.error("OrbitControls niet correct geladen. De initViewer stopt.");
+                     // Optioneel: toon een foutmelding aan de gebruiker
+                     // alert("Fout: De 3D controls zijn niet geladen. Controleer uw bestanden.");
+                     return;
+                }
+                
+                console.log("Stap 1: Initialiseer Three.js (Laatste poging).");
+
+                // Scene 
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x121212); 
+
+                // Camera 
+                camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
+                camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
+                
+                // Renderer 
+                renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-            }
-        }
-        
-        function resetView() {
-            if (!controls) return;
-            
-            if (!object) {
-                 controls.reset();
-                 camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
-                 controls.target.set(0, 0, 0);
-                 controls.update();
-                 return;
-            }
-
-            const box = new THREE.Box3().setFromObject(object);
-            if (box.isEmpty()) return;
-
-            const size = new THREE.Vector3();
-            box.getSize(size);
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const distance = maxDim * 1.5; 
-            defaultCameraDistance = distance;
-
-            const center = new THREE.Vector3();
-            box.getCenter(center);
-
-            controls.reset();
-            controls.target.copy(center); 
-            
-            camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
-            controls.update();
-            console.log(`Stap 4: View gereset en gefocust op model.`);
-        }
-        
-        resetButton.addEventListener('click', resetView);
-        
-        // --- HOOFD LAAD FUNCTIE (ALLEEN STL) ---
-        
-        fileUpload.addEventListener('change', async function(event) {
-            const file = event.target.files[0];
-            if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
-            
-            if (!renderer) {
-                 alert("Fout: Initialiseer eerst de 3D-viewer.");
-                 return;
-            }
-            
-            loadingIndicator.classList.remove('hidden'); 
-
-            // Opruimen vorig model
-            if (object) {
-                scene.remove(object);
-                object.traverse(child => {
-                    if (child.isMesh) {
-                        if (child.geometry) child.geometry.dispose();
-                        if (child.material) child.material.dispose();
-                    }
-                });
-                object = null; 
-            }
-
-            try {
-                console.log("Stap 3: STL-bestand gelezen.");
-                const reader = new FileReader();
-                const data = await new Promise((resolve, reject) => {
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = reject;
-                    reader.readAsArrayBuffer(file);
-                });
-
-                const loader = new THREE.STLLoader();
-                const geometry = loader.parse(data);
+                renderer.setPixelRatio(window.devicePixelRatio);
                 
-                geometry.computeBoundingBox();
+                // Plaats renderer in container
+                const placeholder = document.getElementById('viewer-placeholder');
+                if (placeholder) { 
+                    placeholder.remove();
+                }
+                viewerContainer.appendChild(renderer.domElement);
+
+                // Belichting
+                scene.add(new THREE.AmbientLight(0x404040, 3.0)); 
                 
-                // Centreer de geometrie
+                const mainLight = new THREE.DirectionalLight(0xffffff, 3.5); 
+                mainLight.position.set(200, 300, 200);
+                scene.add(mainLight);
+                
+                const fillLight = new THREE.DirectionalLight(0xddddff, 2.0); 
+                fillLight.position.set(-200, -300, -200);
+                scene.add(fillLight);
+
+                // DEBUG VISUAL: Grondrooster 
+                const size = 100;
+                const divisions = 10;
+                const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
+                scene.add(gridHelper);
+                
+                // Camera Controls (FAALDE HIER)
+                controls = new THREE.OrbitControls(camera, renderer.domElement); 
+                controls.enableDamping = true; 
+                controls.dampingFactor = 0.15;
+                controls.screenSpacePanning = true; 
+                controls.minDistance = 5;
+                controls.maxDistance = 5000; 
+
+                // Animate Loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+                
+                window.addEventListener('resize', onWindowResize, false);
+                console.log("Stap 2: Viewer gestart. Grid zou nu zichtbaar moeten zijn.");
+            }
+            
+            function onWindowResize() {
+                if (camera && renderer) {
+                    camera.aspect = viewerContainer.clientWidth / viewerContainer.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+                }
+            }
+            
+            function resetView() {
+                if (!controls) return;
+                
+                if (!object) {
+                     controls.reset();
+                     camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
+                     controls.target.set(0, 0, 0);
+                     controls.update();
+                     return;
+                }
+
+                const box = new THREE.Box3().setFromObject(object);
+                if (box.isEmpty()) return;
+
+                const size = new THREE.Vector3();
+                box.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = maxDim * 1.5; 
+                defaultCameraDistance = distance;
+
                 const center = new THREE.Vector3();
-                geometry.boundingBox.getCenter(center);
-                geometry.translate(-center.x, -center.y, -center.z);
+                box.getCenter(center);
 
-                // Maak de Mesh
-                const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                controls.reset();
+                controls.target.copy(center); 
                 
-                scene.add(model);
-                object = model; 
-                resetView(); 
-                console.log("Stap 5: Model toevoeging en reset voltooid.");
-
-            } catch (error) {
-                console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
-                alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
-            } finally {
-                loadingIndicator.classList.add('hidden'); 
+                camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
+                controls.update();
+                console.log(`Stap 4: View gereset en gefocust op model.`);
             }
-        });
+            
+            resetButton.addEventListener('click', resetView);
+            
+            // --- HOOFD LAAD FUNCTIE (ALLEEN STL) ---
+            
+            fileUpload.addEventListener('change', async function(event) {
+                const file = event.target.files[0];
+                if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
+                
+                if (!renderer) {
+                     alert("Fout: Initialiseer eerst de 3D-viewer.");
+                     return;
+                }
+                
+                loadingIndicator.classList.remove('hidden'); 
 
-        // Start de viewer wanneer het document geladen is
-        document.addEventListener('DOMContentLoaded', () => {
-             initViewer();
-             resetView();
-        });
+                // Opruimen vorig model
+                if (object) {
+                    scene.remove(object);
+                    object.traverse(child => {
+                        if (child.isMesh) {
+                            if (child.geometry) child.geometry.dispose();
+                            if (child.material) child.material.dispose();
+                        }
+                    });
+                    object = null; 
+                }
+
+                try {
+                    console.log("Stap 3: STL-bestand gelezen.");
+                    const reader = new FileReader();
+                    const data = await new Promise((resolve, reject) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.onerror = reject;
+                        reader.readAsArrayBuffer(file);
+                    });
+
+                    // We gebruiken de loader die de lokale STLLoader.js aanmaakt
+                    const loader = new THREE.STLLoader(); 
+                    const geometry = loader.parse(data);
+                    
+                    geometry.computeBoundingBox();
+                    
+                    // Centreer de geometrie
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    geometry.translate(-center.x, -center.y, -center.z);
+
+                    // Maak de Mesh
+                    const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                    
+                    scene.add(model);
+                    object = model; 
+                    resetView(); 
+                    console.log("Stap 5: Model toevoeging en reset voltooid.");
+
+                } catch (error) {
+                    console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
+                    alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
+                } finally {
+                    loadingIndicator.classList.add('hidden'); 
+                }
+            });
+
+            // Start de viewer wanneer het document geladen is
+            document.addEventListener('DOMContentLoaded', () => {
+                 initViewer();
+                 resetView();
+            });
+        }
     </script>
 </body>
 </html>
