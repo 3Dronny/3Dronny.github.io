@@ -159,8 +159,13 @@
     </div>
     
     <script type="module">
-        // Importeer alles vanuit de module. THREE is nu een object dat alle Three.js klassen bevat.
-        import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js';
+        // Importeer de KERNKLASSEN DIRECT uit de Three.js module
+        import { 
+            Scene, PerspectiveCamera, WebGLRenderer, Color, AmbientLight, DirectionalLight, GridHelper, 
+            MeshPhongMaterial, Mesh, Vector3, Box3, 
+        } from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.module.js'; // Let op: .module.js
+        
+        // Importeer de Controls en Loader
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
 
@@ -168,9 +173,9 @@
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
         // Standaard materiaal voor modellen (Groen en glanzend)
-        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-            color: new THREE.Color(ACCENT_COLOR_HEX), // Emerald Green
-            emissive: new THREE.Color(0x0a1e16),      
+        const DEFAULT_MESH_MATERIAL = new MeshPhongMaterial({ 
+            color: new Color(ACCENT_COLOR_HEX), 
+            emissive: new Color(0x0a1e16),      
             specular: 0xeeeeee,                      
             shininess: 150,                           
         });
@@ -186,7 +191,7 @@
         let object; 
         let defaultCameraDistance = 100; 
 
-        // --- 1. Prijsberekening Logica ---
+        // --- 1. Prijsberekening Logica (ongewijzigd) ---
         function calculatePrice(e) {
             e.preventDefault();
             const printtijd = parseFloat(document.getElementById('printtijd').value);
@@ -213,18 +218,18 @@
         function initViewer() {
             if (renderer) return;
 
-            console.log("Stap 1: Initialiseer Three.js (Module Scope).");
+            console.log("Stap 1: Initialiseer Three.js met directe klassen imports.");
 
-            // Scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0f172a); 
+            // Scene (geen THREE. voor Scene)
+            scene = new Scene();
+            scene.background = new Color(0x0f172a); 
 
-            // Camera
-            camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
+            // Camera (geen THREE. voor PerspectiveCamera)
+            camera = new PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
             camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
             
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            // Renderer (geen THREE. voor WebGLRenderer)
+            renderer = new WebGLRenderer({ antialias: true });
             renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             
@@ -235,15 +240,15 @@
             viewerContainer.appendChild(renderer.domElement);
 
             // Belichting
-            scene.add(new THREE.AmbientLight(0x404040)); 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0); 
+            scene.add(new AmbientLight(0x404040)); 
+            const directionalLight = new DirectionalLight(0xffffff, 3.0); 
             directionalLight.position.set(200, 300, 200);
             scene.add(directionalLight);
 
-            // DEBUG VISUAL: Grondrooster (Moet nu zichtbaar zijn)
+            // DEBUG VISUAL: Grondrooster (geen THREE. voor GridHelper)
             const size = 100;
             const divisions = 10;
-            const gridHelper = new THREE.GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
+            const gridHelper = new GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
             scene.add(gridHelper);
             
             // Camera Controls 
@@ -284,11 +289,11 @@
                  return;
             }
 
-            // BELANGRIJKE CORRECTIE: Gebruik THREE.Box3 en THREE.Vector3
-            const box = new THREE.Box3().setFromObject(object);
+            // Gebruik directe Box3 en Vector3 (geen THREE.)
+            const box = new Box3().setFromObject(object);
             if (box.isEmpty()) return;
 
-            const size = new THREE.Vector3();
+            const size = new Vector3();
             box.getSize(size);
             const maxDim = Math.max(size.x, size.y, size.z);
             const distance = maxDim * 1.5; 
@@ -342,12 +347,13 @@
                 
                 geometry.computeBoundingBox();
                 
-                // BELANGRIJKE CORRECTIE: Gebruik THREE.Vector3
-                const center = new THREE.Vector3();
+                // Gebruik directe Vector3 (geen THREE.)
+                const center = new Vector3();
                 geometry.boundingBox.getCenter(center);
                 geometry.translate(-center.x, -center.y, -center.z);
 
-                const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                // Gebruik directe Mesh (geen THREE.)
+                const model = new Mesh(geometry, DEFAULT_MESH_MATERIAL);
                 
                 scene.add(model);
                 object = model; 
