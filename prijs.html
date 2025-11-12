@@ -160,7 +160,8 @@
             shininess: 30 
         });
 
-        // *** 1. Prijsberekening Logica ***
+        // *** 1. Prijsberekening Logica *** (ongewijzigd)
+        // ... (Prijsberekeningslogica blijft hier) ...
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -318,10 +319,15 @@
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
 
                 } else if (fileName.endsWith('.3mf')) {
+                    // *** FIX V4: Agressieve centrering en materialisering ***
+                    
+                    // 1. Initialiseer de loader direct met de renderer (soms nodig voor texturen/kleuren)
                     const loader = new THREE.ThreeMFLoader();
+
+                    // 2. Pars de data (dit geeft een GROUP object terug)
                     model = loader.parse(e.target.result);
                     
-                    // *** FIX V3: Forceer nieuw materiaal op elk mesh en ruim oude op ***
+                    // 3. Forceer nieuw materiaal op elk mesh en ruim oude op
                     model.traverse(function(child) {
                         if (child.isMesh) {
                             // Gooi oud materiaal weg
@@ -334,15 +340,22 @@
                             }
                             // Dwing nieuw groen materiaal af
                             child.material = DEFAULT_MESH_MATERIAL; 
+                            
+                            // *** NIEUWE STAP: Transleer de interne geometrie naar de nulpositie ***
+                            // Dit is de meest kritieke stap voor 3MF/Groups
+                            if (child.geometry) {
+                                child.geometry.computeBoundingBox();
+                                const center = new THREE.Vector3();
+                                child.geometry.boundingBox.getCenter(center);
+                                child.geometry.translate(-center.x, -center.y, -center.z);
+                            }
                         }
                     });
 
-                    // Centrering van de Group (3MF)
-                    const box = new THREE.Box3().setFromObject(model);
-                    const center = new THREE.Vector3();
-                    box.getCenter(center);
-                    model.position.sub(center); 
-
+                    // 4. Reset de positie van de HOOFDGROEP (de 'model') naar de oorsprong.
+                    // Omdat we de interne geometrie al getransleerd hebben, staat alles nu in het midden.
+                    model.position.set(0, 0, 0); 
+                    
                 } else {
                     alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
                     return;
