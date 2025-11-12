@@ -176,12 +176,11 @@
             const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
             // Standaard materiaal voor modellen (Groen en glanzend)
-            // AANGEPAST: De kleur is nu direct de accentkleur
             const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
                 color: new THREE.Color(ACCENT_COLOR_HEX), // Gebruik de groene accentkleur
-                emissive: new THREE.Color(0x0a1e16),      // Donkergroene gloed voor diepte
-                specular: 0xeeeeee,                      // Witte reflecties
-                shininess: 150,                           // Glanzend oppervlak
+                emissive: new THREE.Color(0x05100c),      // Subtiele donkergroene gloed voor diepte (verminderd)
+                specular: new THREE.Color(0x66ccaa),      // Glanzende highlights, lichtgroen voor een metaalachtige look
+                shininess: 100,                           // Glans intensiteit
             });
 
             // Elementen
@@ -247,22 +246,22 @@
                 }
                 viewerContainer.appendChild(renderer.domElement);
 
-                // Belichting
-                scene.add(new THREE.AmbientLight(0x404040, 3.0)); 
+                // Belichting - Verhoogde intensiteit voor meer contrast
+                scene.add(new THREE.AmbientLight(0x404040, 3.5)); // Omgevingslicht
                 
-                const mainLight = new THREE.DirectionalLight(0xffffff, 3.5); 
+                const mainLight = new THREE.DirectionalLight(0xffffff, 4.5); // Hoofdlicht (sterker)
                 mainLight.position.set(200, 300, 200);
                 scene.add(mainLight);
                 
-                const fillLight = new THREE.DirectionalLight(0xddddff, 2.0); 
+                const fillLight = new THREE.DirectionalLight(0xddddff, 3.0); // Invullicht (sterker)
                 fillLight.position.set(-200, -300, -200);
                 scene.add(fillLight);
 
-                // DEBUG VISUAL: Grondrooster 
-                const size = 100;
-                const divisions = 10;
-                const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
-                scene.add(gridHelper);
+                // DEBUG VISUAL: Grondrooster (NU VERWIJDERD)
+                // const size = 100;
+                // const divisions = 10;
+                // const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
+                // scene.add(gridHelper);
                 
                 // Camera Controls 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -281,7 +280,7 @@
                 animate();
                 
                 window.addEventListener('resize', onWindowResize, false);
-                console.log("Stap 2: Viewer gestart. Grid zou nu zichtbaar moeten zijn.");
+                console.log("Stap 2: Viewer gestart. Grid verwijderd, verbeterde verlichting.");
             }
             
             function onWindowResize() {
