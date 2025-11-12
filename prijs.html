@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Print Prijs Calculator met Viewer | 3DRonny</title>
+    <title>3D Print Prijs Calculator met Professionele Viewer | 3DRonny</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,48 +20,37 @@
 
         /* Aangepaste styling voor een donkere, moderne look */
         body {
-            background-color: #1f2937; /* Donkergrijs/blauw */
-            color: #d1d5db; /* Lichtgrijze tekst */
+            background-color: #1f2937;
+            color: #d1d5db;
         }
         
         .accent-text {
             color: var(--accent-color);
         }
         
-        .accent-border {
-            border-color: var(--accent-color);
-        }
-        
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-        }
-
-        /* Styling voor invulvelden */
-        .input-field {
-            background-color: #374151; /* Donkerder veld */
-            border: 1px solid #4b5563;
-            color: white;
-        }
-        
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
-        }
-        
-        /* 3D Viewer Container */
+        /* 3D Viewer Container: GROTER GEMAAKT (600px hoog) */
         #viewer-container {
             width: 100%;
-            height: 400px;
-            background-color: #2c3e50; /* Donkerblauwe achtergrond voor de viewer */
+            height: 600px; /* VERHOOGD! */
+            background-color: #0f172a; /* Zwart-blauwe professionele achtergrond */
             border-radius: 12px;
             overflow: hidden;
             position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Overige styles */
+        .btn-primary {
+            background-color: var(--accent-color);
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+        .input-field {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            color: white;
         }
     </style>
 </head>
@@ -72,14 +61,14 @@
             <h1 class="text-4xl font-bold text-white mb-2">
                 3D Print Prijs <span class="accent-text">Calculator</span>
             </h1>
-            <p class="text-gray-400">Bereken de geschatte kosten en bekijk jouw model.</p>
+            <p class="text-gray-400">Bekijk grote modellen en bereken de kosten nauwkeurig.</p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
             
-            <div class="lg:order-2">
+            <div class="lg:col-span-3 lg:order-1">
                 <h2 class="text-2xl font-semibold mb-4 text-white">
-                    <i class="fas fa-cube mr-2 accent-text"></i>3D Model Viewer
+                    <i class="fas fa-cube mr-2 accent-text"></i>Professionele 3D Model Viewer
                 </h2>
                 
                 <div id="viewer-container">
@@ -88,11 +77,11 @@
                 
                 <div class="mt-4 flex flex-col space-y-3">
                     <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg" aria-label="Upload 3D Model Bestand">
-                    <p class="text-sm text-gray-400">Ondersteund formaat: **STL**.</p>
+                    <p class="text-sm text-gray-400">Ondersteund formaat: **STL**. (Voor zeer grote bestanden kan het laden enkele seconden duren).</p>
                 </div>
             </div>
 
-            <div class="lg:order-1">
+            <div class="lg:col-span-2 lg:order-2">
                 <h2 class="text-2xl font-semibold mb-4 text-white">
                     <i class="fas fa-calculator mr-2 accent-text"></i>Printparameters
                 </h2>
@@ -147,81 +136,86 @@
     </div>
     
     <script>
-        // Kleurcode ophalen uit CSS-variabele
+        // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
         // *** 1. Prijsberekening Logica ***
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
-
-        // Tarieven (AANPASSEN OP BASIS VAN JE EIGEN KOSTEN!)
         const COST_PER_GRAM_FILAMENT = 0.10; 
         const COST_PER_HOUR_PRINTER = 4.00;  
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
-            // Haal waarden op
             const printtijd = parseFloat(document.getElementById('printtijd').value);
             const gewicht = parseFloat(document.getElementById('gewicht').value);
             const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
 
-            if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) {
-                alert("Vul alle velden correct in.");
-                return;
-            }
+            if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
 
-            // Berekening
             const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
             const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
             const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
 
-            // Resultaat tonen
             totalPriceElement.textContent = `€ ${totalePrijs.toFixed(2)}`;
             resultContainer.classList.remove('hidden');
         });
 
 
-        // *** 2. Complete 3D Viewer Logica met STLLoader en OrbitControls ***
+        // *** 2. Professionele 3D Viewer Logica met Verbeterde Belichting ***
         const viewerContainer = document.getElementById('viewer-container');
         const fileUpload = document.getElementById('file-upload');
         let scene, camera, renderer, controls;
-        let object; // Referentie naar het geladen model
+        let object; 
 
         function initViewer() {
             // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x2c3e50);
+            scene.background = new THREE.Color(0x0f172a); // Donkerblauwe/zwarte achtergrond
 
             // Camera
-            camera = new THREE.PerspectiveCamera(75, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 1000);
-            camera.position.z = 5;
+            camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); // FOV van 75 naar 50 voor een meer 'tele' effect
+            camera.position.set(0, 0, 100);
 
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // Verbeter de kwaliteit op high-DPI schermen
             
-            // Verwijder de placeholder tekst
             const placeholder = document.getElementById('viewer-placeholder');
             if (placeholder) {
                 viewerContainer.removeChild(placeholder);
             }
             viewerContainer.appendChild(renderer.domElement);
 
-            // Verlichting
-            scene.add(new THREE.AmbientLight(0x404040, 3)); // Zacht omgevingslicht
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-            directionalLight.position.set(10, 10, 10);
-            scene.add(directionalLight);
+            // Professionele Belichting:
+            
+            // 1. Zacht Omgevingslicht (Ambient)
+            scene.add(new THREE.AmbientLight(0x444444)); 
+            
+            // 2. Hemisfeer Licht (voor zachte overgang tussen lucht/grond)
+            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.5); 
+            scene.add(hemisphereLight);
+
+            // 3. Gericht Licht (Key Light)
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            keyLight.position.set(200, 200, 200);
+            scene.add(keyLight);
+            
+            // 4. Secundair/Fill Light
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.7);
+            fillLight.position.set(-200, -100, -200);
+            scene.add(fillLight);
+
 
             // Camera Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
-            controls.dampingFactor = 0.25;
-            controls.screenSpacePanning = false;
-            controls.minDistance = 1;
-            controls.maxDistance = 50;
+            controls.dampingFactor = 0.15; // Nog soepeler
+            controls.screenSpacePanning = true; 
+            controls.minDistance = 5;
+            controls.maxDistance = 1000; // Hoger max distance voor grote modellen
 
             // Animate Loop
             function animate() {
@@ -242,7 +236,6 @@
             }
         }
         
-        // Initialiseer de viewer zodra de pagina geladen is
         initViewer(); 
         
         fileUpload.addEventListener('change', function(event) {
@@ -272,23 +265,26 @@
                     // Materiaal met jouw accentkleur
                     const material = new THREE.MeshPhongMaterial({ 
                         color: new THREE.Color(ACCENT_COLOR_HEX),
-                        specular: 0x111111,
-                        shininess: 200
+                        specular: 0x444444, // Meer reflectie
+                        shininess: 30 
                     });
                     
                     object = new THREE.Mesh(geometry, material);
                     scene.add(object);
                     
-                    // Pas de camera aan om het model te bekijken
+                    // Pas de camera aan om het model te bekijken (belangrijk voor grote modellen!)
                     const size = new THREE.Vector3();
                     geometry.boundingBox.getSize(size);
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    const fov = camera.fov * (Math.PI / 180);
-                    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-                    cameraZ *= 1.5; // Extra afstand
                     
-                    camera.position.set(cameraZ, cameraZ, cameraZ);
+                    // Bereken de benodigde afstand om het object in beeld te krijgen
+                    const distance = maxDim * 1.5; 
+                    
+                    // Stel camera positie in
+                    camera.position.set(distance, distance * 0.5, distance * 1.5);
                     camera.lookAt(scene.position);
+                    
+                    // Reset controls target
                     controls.target.set(0, 0, 0);
                     controls.update();
 
