@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Print Prijs Calculator met Nieuwe Viewer | 3DRonny</title>
+    <title>3D Print Prijs Calculator | 3DRonny</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -159,7 +159,7 @@
     </div>
     
     <script type="module">
-        // Importeer Three.js modules DIRECT in dit blok. Dit zorgt ervoor dat ze beschikbaar zijn in de scope.
+        // Importeer alles vanuit de module. THREE is nu een object dat alle Three.js klassen bevat.
         import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
@@ -246,7 +246,7 @@
             const gridHelper = new THREE.GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
             scene.add(gridHelper);
             
-            // Camera Controls (Werkt nu, omdat het binnen de module scope is)
+            // Camera Controls 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
@@ -284,6 +284,7 @@
                  return;
             }
 
+            // BELANGRIJKE CORRECTIE: Gebruik THREE.Box3 en THREE.Vector3
             const box = new THREE.Box3().setFromObject(object);
             if (box.isEmpty()) return;
 
@@ -336,12 +337,12 @@
                     reader.readAsArrayBuffer(file);
                 });
 
-                // STLLoader (Werkt nu, omdat het binnen de module scope is)
                 const loader = new STLLoader(); 
                 const geometry = loader.parse(data);
                 
                 geometry.computeBoundingBox();
                 
+                // BELANGRIJKE CORRECTIE: Gebruik THREE.Vector3
                 const center = new THREE.Vector3();
                 geometry.boundingBox.getCenter(center);
                 geometry.translate(-center.x, -center.y, -center.z);
