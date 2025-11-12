@@ -350,17 +350,19 @@
                     
                 } else if (fileName.endsWith('.3mf')) {
                     
-                    // *** FIX V5: Terug naar de stabiele ArrayBuffer en .parse() ***
                     const loader = new THREE.ThreeMFLoader();
                     
-                    // De .parse() methode is nu direct de bron van de fout.
-                    // Als dit faalt, ligt het aan de bestandsstructuur en de loader-versie.
+                    // Parsen
                     model = loader.parse(data); 
+                    
+                    // *** FIX V6: Controleer expliciet of het geparseerde model een geldige Group is ***
+                    if (!model || model.children.length === 0) {
+                        throw new Error("Het 3MF-bestand bevat geen geldige 3D-modellen (meshes) of is leeg.");
+                    }
 
                     // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid
                     model.traverse(function(child) {
                         if (child.isMesh) {
-                            // Dwing nieuw groen materiaal af
                             child.material = DEFAULT_MESH_MATERIAL;
                         }
                     });
@@ -384,8 +386,14 @@
 
             } catch (error) {
                 console.error("Fout bij het laden van het 3D-model (3MF):", error);
-                // Toon de specifieke foutmelding
-                alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${error.message})`); 
+                
+                // Vang de specifieke 'Cannot read properties of null' en geef een duidelijkere melding
+                let detailedMessage = error.message;
+                if (detailedMessage.includes("Cannot read properties of null (reading 'model')")) {
+                    detailedMessage = "De 3MF-loader kon de structuur van het bestand niet correct lezen. Dit duidt op een corrupt of ongebruikelijk geëxporteerd 3MF-bestand.";
+                }
+
+                alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${detailedMessage})`); 
             } finally {
                 loadingIndicator.classList.add('hidden'); // Verberg laad-indicator
             }
