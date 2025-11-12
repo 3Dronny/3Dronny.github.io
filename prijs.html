@@ -11,11 +11,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js"></script> 
 
     <script type="module">
+        // Importeer de controllers en loaders via de moderne module-structuur
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/3MFLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/ThreeMFLoader.js';
 
-        // Maak ze globaal beschikbaar in de THREE-namespace voor de rest van de code
+        // Maak de geïmporteerde modules globaal beschikbaar in de THREE-namespace, 
+        // zodat de rest van je script ze kan gebruiken.
         window.THREE.OrbitControls = OrbitControls;
         window.THREE.STLLoader = STLLoader;
         window.THREE.ThreeMFLoader = ThreeMFLoader; 
@@ -223,7 +225,7 @@
         let defaultCameraDistance = 100; 
 
         function initViewer() {
-            // Controleer of de viewer al geïnitialiseerd is (om dubbele initialisatie te voorkomen)
+            // Voorkom dubbele initialisatie
             if (renderer) return;
 
             // Scene
@@ -242,7 +244,7 @@
             
             const placeholder = document.getElementById('viewer-placeholder');
             if (placeholder && viewerContainer.contains(placeholder)) {
-                // Verwijder de placeholder zodra de renderer klaar is om de DOM over te nemen
+                // Verwijder de placeholder zodra de renderer klaar is
                 viewerContainer.removeChild(placeholder);
             }
             viewerContainer.appendChild(renderer.domElement);
@@ -258,7 +260,7 @@
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
 
-            // Camera Controls (nu zeker gedefinieerd)
+            // Camera Controls (nu zeker gedefinieerd door de fix)
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
@@ -309,14 +311,15 @@
         
         resetButton.addEventListener('click', resetView);
         
-        // --- HOOFD LAAD FUNCTIE (ongewijzigd) ---
+        // --- HOOFD LAAD FUNCTIE ---
         
         fileUpload.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            // Controleer of de viewer is geïnitialiseerd voordat we laden
+            // Controleer of de viewer is geïnitialiseerd
             if (!renderer) {
+                 console.error("3D viewer nog niet klaar. Wacht op 'window load' event.");
                  alert("Fout: De 3D viewer is nog niet correct gestart. Wacht tot de pagina volledig geladen is.");
                  return;
             }
@@ -416,7 +419,7 @@
             }
         });
 
-        // *** NIEUWE FIX: Start de viewer pas als alles is geladen ***
+        // *** FIX: Start de viewer pas als alle modules en de DOM zijn geladen ***
         window.addEventListener('load', initViewer);
     </script>
 </body>
