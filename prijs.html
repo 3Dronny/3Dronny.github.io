@@ -159,16 +159,17 @@
     
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/3MFLoader.js"></script>
     
     <script>
         
-        // Final sanity check
+        // Final sanity check - controleert nu op de JSZip variabele
         if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined' || typeof JSZip === 'undefined') {
             console.error("KRITIEKE FOUT: Een van de benodigde Three.js-componenten (of JSZip) is niet correct geladen. De 3D Viewer start niet.");
             const container = document.getElementById('viewer-container');
             if (container) {
+                // Toon de foutmelding op de pagina
                 container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>Een noodzakelijk extern bestand kon niet geladen worden.</div>';
             }
         } else {
@@ -316,7 +317,7 @@
             
             resetButton.addEventListener('click', resetView);
             
-            // --- HOOFD LAAD FUNCTIE (MET JSZip) ---
+            // --- HOOFD LAAD FUNCTIE (NU MET CORRECTE JSZip AFHANKELIJKHEID) ---
             
             fileUpload.addEventListener('change', async function(event) {
                 const file = event.target.files[0];
@@ -374,7 +375,7 @@
                     } else if (is3MF) {
                         const loader = new THREE.ThreeMFLoader();
                         
-                        // FIX: JSZip is nu geladen, dus de parser zou moeten werken.
+                        // JSZip is nu correct geladen
                         model = loader.parse(data); 
 
                         if (!model || model.children.length === 0) {
@@ -400,12 +401,12 @@
                         object = model; 
                         resetView(); 
                     } else {
-                        // Dit zou niet mogen gebeuren na de controles, maar als vangnet
                         throw new Error("Geen geldig 3D-model gevonden na het parsen.");
                     }
 
                 } catch (error) {
                     console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D BESTAND:", error);
+                    // De foutmelding is nu (als de loader nog crasht) een echte parseerfout, geen missende bibliotheekfout.
                     alert(`Fout bij het laden van het model: ${error.message}. Controleer of het bestand valide is.`); 
                 } finally {
                     loadingIndicator.classList.add('hidden'); 
