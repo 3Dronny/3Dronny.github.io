@@ -159,19 +159,20 @@
     
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/3MFLoader.js"></script>
     
     <script>
         
         // Final sanity check
-        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-            console.error("KRITIEKE FOUT: Een van de benodigde Three.js-componenten is niet correct geladen. De 3D Viewer start niet.");
+        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined' || typeof JSZip === 'undefined') {
+            console.error("KRITIEKE FOUT: Een van de benodigde Three.js-componenten (of JSZip) is niet correct geladen. De 3D Viewer start niet.");
             const container = document.getElementById('viewer-container');
             if (container) {
-                container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>De viewer kan niet laden vanwege een probleem met externe bestanden.</div>';
+                container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>Een noodzakelijk extern bestand kon niet geladen worden.</div>';
             }
         } else {
-            console.log("Alle Three.js componenten zijn succesvol geladen.");
+            console.log("Alle Three.js componenten en JSZip zijn succesvol geladen.");
 
             // Donkerdere, diepere Groene Kleur
             const MODEL_COLOR = 0x007733; 
@@ -315,7 +316,7 @@
             
             resetButton.addEventListener('click', resetView);
             
-            // --- HOOFD LAAD FUNCTIE (GEFIXTE 3MF LOGICA) ---
+            // --- HOOFD LAAD FUNCTIE (MET JSZip) ---
             
             fileUpload.addEventListener('change', async function(event) {
                 const file = event.target.files[0];
@@ -373,11 +374,11 @@
                     } else if (is3MF) {
                         const loader = new THREE.ThreeMFLoader();
                         
-                        // BELANGRIJKSTE FIX: Parse het model direct.
+                        // FIX: JSZip is nu geladen, dus de parser zou moeten werken.
                         model = loader.parse(data); 
 
-                        if (!model) {
-                            throw new Error("Het 3MF-bestand kon niet worden geparset of is leeg.");
+                        if (!model || model.children.length === 0) {
+                            throw new Error("Het 3MF-bestand kon niet worden geparset of is leeg (geen modeldata gevonden).");
                         }
                         
                         // Overschrijf alle materialen met onze standaard groene kleur
@@ -399,6 +400,7 @@
                         object = model; 
                         resetView(); 
                     } else {
+                        // Dit zou niet mogen gebeuren na de controles, maar als vangnet
                         throw new Error("Geen geldig 3D-model gevonden na het parsen.");
                     }
 
