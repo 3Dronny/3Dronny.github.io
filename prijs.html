@@ -9,9 +9,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/examples/js/loaders/3MFLoader.js"></script> 
+
+    <script type="module">
+        // Importeer de modules van de Three.js voorbeeldbibliotheek (r156)
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/3MFLoader.js';
+
+        // Maak de geëxporteerde modules globaal beschikbaar in de THREE-namespace.
+        // Dit is nodig omdat de rest van de code in het <script>-blok ze als globale objecten verwacht.
+        window.THREE.OrbitControls = OrbitControls;
+        window.THREE.STLLoader = STLLoader;
+        window.THREE.ThreeMFLoader = ThreeMFLoader; 
+    </script>
     <style>
         /* Jouw Gewenste Groene Accentkleur */
         :root {
@@ -180,12 +190,12 @@
         // Laad-indicator
         const loadingIndicator = document.getElementById('loading-indicator');
 
-        // *** 1. Prijsberekening Logica ***
+        // --- 1. Prijsberekening Logica ---
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
         const COST_PER_GRAM_FILAMENT = 0.10; 
-        const COST_PER_HOUR_PRINTER = 4.00;  
+        const COST_PER_HOUR_PRINTER = 4.00; 
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -230,7 +240,10 @@
             
             const placeholder = document.getElementById('viewer-placeholder');
             if (placeholder) {
-                viewerContainer.removeChild(placeholder);
+                // Zorg ervoor dat de placeholder verdwijnt wanneer de renderer wordt toegevoegd
+                if (viewerContainer.contains(placeholder)) {
+                    viewerContainer.removeChild(placeholder);
+                }
             }
             viewerContainer.appendChild(renderer.domElement);
 
@@ -246,6 +259,7 @@
             scene.add(fillLight);
 
             // Camera Controls
+            // De OrbitControls Class is nu beschikbaar door de fix in de <head>
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
@@ -321,6 +335,8 @@
                         }
                     }
                 });
+                // Wis de referentie
+                object = null; 
             }
 
             const fileName = file.name.toLowerCase();
@@ -337,10 +353,11 @@
 
 
                 if (fileName.endsWith('.stl')) {
-                    const loader = new THREE.STLLoader();
+                    // STLLoader is nu correct gedefinieerd door de fix
+                    const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     
-                    // *** FIX V9: Robuuste STL Centrering ***
+                    // Robuuste STL Centrering
                     geometry.computeBoundingBox();
                     if (!geometry.boundingBox) {
                         throw new Error("Kan de afmetingen van het STL-model niet berekenen.");
@@ -356,7 +373,8 @@
                     
                 } else if (fileName.endsWith('.3mf')) {
                     
-                    const loader = new THREE.ThreeMFLoader();
+                    // ThreeMFLoader is nu correct gedefinieerd door de fix
+                    const loader = new THREE.ThreeMFLoader(); 
                     
                     // Parsen
                     let parsedModel = loader.parse(data); 
@@ -367,10 +385,9 @@
                     }
                     model = parsedModel;
                     
-                    // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid
+                    // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid (overrulet 3MF materialen)
                     model.traverse(function(child) {
                         if (child.isMesh) {
-                            // Dwing nieuw groen materiaal af
                             child.material = DEFAULT_MESH_MATERIAL;
                         }
                     });
@@ -398,12 +415,12 @@
                 let detailedMessage = error.message;
                 
                 // Vang bekende 3MF-fouten op
-                if (detailedMessage.includes("3MF-loader (r156) kon de structuur niet volledig lezen") || detailedMessage.includes("Cannot read properties of null")) {
-                    detailedMessage = "De 3MF-loader (r156) kon dit bestand niet parsen. Dit bevestigt dat het een zeer ongebruikelijk geëxporteerd 3MF-bestand is. **Probeer de STL-conversie als enige overgebleven optie.**";
+                if (detailedMessage.includes("3MF-loader (r156) kon de structuur niet volledig lezen")) {
+                    detailedMessage = "De 3MF-loader kon dit bestand niet parsen. Het is mogelijk een ongebruikelijk geëxporteerd 3MF-bestand. Probeer de STL-conversie.";
                 }
                 
                 // Vang nieuwe STL-fouten op
-                 if (detailedMessage.includes("Kan de afmetingen van het STL-model niet berekenen.")) {
+                if (detailedMessage.includes("Kan de afmetingen van het STL-model niet berekenen.")) {
                     detailedMessage = "Het STL-model lijkt corrupt te zijn of de geometrie bevat geen meetbare vlakken (leeg bestand). Probeer een ander STL-bestand.";
                 }
 
