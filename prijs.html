@@ -315,7 +315,7 @@
             
             resetButton.addEventListener('click', resetView);
             
-            // --- HOOFD LAAD FUNCTIE (NU VOOR STL EN 3MF) ---
+            // --- HOOFD LAAD FUNCTIE (GEFIXTE 3MF LOGICA) ---
             
             fileUpload.addEventListener('change', async function(event) {
                 const file = event.target.files[0];
@@ -354,7 +354,6 @@
                     const data = await new Promise((resolve, reject) => {
                         reader.onload = (e) => resolve(e.target.result);
                         reader.onerror = reject;
-                        // 3MF vereist blob/arraybuffer, STL kan ook (is beter)
                         reader.readAsArrayBuffer(file); 
                     });
 
@@ -369,33 +368,38 @@
                         geometry.boundingBox.getCenter(center);
                         geometry.translate(-center.x, -center.y, -center.z);
                         
-                        // STL heeft alleen geometrie, dus we creëren de Mesh met ons standaard materiaal
                         model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
 
                     } else if (is3MF) {
-                        // 3MF kan materiaal en/of meerdere objecten bevatten, dus we laden de hele Groep/Scene
                         const loader = new THREE.ThreeMFLoader();
+                        
+                        // BELANGRIJKSTE FIX: Parse het model direct.
                         model = loader.parse(data); 
 
-                        // 3MF modellen hebben vaak hun eigen materialen.
-                        // Optioneel: Overschrijf hun materialen met onze standaard kleur
+                        if (!model) {
+                            throw new Error("Het 3MF-bestand kon niet worden geparset of is leeg.");
+                        }
+                        
+                        // Overschrijf alle materialen met onze standaard groene kleur
                         model.traverse((child) => {
                             if (child.isMesh) {
                                 child.material = DEFAULT_MESH_MATERIAL;
                             }
                         });
 
-                        // 3MF objecten moeten ook gecentreerd worden
+                        // Centrering voor de THREE.Group
                         const box = new THREE.Box3().setFromObject(model);
                         const center = new THREE.Vector3();
                         box.getCenter(center);
-                        model.position.sub(center); // Subtraheer het middelpunt van de positie
+                        model.position.sub(center); 
                     }
                     
                     if (model) {
                         scene.add(model);
                         object = model; 
                         resetView(); 
+                    } else {
+                        throw new Error("Geen geldig 3D-model gevonden na het parsen.");
                     }
 
                 } catch (error) {
