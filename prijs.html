@@ -162,10 +162,9 @@
     
     <script>
         
-        // Final sanity check: De fout wordt opgevangen in deze if-statement
+        // Final sanity check
         if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
             console.error("KRITIEKE FOUT: Three.js of de OrbitControls zijn niet correct geladen. De 3D Viewer start niet.");
-            // Toon een duidelijke fout aan de gebruiker
             const container = document.getElementById('viewer-container');
             if (container) {
                 container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>De viewer kan niet laden vanwege een probleem met externe bestanden.</div>';
@@ -177,11 +176,12 @@
             const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
             // Standaard materiaal voor modellen (Groen en glanzend)
+            // AANGEPAST: De kleur is nu direct de accentkleur
             const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-                color: new THREE.Color(ACCENT_COLOR_HEX), 
-                emissive: new THREE.Color(0x0a1e16),      
-                specular: 0xeeeeee,                      
-                shininess: 150,                           
+                color: new THREE.Color(ACCENT_COLOR_HEX), // Gebruik de groene accentkleur
+                emissive: new THREE.Color(0x0a1e16),      // Donkergroene gloed voor diepte
+                specular: 0xeeeeee,                      // Witte reflecties
+                shininess: 150,                           // Glanzend oppervlak
             });
 
             // Elementen
@@ -264,7 +264,7 @@
                 const gridHelper = new THREE.GridHelper(size, divisions, 0x10b981, 0x444444); 
                 scene.add(gridHelper);
                 
-                // Camera Controls (Werkt alleen als de controls geladen zijn)
+                // Camera Controls 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true; 
                 controls.dampingFactor = 0.15;
@@ -359,7 +359,6 @@
                         reader.readAsArrayBuffer(file);
                     });
 
-                    // De STLLoader wordt nu geladen via CDN, net als de rest
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     
