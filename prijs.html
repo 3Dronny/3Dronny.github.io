@@ -172,15 +172,15 @@
         } else {
             console.log("Three.js, OrbitControls en STLLoader zijn succesvol geladen.");
 
-            // Definitieve Groene Kleur: Heldermintgroen (vast)
-            const MODEL_COLOR = 0x00ff88; 
+            // AANGEPAST: Donkerdere, diepere Groene Kleur
+            const MODEL_COLOR = 0x007733; 
 
             // Standaard materiaal voor modellen
             const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
                 color: new THREE.Color(MODEL_COLOR), 
-                emissive: new THREE.Color(0x05100c),      
-                specular: new THREE.Color(0xffffff),      // Specular ingesteld op wit voor neutrale glans
-                shininess: 120,                           // Glans intensiteit
+                emissive: new THREE.Color(0x00331a),      // Donkerdere emissie om schaduwen te verdiepen
+                specular: new THREE.Color(0xffffff),      // Glans blijft wit
+                shininess: 30,                            // AANGEPAST: Glans verminderd voor scherper uiterlijk
             });
 
             // Elementen
@@ -246,21 +246,21 @@
                 }
                 viewerContainer.appendChild(renderer.domElement);
 
-                // --- Belichting Optimalisatie ---
-                scene.add(new THREE.AmbientLight(0xffffff, 0.7)); // Subtiel wit omgevingslicht, iets sterker
+                // --- Belichting Optimalisatie (Lichtere intensiteit voor donkerder model) ---
+                scene.add(new THREE.AmbientLight(0xffffff, 0.4)); // Verlaagd om de scène donkerder te maken
                 
-                // Hoofdlicht: Krachtig en van boven/rechts
-                const mainLight = new THREE.DirectionalLight(0xffffff, 4.0); 
+                // Hoofdlicht
+                const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); // Verlaagd
                 mainLight.position.set(200, 300, 200);
                 scene.add(mainLight);
                 
-                // Secundair licht: Contrast en reliëf (van onder/links/achter)
-                const fillLight = new THREE.DirectionalLight(0xffffff, 2.5); 
+                // Secundair licht
+                const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); // Verlaagd
                 fillLight.position.set(-200, -200, -200);
                 scene.add(fillLight);
                 
                 // Extra licht voor highlights aan de voorkant (subtiel)
-                const rimLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                const rimLight = new THREE.DirectionalLight(0xffffff, 0.8); // Verlaagd
                 rimLight.position.set(0, 0, 300);
                 scene.add(rimLight);
                 // --------------------------------
@@ -282,7 +282,7 @@
                 animate();
                 
                 window.addEventListener('resize', onWindowResize, false);
-                console.log("Stap 2: Viewer gestart. Geoptimaliseerde belichting.");
+                console.log("Stap 2: Viewer gestart. Nieuwe kleur en scherpere weergave geactiveerd.");
             }
             
             function onWindowResize() {
@@ -314,7 +314,8 @@
                 defaultCameraDistance = distance;
 
                 const center = new THREE.Vector3();
-                box.getCenter(center);
+                geometry.boundingBox.getCenter(center);
+                geometry.translate(-center.x, -center.y, -center.z);
 
                 controls.reset();
                 controls.target.copy(center); 
