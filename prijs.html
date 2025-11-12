@@ -160,7 +160,7 @@
             shininess: 30 
         });
 
-        // *** 1. Prijsberekening Logica *** (ongewijzigd)
+        // *** 1. Prijsberekening Logica ***
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
         const totalPriceElement = document.getElementById('totaal-prijs');
@@ -258,19 +258,17 @@
             // Bounding Box berekening van het hele object
             const box = new THREE.Box3().setFromObject(object);
 
-            if (box.isEmpty()) return; // Geen object geladen
+            if (box.isEmpty()) return;
 
             const size = new THREE.Vector3();
             box.getSize(size);
             const maxDim = Math.max(size.x, size.y, size.z);
             
-            // Stel de afstand in op basis van de grootste dimensie
             const distance = maxDim * 1.5; 
             defaultCameraDistance = distance;
 
             // Reset de camera positie en target
             controls.reset();
-            // Plaats de camera op een optimale afstand en hoek
             camera.position.set(distance, distance * 0.5, distance * 1.5);
             controls.target.set(0, 0, 0);
             controls.update();
@@ -284,7 +282,7 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            // Verwijder vorig model
+            // Verwijder vorig model en opruiming
             if (object) {
                 scene.remove(object);
                 object.traverse(child => {
@@ -323,10 +321,18 @@
                     const loader = new THREE.ThreeMFLoader();
                     model = loader.parse(e.target.result);
                     
-                    // *** FIX V2: Garandeer dat elk mesh de accentkleur krijgt ***
+                    // *** FIX V3: Forceer nieuw materiaal op elk mesh en ruim oude op ***
                     model.traverse(function(child) {
                         if (child.isMesh) {
-                            // Dwing het materiaal af, negeer de ingebouwde kleur van de 3MF
+                            // Gooi oud materiaal weg
+                            if (child.material) {
+                                if (Array.isArray(child.material)) {
+                                    child.material.forEach(m => m.dispose());
+                                } else {
+                                    child.material.dispose();
+                                }
+                            }
+                            // Dwing nieuw groen materiaal af
                             child.material = DEFAULT_MESH_MATERIAL; 
                         }
                     });
