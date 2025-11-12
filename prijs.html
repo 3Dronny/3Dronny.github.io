@@ -28,10 +28,10 @@
             color: var(--accent-color);
         }
         
-        /* 3D Viewer Container: GROTER GEMAAKT (600px hoog) */
+        /* 3D Viewer Container: GROOT */
         #viewer-container {
             width: 100%;
-            height: 600px; /* VERHOOGD! */
+            height: 600px;
             background-color: #0f172a; /* Zwart-blauwe professionele achtergrond */
             border-radius: 12px;
             overflow: hidden;
@@ -51,6 +51,16 @@
             background-color: #374151;
             border: 1px solid #4b5563;
             color: white;
+        }
+        
+        /* Reset knop styling */
+        .btn-reset {
+            background-color: #4b5563;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-reset:hover {
+            background-color: #6b7280;
         }
     </style>
 </head>
@@ -75,10 +85,13 @@
                     <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL-bestand om de 3D-viewer te starten.</p>
                 </div>
                 
-                <div class="mt-4 flex flex-col space-y-3">
-                    <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg" aria-label="Upload 3D Model Bestand">
-                    <p class="text-sm text-gray-400">Ondersteund formaat: **STL**. (Voor zeer grote bestanden kan het laden enkele seconden duren).</p>
+                <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                    <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
+                    <button id="reset-view-btn" class="btn-reset p-2 rounded-lg font-semibold whitespace-nowrap">
+                        <i class="fas fa-sync-alt mr-2"></i>Reset View
+                    </button>
                 </div>
+                <p class="text-sm text-gray-400 mt-2">Ondersteund formaat: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
             </div>
 
             <div class="lg:col-span-2 lg:order-2">
@@ -163,25 +176,28 @@
         });
 
 
-        // *** 2. Professionele 3D Viewer Logica met Verbeterde Belichting ***
+        // *** 2. Professionele 3D Viewer Logica ***
         const viewerContainer = document.getElementById('viewer-container');
         const fileUpload = document.getElementById('file-upload');
+        const resetButton = document.getElementById('reset-view-btn'); // Nieuwe knop
         let scene, camera, renderer, controls;
         let object; 
+        let defaultCameraDistance = 100; // Standaardafstand voor de camera
 
         function initViewer() {
             // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0f172a); // Donkerblauwe/zwarte achtergrond
+            scene.background = new THREE.Color(0x0f172a); 
 
             // Camera
-            camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); // FOV van 75 naar 50 voor een meer 'tele' effect
-            camera.position.set(0, 0, 100);
+            camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
+            camera.position.set(defaultCameraDistance, defaultCameraDistance, defaultCameraDistance); // Initiele positie
+            camera.lookAt(scene.position);
 
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio); // Verbeter de kwaliteit op high-DPI schermen
+            renderer.setPixelRatio(window.devicePixelRatio);
             
             const placeholder = document.getElementById('viewer-placeholder');
             if (placeholder) {
@@ -189,21 +205,13 @@
             }
             viewerContainer.appendChild(renderer.domElement);
 
-            // Professionele Belichting:
-            
-            // 1. Zacht Omgevingslicht (Ambient)
+            // Belichting
             scene.add(new THREE.AmbientLight(0x444444)); 
-            
-            // 2. Hemisfeer Licht (voor zachte overgang tussen lucht/grond)
             const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.5); 
             scene.add(hemisphereLight);
-
-            // 3. Gericht Licht (Key Light)
             const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
             keyLight.position.set(200, 200, 200);
             scene.add(keyLight);
-            
-            // 4. Secundair/Fill Light
             const fillLight = new THREE.DirectionalLight(0xffffff, 0.7);
             fillLight.position.set(-200, -100, -200);
             scene.add(fillLight);
@@ -212,10 +220,10 @@
             // Camera Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true; 
-            controls.dampingFactor = 0.15; // Nog soepeler
+            controls.dampingFactor = 0.15;
             controls.screenSpacePanning = true; 
             controls.minDistance = 5;
-            controls.maxDistance = 1000; // Hoger max distance voor grote modellen
+            controls.maxDistance = 1000; 
 
             // Animate Loop
             function animate() {
@@ -235,6 +243,31 @@
                 renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
             }
         }
+        
+        // Functie om de camera te resetten naar de beginpositie
+        function resetView() {
+            if (!controls || !object) return;
+
+            // Als er een object is geladen, bereken opnieuw de optimale afstand
+            if (object) {
+                const geometry = object.geometry;
+                geometry.computeBoundingBox();
+                const size = new THREE.Vector3();
+                geometry.boundingBox.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = maxDim * 1.5; 
+                defaultCameraDistance = distance;
+            }
+
+            // Reset de camera positie en target
+            controls.reset();
+            camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.5, defaultCameraDistance * 1.5);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+        
+        // Event listener voor de nieuwe reset knop
+        resetButton.addEventListener('click', resetView);
         
         initViewer(); 
         
@@ -262,31 +295,18 @@
                     geometry.boundingBox.getCenter(center);
                     geometry.translate(-center.x, -center.y, -center.z);
 
-                    // Materiaal met jouw accentkleur
+                    // Materiaal met JOUW ACCENTKLEUR
                     const material = new THREE.MeshPhongMaterial({ 
-                        color: new THREE.Color(ACCENT_COLOR_HEX),
-                        specular: 0x444444, // Meer reflectie
+                        color: new THREE.Color(ACCENT_COLOR_HEX), // NU GEEL IN PLAATS VAN WIT
+                        specular: 0x444444, 
                         shininess: 30 
                     });
                     
                     object = new THREE.Mesh(geometry, material);
                     scene.add(object);
                     
-                    // Pas de camera aan om het model te bekijken (belangrijk voor grote modellen!)
-                    const size = new THREE.Vector3();
-                    geometry.boundingBox.getSize(size);
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    
-                    // Bereken de benodigde afstand om het object in beeld te krijgen
-                    const distance = maxDim * 1.5; 
-                    
-                    // Stel camera positie in
-                    camera.position.set(distance, distance * 0.5, distance * 1.5);
-                    camera.lookAt(scene.position);
-                    
-                    // Reset controls target
-                    controls.target.set(0, 0, 0);
-                    controls.update();
+                    // Roep resetView aan om de camera optimaal in te stellen na het laden
+                    resetView();
 
                 } else {
                     alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL-bestand.");
