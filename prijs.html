@@ -153,6 +153,13 @@
         // Kleurcode ophalen
         const ACCENT_COLOR_HEX = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
 
+        // Standaard materiaal voor modellen
+        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
+            color: new THREE.Color(ACCENT_COLOR_HEX), 
+            specular: 0x444444, 
+            shininess: 30 
+        });
+
         // *** 1. Prijsberekening Logica (ongewijzigd) ***
         const form = document.getElementById('price-calculator');
         const resultContainer = document.getElementById('resultaat-container');
@@ -247,13 +254,18 @@
         function resetView() {
             if (!controls || !object) return;
 
-            if (object) {
-                // Bereken de maat van het object (Bounding Box)
-                let geometry = object.geometry;
-                if (!geometry.boundingBox) geometry.computeBoundingBox();
-                
+            let geometryToBound = object.isMesh ? object.geometry : new THREE.Box3().setFromObject(object);
+
+            if (geometryToBound.isBox3) { // 3MF (Group)
                 const size = new THREE.Vector3();
-                geometry.boundingBox.getSize(size);
+                geometryToBound.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = maxDim * 1.5; 
+                defaultCameraDistance = distance;
+            } else { // STL (Geometry)
+                if (!geometryToBound.boundingBox) geometryToBound.computeBoundingBox();
+                const size = new THREE.Vector3();
+                geometryToBound.boundingBox.getSize(size);
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const distance = maxDim * 1.5; 
                 defaultCameraDistance = distance;
@@ -266,7 +278,6 @@
             controls.update();
         }
         
-
         resetButton.addEventListener('click', resetView);
         
         initViewer(); 
@@ -278,8 +289,19 @@
             // Verwijder vorig model
             if (object) {
                 scene.remove(object);
-                object.geometry.dispose();
-                object.material.dispose();
+                // Object materialen en geometrie opruimen is belangrijk
+                object.traverse(child => {
+                    if (child.isMesh) {
+                        if (child.geometry) child.geometry.dispose();
+                        if (child.material) {
+                            if (Array.isArray(child.material)) {
+                                child.material.forEach(m => m.dispose());
+                            } else {
+                                child.material.dispose();
+                            }
+                        }
+                    }
+                });
             }
 
             const fileName = file.name.toLowerCase();
@@ -287,41 +309,28 @@
 
             reader.onload = function(e) {
                 let model;
-                let material;
-                let geometry;
+                let geometryToBound; // Referentie voor de Bounding Box berekening
                 
                 if (fileName.endsWith('.stl')) {
                     const loader = new THREE.STLLoader();
-                    geometry = loader.parse(e.target.result);
+                    const geometry = loader.parse(e.target.result);
                     
-                    // Materiaal met accentkleur voor STL
-                    material = new THREE.MeshPhongMaterial({ 
-                        color: new THREE.Color(ACCENT_COLOR_HEX),
-                        specular: 0x444444, 
-                        shininess: 30 
-                    });
-                    
-                    model = new THREE.Mesh(geometry, material);
+                    model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                    geometryToBound = geometry; // STL gebruikt de geometrie voor centreren
 
                 } else if (fileName.endsWith('.3mf')) {
                     const loader = new THREE.ThreeMFLoader();
                     model = loader.parse(e.target.result);
-                    // 3MF modellen kunnen al materiaal/kleurinformatie bevatten.
-                    // Als het geen eigen kleur heeft, overschrijven we het met de accentkleur.
-                    if (!model.children.length || !model.children[0].material) {
-                        model.traverse(function(child) {
-                            if (child.isMesh) {
-                                child.material = new THREE.MeshPhongMaterial({ 
-                                    color: new THREE.Color(ACCENT_COLOR_HEX), 
-                                    specular: 0x444444, 
-                                    shininess: 30 
-                                });
-                            }
-                        });
-                    }
                     
-                    // Gebruik de bounding box van de hele Group (model)
-                    geometry = new THREE.Box3().setFromObject(model);
+                    // *** FIX: LOOP DOOR ELK ONDERDEEL OM MATERIAAL TE GARANDEREN ***
+                    model.traverse(function(child) {
+                        if (child.isMesh) {
+                            // Dwing de accentkleur af
+                            child.material = DEFAULT_MESH_MATERIAL; 
+                        }
+                    });
+                    
+                    geometryToBound = new THREE.Box3().setFromObject(model); // 3MF gebruikt de Group (Box3)
 
                 } else {
                     alert("Onbekend bestandsformaat. Selecteer alstublieft een .STL- of .3MF-bestand.");
@@ -332,16 +341,16 @@
                 scene.add(model);
                 object = model; // Houd de referentie vast
                 
-                // Centreren en Camera aanpassen
-                if (geometry.isBox3) { // 3MF
+                // Centreren 
+                if (geometryToBound.isBox3) { // 3MF (Group)
                     const center = new THREE.Vector3();
-                    geometry.getCenter(center);
-                    object.position.sub(center); // Model centreren
-                } else { // STL
-                    geometry.computeBoundingBox();
+                    geometryToBound.getCenter(center);
+                    object.position.sub(center); 
+                } else { // STL (Geometry)
+                    geometryToBound.computeBoundingBox();
                     const center = new THREE.Vector3();
-                    geometry.boundingBox.getCenter(center);
-                    geometry.translate(-center.x, -center.y, -center.z);
+                    geometryToBound.boundingBox.getCenter(center);
+                    geometryToBound.translate(-center.x, -center.y, -center.z);
                 }
                 
                 // Roep resetView aan om de camera optimaal in te stellen na het laden
@@ -349,9 +358,9 @@
 
             };
             
-            // Lees het bestand als ArrayBuffer voor Three.js Loaders
             reader.readAsArrayBuffer(file);
         });
     </script>
+
 </body>
 </html>
