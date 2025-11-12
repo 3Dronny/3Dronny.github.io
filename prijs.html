@@ -353,16 +353,18 @@
                     const loader = new THREE.ThreeMFLoader();
                     
                     // Parsen
-                    model = loader.parse(data); 
-                    
-                    // *** FIX V6: Controleer expliciet of het geparseerde model een geldige Group is ***
-                    if (!model || model.children.length === 0) {
-                        throw new Error("Het 3MF-bestand bevat geen geldige 3D-modellen (meshes) of is leeg.");
-                    }
+                    let parsedModel = loader.parse(data); 
 
+                    // *** FIX V7: Expliciete controle op geldigheid Group-object ***
+                    if (!parsedModel || !parsedModel.isGroup || parsedModel.children.length === 0) {
+                        throw new Error("De 3MF-loader kon de Group-structuur niet volledig lezen, wat wijst op een leeg of ongeldig model binnen het bestand.");
+                    }
+                    model = parsedModel;
+                    
                     // 1. Forceer het materiaal voor gegarandeerde zichtbaarheid
                     model.traverse(function(child) {
                         if (child.isMesh) {
+                            // Dwing nieuw groen materiaal af
                             child.material = DEFAULT_MESH_MATERIAL;
                         }
                     });
@@ -387,10 +389,10 @@
             } catch (error) {
                 console.error("Fout bij het laden van het 3D-model (3MF):", error);
                 
-                // Vang de specifieke 'Cannot read properties of null' en geef een duidelijkere melding
+                // Vang de algemene parse-fout op en geef een duidelijke melding
                 let detailedMessage = error.message;
-                if (detailedMessage.includes("Cannot read properties of null (reading 'model')")) {
-                    detailedMessage = "De 3MF-loader kon de structuur van het bestand niet correct lezen. Dit duidt op een corrupt of ongebruikelijk geëxporteerd 3MF-bestand.";
+                if (detailedMessage.includes("Cannot read properties of null") || detailedMessage.includes("3MF-loader kon de Group-structuur niet volledig lezen")) {
+                    detailedMessage = "De 3MF-loader kon het bestand niet parsen. **Probeer het model in uw slicer opnieuw op te slaan als een STL-bestand** en laad dit in plaats daarvan. Dit is de meest betrouwbare oplossing.";
                 }
 
                 alert(`Er is een fout opgetreden bij het laden van het model. Controleer of het bestand niet corrupt is. (Details: ${detailedMessage})`); 
