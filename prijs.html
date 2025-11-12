@@ -3,124 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Print Prijs Calculator | 3DRonny</title>
+    <title>Professionele 3D Print Calculator | 3DRonny</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Jouw Gewenste Groene Accentkleur */
+        /* CSS Variabelen voor de groene accentkleur */
         :root {
             --accent-color: #10b981; /* Emerald Green */
             --accent-hover: #059669;
         }
 
-        /* Aangepaste styling voor een donkere, moderne look */
+        /* Basis Donker Thema */
         body {
-            background-color: #1f2937;
-            color: #d1d5db;
+            background-color: #121212; /* Zeer donker grijs */
+            color: #e0e0e0; /* Zacht wit */
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
         }
         
-        .accent-text {
-            color: var(--accent-color);
-        }
-        
-        /* 3D Viewer Container: GROOT */
+        /* Viewer en input veld stijlen */
         #viewer-container {
             width: 100%;
             height: 600px;
-            background-color: #0f172a; 
+            background-color: #1e1e1e; 
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
         }
 
-        /* Overige styles */
+        .accent-text {
+            color: var(--accent-color);
+        }
+
+        .card-bg {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+        }
+
         .btn-primary {
             background-color: var(--accent-color);
-            transition: background-color 0.3s;
+            color: #121212;
+            transition: background-color 0.2s;
         }
         .btn-primary:hover {
             background-color: var(--accent-hover);
-        }
-        .input-field {
-            background-color: #374151;
-            border: 1px solid #4b5563;
-            color: white;
-        }
-        .btn-reset {
-            background-color: #4b5563;
-            color: white;
-            transition: background-color 0.3s;
-        }
-        .btn-reset:hover {
-            background-color: #6b7280;
-        }
-        .loading-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.9);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            font-size: 1.25rem;
-            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
         }
     </style>
 </head>
-<body class="p-6">
+<body class="p-8">
     <div class="max-w-7xl mx-auto">
         
-        <header class="text-center mb-10">
-            <h1 class="text-4xl font-bold text-white mb-2">
-                3D Print Prijs <span class="accent-text">Calculator</span>
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-white mb-3 tracking-tight">
+                3DRonny <span class="accent-text">Pricing Engine</span>
             </h1>
-            <p class="text-gray-400">Bekijk grote modellen en bereken de kosten nauwkeurig.</p>
+            <p class="text-gray-400 text-xl">Upload, Visualiseer en Bereken direct uw 3D Print Kosten.</p>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
             
-            <div class="lg:col-span-3 lg:order-1">
-                <h2 class="text-2xl font-semibold mb-4 text-white">
-                    <i class="fas fa-cube mr-2 accent-text"></i>Professionele 3D Model Viewer
+            <div class="lg:col-span-3">
+                <h2 class="text-3xl font-semibold mb-4 text-white">
+                    <i class="fas fa-cube mr-3 accent-text"></i>3D Model Viewer
                 </h2>
                 
                 <div id="viewer-container">
-                    <p id="viewer-placeholder" class="text-center text-gray-500 pt-4">Upload een STL-bestand om de 3D-viewer te starten.</p>
+                    <p id="viewer-placeholder" class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        Upload een STL-bestand om de 3D-viewer te starten.
+                    </p>
                     <div id="loading-indicator" class="loading-overlay hidden">
                         <i class="fas fa-spinner fa-spin mr-3"></i> Model laden...
                     </div>
                 </div>
                 
                 <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                    <input type="file" id="file-upload" accept=".stl" class="input-field p-2 rounded-lg flex-grow" aria-label="Upload 3D Model Bestand">
-                    <button id="reset-view-btn" class="btn-reset p-2 rounded-lg font-semibold whitespace-nowrap">
+                    <input type="file" id="file-upload" accept=".stl" class="input-field p-3 rounded-lg flex-grow cursor-pointer" aria-label="Upload 3D Model Bestand">
+                    <button id="reset-view-btn" class="btn-primary p-3 rounded-lg font-semibold whitespace-nowrap">
                         <i class="fas fa-sync-alt mr-2"></i>Reset View
                     </button>
                 </div>
-                <p class="text-sm text-gray-400 mt-2">Ondersteunde formaten: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
+                <p class="text-sm text-gray-500 mt-2">Ondersteunde formaten: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
             </div>
 
-            <div class="lg:col-span-2 lg:order-2">
-                <h2 class="text-2xl font-semibold mb-4 text-white">
-                    <i class="fas fa-calculator mr-2 accent-text"></i>Printparameters
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-semibold mb-4 text-white">
+                    <i class="fas fa-calculator mr-3 accent-text"></i>Kostenberekening
                 </h2>
                 
-                <form id="price-calculator" class="space-y-6 bg-gray-800 p-6 rounded-xl shadow-lg">
+                <form id="price-calculator" class="space-y-6 card-bg p-8 rounded-xl">
                     
                     <div>
-                        <label for="printtijd" class="block mb-2 font-medium text-white">
-                            <i class="fas fa-clock mr-2 accent-text"></i>Printtijd (uren)
+                        <label for="printtijd" class="block mb-2 font-medium text-gray-300">
+                            <i class="fas fa-clock mr-2 accent-text"></i>Printduur (uren)
                         </label>
                         <input type="number" id="printtijd" step="0.1" min="0" value="5.0"
                                class="w-full input-field p-3 rounded-lg" placeholder="5.0" required>
                     </div>
-
+                    
                     <div>
-                        <label for="gewicht" class="block mb-2 font-medium text-white">
+                        <label for="gewicht" class="block mb-2 font-medium text-gray-300">
                             <i class="fas fa-weight-hanging mr-2 accent-text"></i>Gewicht (gram)
                         </label>
                         <input type="number" id="gewicht" step="1" min="1" value="100"
@@ -128,7 +125,7 @@
                     </div>
 
                     <div>
-                        <label for="vulling" class="block mb-2 font-medium text-white">
+                        <label for="vulling" class="block mb-2 font-medium text-gray-300">
                             <i class="fas fa-fill-drip mr-2 accent-text"></i>Vulling / Infill (%)
                         </label>
                         <input type="number" id="vulling" step="5" min="0" max="100" value="20"
@@ -136,36 +133,36 @@
                     </div>
                     
                     <div>
-                        <label for="vaste-kosten" class="block mb-2 font-medium text-white">
+                        <label for="vaste-kosten" class="block mb-2 font-medium text-gray-300">
                             <i class="fas fa-euro-sign mr-2 accent-text"></i>Opstart/Vaste kosten (€)
                         </label>
-                        <input type="number" id="vaste-kosten" step="0.1" min="0" value="5.00"
+                        <input type="number" id="vaste-kosten" step="0.50" min="0" value="5.00"
                                class="w-full input-field p-3 rounded-lg" placeholder="5.00" required>
-                        <p class="text-xs text-gray-500 mt-1">Vaste kosten voor opstarten, afschrijving, etc.</p>
+                        <p class="text-xs text-gray-500 mt-1">Vaste kosten voor opstarten en afschrijving.</p>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full p-3 rounded-lg font-semibold text-lg">
-                        <i class="fas fa-money-check-alt mr-2"></i>Bereken Prijs
+                    <button type="submit" class="btn-primary w-full p-4 rounded-lg font-bold text-lg">
+                        <i class="fas fa-cogs mr-2"></i>BEREKEN TOTALE PRIJS
                     </button>
                 </form>
 
-                <div id="resultaat-container" class="mt-8 bg-gray-900 p-6 rounded-xl accent-border border-l-4 shadow-xl hidden" role="status">
-                    <h3 class="text-2xl font-bold mb-3 accent-text">Geschatte Prijs:</h3>
-                    <p class="text-4xl text-white font-extrabold" id="totaal-prijs">€ 0.00</p>
-                    <p class="text-sm text-gray-400 mt-2">Dit is een schatting. De definitieve prijs kan variëren.</p>
+                <div id="resultaat-container" class="mt-8 card-bg p-8 rounded-xl border-l-4 border-l-[var(--accent-color)] shadow-xl hidden" role="status">
+                    <h3 class="text-3xl font-bold mb-3 accent-text">Totale Geschatte Prijs:</h3>
+                    <p class="text-5xl text-white font-extrabold" id="totaal-prijs">€ 0.00</p>
+                    <p class="text-sm text-gray-500 mt-3">Gebaseerd op de ingevoerde parameters. De definitieve prijs kan variëren.</p>
                 </div>
             </div>
         </div>
     </div>
     
     <script type="module">
-        // DE FIX: Gebruik de standaard ES Module URL van Three.js CDN
+        // Importeer de KERNKLASSEN DIRECT uit de Three.js module
         import { 
             Scene, PerspectiveCamera, WebGLRenderer, Color, AmbientLight, DirectionalLight, GridHelper, 
-            MeshPhongMaterial, Mesh, Vector3, Box3, 
+            MeshPhongMaterial, Mesh, Vector3, Box3,
         } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/build/three.module.js';
         
-        // Importeer de Controls en Loader (URL's zijn al correct)
+        // Importeer de Controls en Loader
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
 
@@ -191,22 +188,28 @@
         let object; 
         let defaultCameraDistance = 100; 
 
-        // --- 1. Prijsberekening Logica (ongewijzigd) ---
+        // --- 1. Prijsberekening Logica ---
         function calculatePrice(e) {
             e.preventDefault();
+            
+            // Haal waarden op en converteer naar nummers
             const printtijd = parseFloat(document.getElementById('printtijd').value);
             const gewicht = parseFloat(document.getElementById('gewicht').value);
             const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
+            const vulling = parseFloat(document.getElementById('vulling').value); // Niet direct gebruikt in prijs, maar goed om te hebben
             
-            const COST_PER_GRAM_FILAMENT = 0.10; 
-            const COST_PER_HOUR_PRINTER = 4.00; 
+            // Constants voor berekening
+            const COST_PER_GRAM_FILAMENT = 0.10; // €0.10 per gram (voorbeeld)
+            const COST_PER_HOUR_PRINTER = 4.00; // €4.00 per uur (voorbeeld, incl. stroom/afschrijving)
 
             if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
 
+            // Berekening
             const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
             const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
             const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
 
+            // Resultaat tonen
             document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
             document.getElementById('resultaat-container').classList.remove('hidden');
         }
@@ -218,37 +221,43 @@
         function initViewer() {
             if (renderer) return;
 
-            console.log("Stap 1: Initialiseer Three.js met correcte module URL.");
+            console.log("Stap 1: Initialiseer Three.js (Module v2).");
 
-            // Scene
+            // Scene 
             scene = new Scene();
-            scene.background = new Color(0x0f172a); 
+            scene.background = new Color(0x121212); // Zwarte achtergrond
 
-            // Camera
+            // Camera 
             camera = new PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
             camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
             
-            // Renderer
+            // Renderer 
             renderer = new WebGLRenderer({ antialias: true });
             renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             
+            // Plaats renderer in container
             const placeholder = document.getElementById('viewer-placeholder');
-            if (placeholder && viewerContainer.contains(placeholder)) {
-                viewerContainer.removeChild(placeholder);
+            if (placeholder) { // Verwijder de placeholder tekst
+                placeholder.remove();
             }
             viewerContainer.appendChild(renderer.domElement);
 
-            // Belichting
-            scene.add(new AmbientLight(0x404040)); 
-            const directionalLight = new DirectionalLight(0xffffff, 3.0); 
-            directionalLight.position.set(200, 300, 200);
-            scene.add(directionalLight);
+            // Belichting (verbeterd)
+            scene.add(new AmbientLight(0x404040, 3.0)); // Algehele zachte verlichting
+            
+            const mainLight = new DirectionalLight(0xffffff, 3.5); 
+            mainLight.position.set(200, 300, 200);
+            scene.add(mainLight);
+            
+            const fillLight = new DirectionalLight(0xddddff, 2.0); 
+            fillLight.position.set(-200, -300, -200);
+            scene.add(fillLight);
 
-            // DEBUG VISUAL: Grondrooster 
+            // DEBUG VISUAL: Grondrooster (Moet nu zichtbaar zijn)
             const size = 100;
             const divisions = 10;
-            const gridHelper = new GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
+            const gridHelper = new GridHelper(size, divisions, 0x10b981, 0x444444); // Groene lijnen op donkere ondergrond
             scene.add(gridHelper);
             
             // Camera Controls 
@@ -281,6 +290,8 @@
         
         function resetView() {
             if (!controls) return;
+            
+            // Als er geen object is, reset dan naar de nulstand
             if (!object) {
                  controls.reset();
                  camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
@@ -289,6 +300,7 @@
                  return;
             }
 
+            // Gebruik directe Box3 en Vector3
             const box = new Box3().setFromObject(object);
             if (box.isEmpty()) return;
 
@@ -298,9 +310,14 @@
             const distance = maxDim * 1.5; 
             defaultCameraDistance = distance;
 
+            const center = new Vector3();
+            box.getCenter(center);
+
             controls.reset();
-            controls.target.set(box.min.x + size.x / 2, box.min.y + size.y / 2, box.min.z + size.z / 2); 
-            camera.position.set(distance, distance * 0.75, distance * 1.5); 
+            controls.target.copy(center); // Target de midden van het object
+            
+            // Plaats camera op afstand van het object
+            camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
             controls.update();
             console.log(`Stap 4: View gereset en gefocust op model.`);
         }
@@ -314,13 +331,13 @@
             if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
             
             if (!renderer) {
-                 console.error("Renderer niet geïnitialiseerd.");
+                 alert("Fout: Initialiseer eerst de 3D-viewer.");
                  return;
             }
             
             loadingIndicator.classList.remove('hidden'); 
 
-            // Opruimen
+            // Opruimen vorig model
             if (object) {
                 scene.remove(object);
                 object.traverse(child => {
@@ -346,10 +363,12 @@
                 
                 geometry.computeBoundingBox();
                 
+                // Centreer de geometrie
                 const center = new Vector3();
                 geometry.boundingBox.getCenter(center);
                 geometry.translate(-center.x, -center.y, -center.z);
 
+                // Maak de Mesh
                 const model = new Mesh(geometry, DEFAULT_MESH_MATERIAL);
                 
                 scene.add(model);
@@ -359,13 +378,13 @@
 
             } catch (error) {
                 console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
-                alert(`Fout bij het laden van het model: ${error.message}`); 
+                alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
             } finally {
                 loadingIndicator.classList.add('hidden'); 
             }
         });
 
-        // Start de viewer
+        // Start de viewer wanneer het document geladen is
         document.addEventListener('DOMContentLoaded', () => {
              initViewer();
              resetView();
