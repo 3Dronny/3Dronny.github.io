@@ -159,13 +159,13 @@
     </div>
     
     <script type="module">
-        // Importeer de KERNKLASSEN DIRECT uit de Three.js module
+        // DE FIX: Gebruik de standaard ES Module URL van Three.js CDN
         import { 
             Scene, PerspectiveCamera, WebGLRenderer, Color, AmbientLight, DirectionalLight, GridHelper, 
             MeshPhongMaterial, Mesh, Vector3, Box3, 
-        } from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r156/three.module.js'; // Let op: .module.js
+        } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/build/three.module.js';
         
-        // Importeer de Controls en Loader
+        // Importeer de Controls en Loader (URL's zijn al correct)
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/loaders/STLLoader.js';
 
@@ -218,17 +218,17 @@
         function initViewer() {
             if (renderer) return;
 
-            console.log("Stap 1: Initialiseer Three.js met directe klassen imports.");
+            console.log("Stap 1: Initialiseer Three.js met correcte module URL.");
 
-            // Scene (geen THREE. voor Scene)
+            // Scene
             scene = new Scene();
             scene.background = new Color(0x0f172a); 
 
-            // Camera (geen THREE. voor PerspectiveCamera)
+            // Camera
             camera = new PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
             camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
             
-            // Renderer (geen THREE. voor WebGLRenderer)
+            // Renderer
             renderer = new WebGLRenderer({ antialias: true });
             renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
@@ -245,7 +245,7 @@
             directionalLight.position.set(200, 300, 200);
             scene.add(directionalLight);
 
-            // DEBUG VISUAL: Grondrooster (geen THREE. voor GridHelper)
+            // DEBUG VISUAL: Grondrooster 
             const size = 100;
             const divisions = 10;
             const gridHelper = new GridHelper(size, divisions, 0xff0000, 0xaaaaaa); 
@@ -289,7 +289,6 @@
                  return;
             }
 
-            // Gebruik directe Box3 en Vector3 (geen THREE.)
             const box = new Box3().setFromObject(object);
             if (box.isEmpty()) return;
 
@@ -347,12 +346,10 @@
                 
                 geometry.computeBoundingBox();
                 
-                // Gebruik directe Vector3 (geen THREE.)
                 const center = new Vector3();
                 geometry.boundingBox.getCenter(center);
                 geometry.translate(-center.x, -center.y, -center.z);
 
-                // Gebruik directe Mesh (geen THREE.)
                 const model = new Mesh(geometry, DEFAULT_MESH_MATERIAL);
                 
                 scene.add(model);
