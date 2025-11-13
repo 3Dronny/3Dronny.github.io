@@ -36,8 +36,8 @@
 
     <script type="module"> 
         
-        // --- 1. IMPORTEREN VAN LOADERS ---
-        // We importeren de benodigde componenten rechtstreeks vanuit de 'jsm' map
+        // --- 1. IMPORTEREN VAN LOADERS (Paden zijn NU gecorrigeerd) ---
+        // Let op de 'jsm' map in de URL's. Dit is cruciaal voor moderne modules.
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/STLLoader.js';
         import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/ThreeMFLoader.js';
@@ -73,7 +73,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting
+            // Belichting (Nodig voor MeshStandardMaterial)
             scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2)); 
             const mainLight = new THREE.DirectionalLight(0xffffff, 4); 
             mainLight.position.set(100, 100, 100);
