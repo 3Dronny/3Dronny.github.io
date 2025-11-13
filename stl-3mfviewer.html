@@ -24,7 +24,10 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/three@latest/build/three.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -34,31 +37,34 @@
     
     <input type="file" id="file-input" accept=".stl, .3mf">
 
-    <script type="module"> 
+    <script> 
         
-        // --- 1. IMPORTEREN VAN LOADERS (Paden zijn NU gecorrigeerd) ---
-        // Let op de 'jsm' map in de URL's. Dit is cruciaal voor moderne modules.
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/ThreeMFLoader.js';
-        
-        // --- 2. SETUP VARIABELEN ---
+        // --- 1. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
         const container = document.getElementById('viewer-container');
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal voor STL-modellen
-        const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
+        // Standaard materiaal voor STL-modellen (MeshPhongMaterial is stabiel voor r128)
+        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0x10b981, 
-            metalness: 0.2,
-            roughness: 0.7,                     
+            emissive: 0x00331a,      
+            specular: 0xffffff,      
+            shininess: 30,                       
         });
 
-        initViewer();
-        
-        // --- 3. INITIALISATIE ---
+        // Controleer of de benodigde componenten zijn geladen
+        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
+            placeholder.textContent = "Fout: Essentiële Three.js componenten (Loaders) niet geladen.";
+            console.error("Three.js Loaders ontbreken. Controleer de CDN-paden.");
+            // We stoppen hier als de externe bestanden niet geladen zijn.
+        } else {
+             initViewer();
+        }
+
+
+        // --- 2. INITIALISATIE ---
         function initViewer() {
             // Scene
             scene = new THREE.Scene();
@@ -73,14 +79,14 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (Nodig voor MeshStandardMaterial)
-            scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2)); 
-            const mainLight = new THREE.DirectionalLight(0xffffff, 4); 
+            // Belichting (MeshPhongMaterial vereist voldoende belichting)
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
             mainLight.position.set(100, 100, 100);
             scene.add(mainLight);
 
             // Controls
-            controls = new OrbitControls(camera, renderer.domElement); 
+            controls = new THREE.OrbitControls(camera, renderer.domElement); 
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
             controls.minDistance = 1;
@@ -101,7 +107,7 @@
             renderer.render(scene, camera);
         }
 
-        // --- 4. LAAD FUNCTIE ---
+        // --- 3. LAAD FUNCTIE ---
         fileInput.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -141,12 +147,14 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    const loader = new STLLoader(); 
+                    // Gebruikt de r128 STLLoader
+                    const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    const loader = new ThreeMFLoader(); 
+                    // Gebruikt de r128 ThreeMFLoader
+                    const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
@@ -176,7 +184,7 @@
 
             } catch (error) {
                 console.error(`❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL: ${error.name}: ${error.message}`);
-                alert(`Fout bij het laden van ${extension}: ${error.message}.`); 
+                alert(`Fout bij het laden van ${extension}: ${error.message}. Controleer de console.`); 
                 placeholder.style.display = 'flex';
             }
         });
