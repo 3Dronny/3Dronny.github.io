@@ -54,9 +54,8 @@
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xeeeeee);
             
-            // ** AANPASSING HIER: MAAK DE 'NEAR' CLIP VÉÉL KLEINER (0.01) **
-            // Dit zorgt ervoor dat extreem kleine modellen niet meer afgesneden worden.
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, **0.01**, 50000); 
+            // ** CAMERA AANGEPAST VOOR EEN BREED BEREIK (Fix voor kleine modellen) **
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 50000); 
             camera.position.z = 50;
 
             // --- RENDERER ---
@@ -128,9 +127,16 @@
             if (extension === 'stl') {
                 const stlLoader = new STLLoader(); 
                 const geometry = stlLoader.parse(buffer);
-                const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
+                
+                // ** AANPASSING FIX: Forceer Wireframe om geometrie te visualiseren **
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: 0xaaaaaa, 
+                    specular: 0x111111, 
+                    shininess: 200,
+                    wireframe: true // <-- ZELF HET MAKEN VAN EEN GEZICHT IS NU NIET NODIG
+                });
                 newModel = new THREE.Mesh(geometry, material);
-                console.log('STL model succesvol geladen!');
+                console.log('STL model succesvol geladen in wireframe modus!');
 
             } else if (extension === '3mf') {
                 const threeMFLoader = new ThreeMFLoader(); 
@@ -146,7 +152,7 @@
                 model = newModel;
                 scene.add(model);
                 
-                // Centreer en zoom de camera (Box3 helpt bij onbekende schalen)
+                // Centreer en zoom de camera
                 const boundingBox = new THREE.Box3().setFromObject(model);
                 const center = boundingBox.getCenter(new THREE.Vector3());
                 const size = boundingBox.getSize(new THREE.Vector3());
@@ -154,7 +160,6 @@
                 controls.target.copy(center);
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const fov = camera.fov * (Math.PI / 180);
-                // Bereken de afstand die nodig is om het model in de viewport te passen
                 let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
                 camera.position.z = center.z + cameraZ;
                 camera.position.x = center.x;
