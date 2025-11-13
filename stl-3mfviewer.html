@@ -46,7 +46,7 @@
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal voor STL-modellen (MeshPhongMaterial is stabiel voor r128)
+        // Standaard materiaal voor STL-modellen
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0x10b981, 
             emissive: 0x00331a,      
@@ -56,9 +56,8 @@
 
         // Controleer of de benodigde componenten zijn geladen
         if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-            placeholder.textContent = "Fout: Essentiële Three.js componenten (Loaders) niet geladen.";
-            console.error("Three.js Loaders ontbreken. Controleer de CDN-paden.");
-            // We stoppen hier als de externe bestanden niet geladen zijn.
+            // Laat dit hier staan voor debuggen, maar de console fout is duidelijk genoeg
+            placeholder.textContent = "Three.js Loaders ontbreken. Probeer Ctrl+F5.";
         } else {
              initViewer();
         }
@@ -79,7 +78,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (MeshPhongMaterial vereist voldoende belichting)
+            // Belichting
             scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
             const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
             mainLight.position.set(100, 100, 100);
