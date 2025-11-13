@@ -10,17 +10,18 @@
 </head>
 <body>
 
-    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script type="module">
+        
+        // --- 1. IMPORTEER ALLES VAN THREE.JS EN DE HELPERS ---
+        // Let op: 'three' is de core. De rest zijn de helpers (loaders, controls).
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/3MFLoader.js';
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/3MFLoader.js"></script>
-
-    <script>
         // Declaraties voor de 3D-scène
         let scene, camera, renderer, controls;
-        let model; // De variabele om je 3D-model in op te slaan
+        let model; 
 
         /**
          * Initialiseert de 3D-scène.
@@ -28,7 +29,7 @@
         function init() {
             // --- SCÈNE INSTELLEN ---
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xeeeeee); // Lichte achtergrond
+            scene.background = new THREE.Color(0xeeeeee);
 
             // --- CAMERA INSTELLEN ---
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -39,13 +40,14 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // --- CONTROLS INSTELLEN (OrbitControls laat je roteren) ---
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; // Voor een soepelere rotatie
+            // --- CONTROLS INSTELLEN (OrbitControls) ---
+            // Let op: De constructor is nu gewoon 'OrbitControls', niet 'THREE.OrbitControls'!
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
             controls.dampingFactor = 0.25;
 
             // --- LICHT INSTELLEN ---
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Zacht omgevingslicht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -54,9 +56,9 @@
 
             // --- LAAD HET MODEL ---
             // ***************************************************************
-            // ** PAS DIT PAD AAN NAAR JE UPLOADED STL OF 3MF BESTAND **
+            // ** VERGEET NIET DIT PAD AAN TE PASSEN NAAR JE BESTANDSNAMEN **
             // ***************************************************************
-            loadModel('jouw_model_naam.stl'); // VOORBEELD: 'model.3mf' of 'test.stl'
+            loadModel('jouw_model_naam.stl'); 
 
             // --- WINDOW RESIZE LISTENER ---
             window.addEventListener('resize', onWindowResize, false);
@@ -78,43 +80,46 @@
          */
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); // Update de controls
+            controls.update();
             renderer.render(scene, camera);
         }
 
         /**
          * Functie om een model te laden op basis van de extensie.
-         * @param {string} url - Het pad naar het 3D-modelbestand.
          */
         function loadModel(url) {
             const extension = url.split('.').pop().toLowerCase();
             
-            // Simpele laadindicator
             console.log('Bezig met laden van model: ' + url);
 
             if (extension === 'stl') {
-                const stlLoader = new THREE.STLLoader();
+                const stlLoader = new STLLoader(); // Geen THREE.STLLoader
                 stlLoader.load(url, function (geometry) {
-                    // Standaard grijs materiaal voor STL
                     const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
                     model = new THREE.Mesh(geometry, material);
                     scene.add(model);
+                    // Centreer de camera op het nieuwe model
+                    controls.target.copy(model.position); 
+                    controls.update(); 
                     console.log('STL model succesvol geladen!');
                 }, 
-                undefined, // Progress functie (niet gebruikt)
+                undefined, // Progress functie
                 function (error) { // Fout functie
-                    console.error('Fout bij laden van STL:', error);
+                    console.error('Fout bij laden van STL. Controleer of het bestand bestaat op:', url, error);
                 });
             } else if (extension === '3mf') {
-                const threeMFLoader = new THREE.ThreeMFLoader();
+                const threeMFLoader = new ThreeMFLoader(); // Geen THREE.ThreeMFLoader
                 threeMFLoader.load(url, function (object) {
                     model = object;
                     scene.add(model);
+                    // Centreer de camera op het nieuwe model
+                    controls.target.copy(model.position); 
+                    controls.update(); 
                     console.log('3MF model succesvol geladen!');
                 }, 
-                undefined, // Progress functie (niet gebruikt)
+                undefined, // Progress functie
                 function (error) { // Fout functie
-                    console.error('Fout bij laden van 3MF:', error);
+                    console.error('Fout bij laden van 3MF. Controleer of het bestand bestaat op:', url, error);
                 });
             } else {
                 console.error('Bestandsformaat niet ondersteund:', extension);
