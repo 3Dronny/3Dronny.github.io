@@ -29,7 +29,7 @@
 
     <script type="module">
         
-        // ** DEZE LINKS ZIJN NU GECORRIGEERD EN STABIEL VOOR CDN **
+        // ** DEZE LINKS ZIJN STABIEL EN ZOUDEN GEEN 404 MEER MOGEN GEVEN **
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
@@ -52,7 +52,7 @@
         function init() {
             // --- SCÈNE & CAMERA ---
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xeeeeee);
+            scene.background = new THREE.Color(0x222222); // Donkere achtergrond voor beter contrast
             
             // Camera breed bereik
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 50000); 
@@ -69,6 +69,7 @@
             controls.dampingFactor = 0.25;
 
             // --- LICHT ---
+            // Voor MeshBasicMaterial (de fix hieronder) is licht niet nodig, maar we laten het staan voor 3MF.
             scene.add(new THREE.AmbientLight(0xffffff, 0.6));
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(1, 1, 1).normalize();
@@ -98,7 +99,6 @@
             const fileName = file.name;
             const extension = fileName.split('.').pop().toLowerCase();
 
-            // Lees het bestand als een ArrayBuffer (ruwe binaire data)
             reader.readAsArrayBuffer(file);
 
             reader.onload = function(event) {
@@ -112,10 +112,9 @@
         }
 
         /**
-         * Laadt het model uit de ArrayBuffer in de 3D-scène en stelt de camera in.
+         * Laadt het model uit de ArrayBuffer in de 3D-scène.
          */
         function loadModel(buffer, extension) {
-            // Verwijder het vorige model
             if (model) {
                 scene.remove(model);
                 model.geometry?.dispose();
@@ -130,17 +129,16 @@
                 
                 // --- DIAGNOSE: CONTROLEER GEOMETRIE DATA ---
                 if (!geometry.attributes.position || geometry.attributes.position.count === 0) {
-                    console.error("Geometrie is leeg of ongeldig. Controleer uw STL-bestand.");
+                    console.error("Geometrie is leeg of ongeldig. Het model wordt niet weergegeven.");
                     return;
                 }
                 console.log('Model geladen. Aantal vertices:', geometry.attributes.position.count); 
                 // --- EINDE DIAGNOSE ---
 
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: 0xaaaaaa, 
-                    specular: 0x111111, 
-                    shininess: 200,
-                    wireframe: true // Forceer wireframe voor zichtbaarheid
+                // ** AANPASSING FIX: Gebruik MeshBasicMaterial voor betere zichtbaarheid **
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0x0000ff, // Felblauw
+                    wireframe: true // Blijft in wireframe voor gegarandeerde weergave
                 });
                 newModel = new THREE.Mesh(geometry, material);
 
