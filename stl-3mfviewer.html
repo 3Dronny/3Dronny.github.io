@@ -57,8 +57,9 @@
         });
 
         // Test of de loaders geladen zijn
-        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-             placeholder.textContent = "Three.js Loaders ontbreken. Probeer Ctrl+F5 om de cache te wissen.";
+        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined') {
+             // We testen niet op ThreeMFLoader om de 3MF-fout te isoleren
+             placeholder.textContent = "Kritieke Three.js bestanden ontbreken.";
         } else {
              initViewer();
         }
@@ -153,8 +154,15 @@
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader
-                    const loader = new THREE.ThreeMFLoader(); 
+                    // ** FIX VOOR THREE.ThreeMFLoader is not a constructor **
+                    // Probeer de constructor direct te gebruiken zoals hij geregistreerd is in het globale venster.
+                    const LoaderConstructor = window.THREE.ThreeMFLoader || THREE.ThreeMFLoader;
+                    
+                    if (typeof LoaderConstructor !== 'function') {
+                        throw new Error("De 3MF loader is niet correct geladen of geregistreerd.");
+                    }
+                    
+                    const loader = new LoaderConstructor(); 
                     model = loader.parse(data); 
                 }
                 
@@ -184,7 +192,12 @@
 
             } catch (error) {
                 console.error(`❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL: ${error.name}: ${error.message}`);
-                alert(`Fout bij het laden van ${extension}: ${error.message}. Controleer de console.`); 
+                // Specifieke foutmelding voor de 3MF loader die niet werkt
+                if (extension === '3mf' && error.message.includes('constructor')) {
+                    alert('Fout bij het laden van 3mf: De ThreeMFLoader kon niet worden geïnitialiseerd. Probeer Ctrl+F5.');
+                } else {
+                    alert(`Fout bij het laden van ${extension}: ${error.message}. Controleer de console.`); 
+                }
                 placeholder.style.display = 'flex';
             }
         });
