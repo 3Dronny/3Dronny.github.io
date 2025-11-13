@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF - Definitief)</title>
+    <title>3D Model Viewer (STL & 3MF - Definitieve Fix)</title>
     <style>
         /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
@@ -24,14 +24,6 @@
             font-size: 1.2em; color: #aaa; pointer-events: none;
         }
     </style>
-</head>
-<body>
-
-    <div id="viewer-container">
-        <div id="placeholder">Upload een STL of 3MF bestand om te starten.</div>
-    </div>
-    
-    <input type="file" id="file-input" accept=".stl, .3mf">
 
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
     
@@ -46,6 +38,14 @@
           }
         }
     </script>
+</head>
+<body>
+
+    <div id="viewer-container">
+        <div id="placeholder">Upload een STL of 3MF bestand om te starten.</div>
+    </div>
+    
+    <input type="file" id="file-input" accept=".stl, .3mf">
 
     <script type="module"> 
         
@@ -65,15 +65,21 @@
         // Standaard materiaal
         const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
             color: 0x10b981, 
-            metalness: 0.3, // Iets glimmender
-            roughness: 0.6, // Iets zachter                       
+            metalness: 0.3, 
+            roughness: 0.6,                     
         });
 
-        // Start de viewer
-        initViewer();
+        // Roep initViewer aan zodra alle imports succesvol zijn.
+        initViewer(); 
         
         // --- 3. INITIALISATIE ---
         function initViewer() {
+            // Controleer of de benodigde objecten bestaan, mocht er toch iets misgaan met imports
+            if (!THREE.Scene || !OrbitControls || !STLLoader || !ThreeMFLoader) {
+                placeholder.textContent = "Kritieke modules (Three.js, loaders) zijn niet geladen.";
+                return;
+            }
+
             // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1e1e1e); 
@@ -87,9 +93,9 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (Aangepast voor betere zichtbaarheid met StandardMaterial)
-            scene.add(new THREE.HemisphereLight(0xeeeeee, 0x111111, 0.8)); // Zachte omgevingslicht
-            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); // Sterker direct licht
+            // Belichting (Sterk genoeg voor StandardMaterial)
+            scene.add(new THREE.HemisphereLight(0xeeeeee, 0x111111, 0.8)); 
+            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); 
             mainLight.position.set(200, 300, 200);
             scene.add(mainLight);
 
@@ -152,11 +158,9 @@
                 if (extension === 'stl') {
                     const loader = new STLLoader(); 
                     const geometry = loader.parse(data);
-                    // Belangrijk: Sommige STL-bestanden bevatten meerdere geometrieën; we veronderstellen één mesh.
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader
                     const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
@@ -172,7 +176,6 @@
                     // Positie aanpassen zodat de onderkant van het model op y=0 ligt
                     model.position.set(-center.x, -box.min.y, -center.z);
 
-                    // De volgende regel is cruciaal: controleer of het object geldig is voordat je het toevoegt
                     if (model instanceof THREE.Mesh || model instanceof THREE.Group) {
                         scene.add(model); 
                         object = model; 
