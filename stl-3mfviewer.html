@@ -2,184 +2,167 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL/3MF)</title>
+    <title>3D Model Viewer (STL & 3MF)</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #222222; } /* Donkere achtergrond */
-        canvas { display: block; }
-        #file-input-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-            font-family: sans-serif;
-        }
-        #fileInput {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
+        body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
+        #viewer-container { width: 100vw; height: 100vh; position: relative; }
+        #file-input { position: absolute; top: 20px; left: 20px; z-index: 10; padding: 10px; }
+        #placeholder { 
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.2em; color: #aaa; pointer-events: none;
         }
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
-    <div id="file-input-container">
-        <input type="file" id="fileInput" accept=".stl, .3mf">
+    <div id="viewer-container">
+        <div id="placeholder">Upload een STL of 3MF bestand</div>
     </div>
+    
+    <input type="file" id="file-input" accept=".stl, .3mf">
 
-    <script type="module">
-        
-        // --- 1. IMPORTEER ALLES VAN THREE.JS VIA CDN (Met CACHE BYPASS ?v=1) ---
-        // Dit lost de 404-fouten op die door de browsercache worden veroorzaakt.
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js?v=1';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js?v=1';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js?v=1';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/ThreeMFLoader.js?v=1';
-
+    <script>
+        // --- 1. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
-        let model;
-        const fileInput = document.getElementById('fileInput');
-
-        init();
-
-        // --- Event Listener voor de Uploadknop ---
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                readFile(file);
-            }
+        let object; 
+        const container = document.getElementById('viewer-container');
+        const fileInput = document.getElementById('file-input');
+        const placeholder = document.getElementById('placeholder');
+        
+        // Standaard materiaal voor STL-modellen
+        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
+            color: 0x007733, 
+            emissive: 0x00331a,      
+            specular: 0xffffff,      
+            shininess: 30,                       
         });
 
-        function init() {
-            // --- SCÈNE & CAMERA ---
+        initViewer();
+        
+        // --- 2. INITIALISATIE ---
+        function initViewer() {
+            // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x222222);
+            scene.background = new THREE.Color(0x1e1e1e); 
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 5000); 
+            camera.position.set(100, 75, 150); 
             
-            // Camera met breed bereik (Fix voor kleine/grote modellen)
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 50000); 
-            camera.position.z = 50;
-
-            // --- RENDERER ---
+            // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
 
-            // --- CONTROLS ---
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
+            // Belichting
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+            mainLight.position.set(100, 100, 100);
+            scene.add(mainLight);
 
-            // --- LICHT ---
-            // Noodzakelijk voor 3MF en als we later naar MeshPhongMaterial wisselen
-            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(1, 1, 1).normalize();
-            scene.add(directionalLight);
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; 
+            controls.dampingFactor = 0.15;
+            controls.minDistance = 1;
 
             window.addEventListener('resize', onWindowResize, false);
             animate();
         }
-
+        
         function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(container.clientWidth, container.clientHeight);
         }
-
+        
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
             renderer.render(scene, camera);
         }
 
-        /**
-         * Leest het geselecteerde lokale bestand in met de FileReader API.
-         */
-        function readFile(file) {
-            const reader = new FileReader();
-            const fileName = file.name;
-            const extension = fileName.split('.').pop().toLowerCase();
+        // --- 3. LAAD FUNCTIE ---
+        fileInput.addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            placeholder.style.display = 'none';
 
-            reader.readAsArrayBuffer(file);
+            const fileName = file.name.toLowerCase();
+            const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            reader.onload = function(event) {
-                const buffer = event.target.result;
-                loadModel(buffer, extension);
-            };
-
-            reader.onerror = function() {
-                console.error("Fout bij het lezen van het bestand.");
-            };
-        }
-
-        /**
-         * Laadt het model uit de ArrayBuffer in de 3D-scène.
-         */
-        function loadModel(buffer, extension) {
-            if (model) {
-                scene.remove(model);
-                model.geometry?.dispose();
-                model.material?.dispose();
-            }
-
-            let newModel = null;
-
-            if (extension === 'stl') {
-                const stlLoader = new STLLoader(); 
-                const geometry = stlLoader.parse(buffer);
-                
-                // --- DIAGNOSE: CONTROLEER GEOMETRIE DATA ---
-                if (!geometry.attributes.position || geometry.attributes.position.count === 0) {
-                    console.error("Geometrie is leeg of ongeldig. Het model wordt niet weergegeven. Probeer een andere STL.");
-                    return;
-                }
-                console.log('Model geladen. Aantal vertices:', geometry.attributes.position.count); 
-                // --- EINDE DIAGNOSE ---
-
-                // Gebruik MeshBasicMaterial voor gegarandeerde zichtbaarheid (geen licht nodig)
-                const material = new THREE.MeshBasicMaterial({ 
-                    color: 0x0000ff, // Felblauw
-                    wireframe: true 
-                });
-                newModel = new THREE.Mesh(geometry, material);
-
-            } else if (extension === '3mf') {
-                const threeMFLoader = new ThreeMFLoader(); 
-                newModel = threeMFLoader.parse(buffer); 
-                console.log('3MF model succesvol geladen!');
-
-            } else {
-                console.error('Bestandsformaat niet ondersteund: ' + extension);
+            if (extension !== 'stl' && extension !== '3mf') {
+                alert('Niet-ondersteund bestandstype. Selecteer een STL of 3MF.');
                 return;
             }
+            
+            // Opruimen vorig model
+            if (object) {
+                scene.remove(object);
+                object = null; 
+            }
 
-            if (newModel) {
-                model = newModel;
-                scene.add(model);
-                
-                // Centreer en zoom de camera
-                const boundingBox = new THREE.Box3().setFromObject(model);
-                const center = boundingBox.getCenter(new THREE.Vector3());
-                const size = boundingBox.getSize(new THREE.Vector3());
-                
-                controls.target.copy(center);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const fov = camera.fov * (Math.PI / 180);
-                let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
-                
-                // Stel positie in
-                if (maxDim > 0) {
-                   camera.position.z = center.z + cameraZ;
-                   camera.position.x = center.x;
-                   camera.position.y = center.y;
-                } else {
-                   camera.position.set(0, 0, 100);
+            try {
+                const reader = new FileReader();
+                const data = await new Promise((resolve, reject) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+
+                let model;
+                let loader;
+
+                if (extension === 'stl') {
+                    loader = new THREE.STLLoader();
+                    const geometry = loader.parse(data);
+                    model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                    console.log('STL-model succesvol geladen.');
+                    
+                } else if (extension === '3mf') {
+                    loader = new THREE.ThreeMFLoader();
+                    model = loader.parse(data); 
+                    // 3MF modellen bevatten vaak al kleur/materiaal, dus we gebruiken het standaard
+                    // materiaal uit de 3MF file (of de standaard Three.js MeshPhong indien geen kleur aanwezig)
+                    console.log('3MF-model succesvol geladen.');
                 }
                 
-                camera.updateProjectionMatrix();
-                controls.update();
+                if (model) {
+                    // Centreren en op de vloer zetten (belangrijk!)
+                    const box = new THREE.Box3().setFromObject(model);
+                    const center = new THREE.Vector3();
+                    const size = new THREE.Vector3();
+                    box.getCenter(center);
+                    box.getSize(size);
+                    
+                    // Plaats het object zodat het gecentreerd en op de vloer (Y=0) staat.
+                    model.position.set(-center.x, -box.min.y, -center.z);
+
+                    scene.add(model);
+                    object = model; 
+                    
+                    // Zoom de camera in op het model
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const distance = maxDim * 2; 
+                    
+                    controls.target.copy(model.position); // Richt op de basis van het model
+                    camera.position.set(model.position.x + distance, model.position.y + distance, model.position.z + distance);
+                    controls.update();
+                }
+
+            } catch (error) {
+                console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL:", error);
+                alert(`Fout bij het laden van ${extension}: ${error.message}.`); 
+                placeholder.style.display = 'flex';
             }
-        }
+        });
+
     </script>
 </body>
 </html>
