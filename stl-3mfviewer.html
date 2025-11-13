@@ -12,12 +12,12 @@
 
     <script type="module">
         
-        // --- 1. IMPORTEER ALLES VAN THREE.JS EN DE HELPERS ---
-        // Let op: 'three' is de core. De rest zijn de helpers (loaders, controls).
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/3MFLoader.js';
+        // --- 1. GEFIXTE IMPORTEER-STRUCTUUR (GEEN "Failed to resolve module specifier") ---
+        // We verwijzen direct naar de bestanden zonder de "npm/" syntax, wat stabieler is voor GitHub Pages.
+        import * as THREE from 'https://cdn.jsdelivr.net/g/three@0.160.0(build/three.module.js)';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/controls/OrbitControls.js)';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/STLLoader.js)';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/3MFLoader.js)';
 
         // Declaraties voor de 3D-scène
         let scene, camera, renderer, controls;
@@ -41,7 +41,6 @@
             document.body.appendChild(renderer.domElement);
 
             // --- CONTROLS INSTELLEN (OrbitControls) ---
-            // Let op: De constructor is nu gewoon 'OrbitControls', niet 'THREE.OrbitControls'!
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
@@ -56,7 +55,7 @@
 
             // --- LAAD HET MODEL ---
             // ***************************************************************
-            // ** VERGEET NIET DIT PAD AAN TE PASSEN NAAR JE BESTANDSNAMEN **
+            // ** DIT IS HET ENIGE PAD DAT JE NOG MOET CONTROLEREN **
             // ***************************************************************
             loadModel('jouw_model_naam.stl'); 
 
@@ -93,32 +92,30 @@
             console.log('Bezig met laden van model: ' + url);
 
             if (extension === 'stl') {
-                const stlLoader = new STLLoader(); // Geen THREE.STLLoader
+                const stlLoader = new STLLoader(); 
                 stlLoader.load(url, function (geometry) {
                     const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
                     model = new THREE.Mesh(geometry, material);
                     scene.add(model);
-                    // Centreer de camera op het nieuwe model
                     controls.target.copy(model.position); 
                     controls.update(); 
                     console.log('STL model succesvol geladen!');
                 }, 
-                undefined, // Progress functie
-                function (error) { // Fout functie
+                undefined, 
+                function (error) { 
                     console.error('Fout bij laden van STL. Controleer of het bestand bestaat op:', url, error);
                 });
             } else if (extension === '3mf') {
-                const threeMFLoader = new ThreeMFLoader(); // Geen THREE.ThreeMFLoader
+                const threeMFLoader = new ThreeMFLoader(); 
                 threeMFLoader.load(url, function (object) {
                     model = object;
                     scene.add(model);
-                    // Centreer de camera op het nieuwe model
                     controls.target.copy(model.position); 
                     controls.update(); 
                     console.log('3MF model succesvol geladen!');
                 }, 
-                undefined, // Progress functie
-                function (error) { // Fout functie
+                undefined, 
+                function (error) { 
                     console.error('Fout bij laden van 3MF. Controleer of het bestand bestaat op:', url, error);
                 });
             } else {
