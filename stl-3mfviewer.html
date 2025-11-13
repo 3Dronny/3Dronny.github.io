@@ -12,12 +12,12 @@
 
     <script type="module">
         
-        // --- 1. GEFIXTE IMPORTEER-STRUCTUUR (GEEN "Failed to resolve module specifier") ---
-        // We verwijzen direct naar de bestanden zonder de "npm/" syntax, wat stabieler is voor GitHub Pages.
+        // --- 1. IMPORTEER ALLES VAN THREE.JS VIA CDN (Module structuur) ---
+        // Dit is de meest stabiele manier om de modules te laden op GitHub Pages.
         import * as THREE from 'https://cdn.jsdelivr.net/g/three@0.160.0(build/three.module.js)';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/controls/OrbitControls.js)';
         import { STLLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/STLLoader.js)';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/3MFLoader.js)';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/ThreeMFLoader.js)';
 
         // Declaraties voor de 3D-scène
         let scene, camera, renderer, controls;
@@ -40,7 +40,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // --- CONTROLS INSTELLEN (OrbitControls) ---
+            // --- CONTROLS INSTELLEN (OrbitControls laat je roteren) ---
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
@@ -54,9 +54,10 @@
             scene.add(directionalLight);
 
             // --- LAAD HET MODEL ---
-            // ***************************************************************
-            // ** DIT IS HET ENIGE PAD DAT JE NOG MOET CONTROLEREN **
-            // ***************************************************************
+            // ************************************************************************************
+            // ** DIT IS DE ENIGE REGEL DIE JE MOET AANPASSEN! **
+            // ** ZORG DAT DE BESTANDSNAAM HIER EXACT OVEREENKOMT MET DE NAAM OP GITHUB (HOOFDLETTERS!) **
+            // ************************************************************************************
             loadModel('jouw_model_naam.stl'); 
 
             // --- WINDOW RESIZE LISTENER ---
@@ -103,7 +104,7 @@
                 }, 
                 undefined, 
                 function (error) { 
-                    console.error('Fout bij laden van STL. Controleer of het bestand bestaat op:', url, error);
+                    console.error('Fout bij laden van STL. 404 betekent dat het bestand niet is gevonden. Controleer het pad: ' + url, error);
                 });
             } else if (extension === '3mf') {
                 const threeMFLoader = new ThreeMFLoader(); 
@@ -116,7 +117,7 @@
                 }, 
                 undefined, 
                 function (error) { 
-                    console.error('Fout bij laden van 3MF. Controleer of het bestand bestaat op:', url, error);
+                    console.error('Fout bij laden van 3MF. 404 betekent dat het bestand niet is gevonden. Controleer het pad: ' + url, error);
                 });
             } else {
                 console.error('Bestandsformaat niet ondersteund:', extension);
