@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF)</title>
+    <title>3D Model Viewer (STL & 3MF - JSM)</title>
     <style>
         /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
@@ -25,14 +25,9 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fflate/0.7.3/umd/index.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    
-    <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/ThreeMFLoader.js"></script> 
+    <script type="module">
+        // ffate.js is een module en wordt later in de hoofdsctipt geïmporteerd.
+    </script> 
 </head>
 <body>
 
@@ -42,9 +37,17 @@
     
     <input type="file" id="file-input" accept=".stl, .3mf">
 
-    <script> 
+    <script type="module"> 
         
-        // --- 1. SETUP VARIABELEN ---
+        // --- 1. IMPORTEREN VAN LOADERS (Paden zijn NU de meest stabiele JSM-links) ---
+        // We gebruiken de nieuwste stabiele versie (r164) voor de beste module-ondersteuning
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js';
+        import { inflate } from 'https://cdn.jsdelivr.net/npm/fflate@0.7.3/esm/index.js'; // ffate.js als module
+
+        // --- 2. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
         const container = document.getElementById('viewer-container');
@@ -52,23 +55,15 @@
         const placeholder = document.getElementById('placeholder');
         
         // Standaard materiaal voor STL-modellen
-        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
+        const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
             color: 0x10b981, 
-            emissive: 0x00331a,      
-            specular: 0xffffff,      
-            shininess: 30,                       
+            metalness: 0.2,
+            roughness: 0.7,                     
         });
 
-        // Test of de basiscomponenten zijn geladen
-        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-             // Als een van de loaders ontbreekt, geven we een generieke melding.
-             placeholder.textContent = "Kritieke 3D-bestanden ontbreken. Probeer Ctrl+F5.";
-        } else {
-             initViewer();
-        }
-
-
-        // --- 2. INITIALISATIE ---
+        initViewer();
+        
+        // --- 3. INITIALISATIE ---
         function initViewer() {
             // Scene
             scene = new THREE.Scene();
@@ -83,14 +78,14 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting
-            scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+            // Belichting (Nodig voor MeshStandardMaterial)
+            scene.add(new THREE.HemisphereLight(0xffffff, 0.4)); 
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.2); 
             mainLight.position.set(100, 100, 100);
             scene.add(mainLight);
 
             // Controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement); 
+            controls = new OrbitControls(camera, renderer.domElement); 
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
             controls.minDistance = 1;
@@ -111,7 +106,7 @@
             renderer.render(scene, camera);
         }
 
-        // --- 3. LAAD FUNCTIE ---
+        // --- 4. LAAD FUNCTIE ---
         fileInput.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -151,14 +146,15 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    // STLLoader (werkt stabiel)
-                    const loader = new THREE.STLLoader(); 
+                    // STLLoader
+                    const loader = new STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader - ffate.js zou dit nu moeten oplossen
-                    const loader = new THREE.ThreeMFLoader(); 
+                    // ThreeMFLoader - ffate.js is nu als module geïmporteerd
+                    // De constructor is direct beschikbaar via import
+                    const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
