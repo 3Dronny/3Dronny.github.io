@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Model Viewer (STL/3MF)</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    
+    <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script src="./js/loaders/STLLoader.js"></script>
+    <script src="./js/loaders/3MFLoader.js"></script>
+
+    <script>
+        // Declaraties voor de 3D-scène
+        let scene, camera, renderer, controls;
+        let model; // De variabele om je 3D-model in op te slaan
+
+        /**
+         * Initialiseert de 3D-scène.
+         */
+        function init() {
+            // --- SCÈNE INSTELLEN ---
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xeeeeee); // Lichte achtergrond
+
+            // --- CAMERA INSTELLEN ---
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+
+            // --- RENDERER INSTELLEN ---
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // --- CONTROLS INSTELLEN (OrbitControls laat je roteren) ---
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // Voor een soepelere rotatie
+            controls.dampingFactor = 0.25;
+
+            // --- LICHT INSTELLEN ---
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Zacht omgevingslicht
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+
+            // --- LAAD HET MODEL ---
+            loadModel('pad/naar/jouw/model.stl'); // Pas dit pad aan!
+
+            // --- WINDOW RESIZE LISTENER ---
+            window.addEventListener('resize', onWindowResize, false);
+            
+            animate();
+        }
+
+        /**
+         * Functie om de grootte van de renderer aan te passen bij wijziging van venstergrootte.
+         */
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        /**
+         * De hoofdanimatielus.
+         */
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); // Update de controls
+            renderer.render(scene, camera);
+        }
+
+        /**
+         * Functie om een model te laden op basis van de extensie.
+         * @param {string} url - Het pad naar het 3D-modelbestand.
+         */
+        function loadModel(url) {
+            const extension = url.split('.').pop().toLowerCase();
+            const loader = new THREE.FileLoader(); // Algemene loader voor de inhoud
+
+            // *** DIT IS WAAR DE 3MF/STL LOGICA MOET KOMEN ***
+            // Je moet de specifieke loaders (STLLoader, 3MFLoader)
+            // hier initialiseren en gebruiken om het bestand te parsen.
+
+            if (extension === 'stl') {
+                const stlLoader = new THREE.STLLoader();
+                stlLoader.load(url, function (geometry) {
+                    const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
+                    model = new THREE.Mesh(geometry, material);
+                    scene.add(model);
+                    console.log('STL model geladen!');
+                });
+            } else if (extension === '3mf') {
+                const threeMFLoader = new THREE.ThreeMFLoader();
+                threeMFLoader.load(url, function (object) {
+                    model = object;
+                    scene.add(model);
+                    console.log('3MF model geladen!');
+                });
+            } else {
+                console.error('Bestandsformaat niet ondersteund:', extension);
+            }
+        }
+
+        // Start de applicatie
+        init();
+
+    </script>
+</body>
+</html>
