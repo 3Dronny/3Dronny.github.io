@@ -12,10 +12,10 @@
 
     <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
     
-    <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 
-    <script src="./js/loaders/STLLoader.js"></script>
-    <script src="./js/loaders/3MFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/3MFLoader.js"></script>
 
     <script>
         // Declaraties voor de 3D-scène
@@ -53,7 +53,10 @@
             scene.add(directionalLight);
 
             // --- LAAD HET MODEL ---
-            loadModel('pad/naar/jouw/model.stl'); // Pas dit pad aan!
+            // ***************************************************************
+            // ** PAS DIT PAD AAN NAAR JE UPLOADED STL OF 3MF BESTAND **
+            // ***************************************************************
+            loadModel('jouw_model_naam.stl'); // VOORBEELD: 'model.3mf' of 'test.stl'
 
             // --- WINDOW RESIZE LISTENER ---
             window.addEventListener('resize', onWindowResize, false);
@@ -85,26 +88,33 @@
          */
         function loadModel(url) {
             const extension = url.split('.').pop().toLowerCase();
-            const loader = new THREE.FileLoader(); // Algemene loader voor de inhoud
-
-            // *** DIT IS WAAR DE 3MF/STL LOGICA MOET KOMEN ***
-            // Je moet de specifieke loaders (STLLoader, 3MFLoader)
-            // hier initialiseren en gebruiken om het bestand te parsen.
+            
+            // Simpele laadindicator
+            console.log('Bezig met laden van model: ' + url);
 
             if (extension === 'stl') {
                 const stlLoader = new THREE.STLLoader();
                 stlLoader.load(url, function (geometry) {
+                    // Standaard grijs materiaal voor STL
                     const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
                     model = new THREE.Mesh(geometry, material);
                     scene.add(model);
-                    console.log('STL model geladen!');
+                    console.log('STL model succesvol geladen!');
+                }, 
+                undefined, // Progress functie (niet gebruikt)
+                function (error) { // Fout functie
+                    console.error('Fout bij laden van STL:', error);
                 });
             } else if (extension === '3mf') {
                 const threeMFLoader = new THREE.ThreeMFLoader();
                 threeMFLoader.load(url, function (object) {
                     model = object;
                     scene.add(model);
-                    console.log('3MF model geladen!');
+                    console.log('3MF model succesvol geladen!');
+                }, 
+                undefined, // Progress functie (niet gebruikt)
+                function (error) { // Fout functie
+                    console.error('Fout bij laden van 3MF:', error);
                 });
             } else {
                 console.error('Bestandsformaat niet ondersteund:', extension);
