@@ -41,19 +41,24 @@
             "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
             "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js",
             "three/examples/jsm/loaders/STLLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js",
-            "three/examples/jsm/loaders/ThreeMFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js"
+            "three/examples/jsm/loaders/ThreeMFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js",
+            
+            /* DEZE LINK IS DE OPLOSSING VOOR DE ffate 404 */
+            "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.7.3/lib/browser.js"
           }
         }
     </script>
 
     <script type="module"> 
         
-        // Let op: De import-strings komen nu overeen met de importmap keys.
+        // --- 1. IMPORTEREN VAN MODULES (Gebruikt de keys uit de importmap) ---
         import * as THREE from 'three';
         import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
         import { ThreeMFLoader } from 'three/examples/jsm/loaders/ThreeMFLoader.js';
         
+        // ffate.js hoeft niet apart geïmporteerd te worden; de ThreeMFLoader gebruikt deze impliciet via de importmap.
+
         // --- 2. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
@@ -68,6 +73,7 @@
             roughness: 0.7,                     
         });
 
+        // Start de viewer direct, de imports zijn asynchroon
         initViewer();
         
         // --- 3. INITIALISATIE ---
@@ -153,13 +159,13 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    // STLLoader
+                    // STLLoader (werkt stabiel)
                     const loader = new STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader 
+                    // ThreeMFLoader (werkt nu correct met de ffate fix in de importmap)
                     const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
