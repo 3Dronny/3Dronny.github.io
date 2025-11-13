@@ -53,7 +53,10 @@
             // --- SCÈNE & CAMERA ---
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xeeeeee);
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            // ** AANPASSING HIER: MAAK DE 'NEAR' CLIP VÉÉL KLEINER (0.01) **
+            // Dit zorgt ervoor dat extreem kleine modellen niet meer afgesneden worden.
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, **0.01**, 50000); 
             camera.position.z = 50;
 
             // --- RENDERER ---
@@ -90,7 +93,6 @@
 
         /**
          * Leest het geselecteerde lokale bestand in met de FileReader API.
-         * @param {File} file - Het bestandsobject van de uploadknop.
          */
         function readFile(file) {
             const reader = new FileReader();
@@ -111,7 +113,7 @@
         }
 
         /**
-         * Laadt het model uit de ArrayBuffer in de 3D-scène.
+         * Laadt het model uit de ArrayBuffer in de 3D-scène en stelt de camera in.
          */
         function loadModel(buffer, extension) {
             // Verwijder het vorige model, indien aanwezig
@@ -125,16 +127,15 @@
 
             if (extension === 'stl') {
                 const stlLoader = new STLLoader(); 
-                const geometry = stlLoader.parse(buffer); // Gebruik parse() in plaats van load()
+                const geometry = stlLoader.parse(buffer);
                 const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
                 newModel = new THREE.Mesh(geometry, material);
-                console.log('STL model geladen!');
+                console.log('STL model succesvol geladen!');
 
             } else if (extension === '3mf') {
                 const threeMFLoader = new ThreeMFLoader(); 
-                // 3MFLoader gebruikt de buffer in de parse functie
                 newModel = threeMFLoader.parse(buffer); 
-                console.log('3MF model geladen!');
+                console.log('3MF model succesvol geladen!');
 
             } else {
                 console.error('Bestandsformaat niet ondersteund: ' + extension);
@@ -145,7 +146,7 @@
                 model = newModel;
                 scene.add(model);
                 
-                // Centreer en zoom de camera
+                // Centreer en zoom de camera (Box3 helpt bij onbekende schalen)
                 const boundingBox = new THREE.Box3().setFromObject(model);
                 const center = boundingBox.getCenter(new THREE.Vector3());
                 const size = boundingBox.getSize(new THREE.Vector3());
@@ -153,6 +154,7 @@
                 controls.target.copy(center);
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const fov = camera.fov * (Math.PI / 180);
+                // Bereken de afstand die nodig is om het model in de viewport te passen
                 let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
                 camera.position.z = center.z + cameraZ;
                 camera.position.x = center.x;
