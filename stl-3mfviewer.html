@@ -2,8 +2,9 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF - Zelfstandig)</title>
+    <title>3D Model Viewer (STL & 3MF)</title>
     <style>
+        /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
         #viewer-container { width: 100vw; height: 100vh; position: relative; }
         #file-input { 
@@ -25,79 +26,10 @@
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
-    
-    <script>
-        (function(){
-            // OrbitControls code, direct in de HTML
-            // Dit lost de externe 404-fout op
-            THREE.OrbitControls = function(camera, domElement) {
-                // ... (volledige code van OrbitControls.js, verkort voor weergave) ...
-                if (camera === undefined || domElement === undefined) {
-                    console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
-                }
-                var scope = this;
-                // ... [rest van de OrbitControls code]
-                this.domElement = (domElement !== undefined) ? domElement : document;
-                this.enabled = true;
-                // ... [rest van de OrbitControls code]
-                this.update = function() {
-                    // ... [update functie]
-                };
-                // ... [volledige code]
-                // Door de code hier in te voegen, wordt deze gegarandeerd geladen.
-            };
-        })();
-    </script>
-
-    <script>
-        (function(){
-            // STLLoader code, direct in de HTML
-            THREE.STLLoader = function ( manager ) {
-                this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
-            };
-            THREE.STLLoader.prototype = {
-                constructor: THREE.STLLoader,
-                load: function ( url, onLoad, onProgress, onError ) {
-                    // ... [laad code]
-                },
-                parse: function ( data ) {
-                    // ... [parse code]
-                    var reader = new DataView( data );
-                    var isBinary = function () {
-                        // ... [binary check code]
-                        // Door de code hier in te voegen, wordt deze gegarandeerd geladen.
-                    }();
-                    // ... [rest van de parse code]
-                }
-            };
-        })();
-    </script>
-    
-    <script>
-        (function(){
-            // ThreeMFLoader code, direct in de HTML
-            THREE.ThreeMFLoader = function ( manager ) {
-                this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
-            };
-            THREE.ThreeMFLoader.prototype = {
-                constructor: THREE.ThreeMFLoader,
-                load: function ( url, onLoad, onProgress, onError ) {
-                    // ... [laad code]
-                },
-                parse: function ( data ) {
-                    // ... [parse code]
-                    var zip = null;
-                    var file = new DataView( data );
-                    // ... [rest van de parse code]
-                    return object;
-                }
-            };
-        })();
-    </script>
-
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/ThreeMFLoader.js"></script> 
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@r128/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -126,7 +58,7 @@
 
         // Test of de loaders geladen zijn
         if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-             placeholder.textContent = "Laden mislukt. Probeer Ctrl+F5 om de cache te wissen.";
+             placeholder.textContent = "Three.js Loaders ontbreken. Probeer Ctrl+F5 om de cache te wissen.";
         } else {
              initViewer();
         }
