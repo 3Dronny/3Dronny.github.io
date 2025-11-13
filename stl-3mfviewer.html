@@ -29,11 +29,11 @@
 
     <script type="module">
         
-        // --- 1. IMPORTEER ALLES VAN THREE.JS VIA CDN ---
-        import * as THREE from 'https://cdn.jsdelivr.net/g/three@0.160.0(build/three.module.js)';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/controls/OrbitControls.js)';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/STLLoader.js)';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/ThreeMFLoader.js)';
+        // ** DEZE LINKS ZIJN NU GECORRIGEERD EN STABIEL VOOR CDN **
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/ThreeMFLoader.js';
 
         let scene, camera, renderer, controls;
         let model;
@@ -115,7 +115,7 @@
          * Laadt het model uit de ArrayBuffer in de 3D-scène en stelt de camera in.
          */
         function loadModel(buffer, extension) {
-            // Verwijder het vorige model, indien aanwezig
+            // Verwijder het vorige model
             if (model) {
                 scene.remove(model);
                 model.geometry?.dispose();
@@ -128,23 +128,19 @@
                 const stlLoader = new STLLoader(); 
                 const geometry = stlLoader.parse(buffer);
                 
-                // ** DIAGNOSE STAP **
-                if (!geometry.attributes.position) {
-                    console.error("Geometrie is ongeldig! Er zijn geen positie-attributen gevonden.");
+                // --- DIAGNOSE: CONTROLEER GEOMETRIE DATA ---
+                if (!geometry.attributes.position || geometry.attributes.position.count === 0) {
+                    console.error("Geometrie is leeg of ongeldig. Controleer uw STL-bestand.");
                     return;
                 }
                 console.log('Model geladen. Aantal vertices:', geometry.attributes.position.count); 
-                if (geometry.attributes.position.count === 0) {
-                    console.error("Geometrie is leeg! Het STL-bestand bevat geen data.");
-                    return;
-                }
-                // ** EINDE DIAGNOSE **
+                // --- EINDE DIAGNOSE ---
 
                 const material = new THREE.MeshPhongMaterial({ 
                     color: 0xaaaaaa, 
                     specular: 0x111111, 
                     shininess: 200,
-                    wireframe: true 
+                    wireframe: true // Forceer wireframe voor zichtbaarheid
                 });
                 newModel = new THREE.Mesh(geometry, material);
 
@@ -172,13 +168,12 @@
                 const fov = camera.fov * (Math.PI / 180);
                 let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
                 
-                // Agressieve schaal fix voor kleine/grote modellen
+                // Stel positie in
                 if (maxDim > 0) {
                    camera.position.z = center.z + cameraZ;
                    camera.position.x = center.x;
                    camera.position.y = center.y;
                 } else {
-                   // Indien maxDim 0 is (plat object), stel handmatige afstand in
                    camera.position.set(0, 0, 100);
                 }
                 
