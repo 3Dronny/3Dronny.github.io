@@ -44,9 +44,9 @@
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // ** FIX VOOR 3MF LOADER **: De ThreeMFLoader moet expliciet worden gedeclareerd
-        const ThreeMFLoader = THREE.ThreeMFLoader; 
-        
+        // ** OPLOSSING:** WE VERWIJDEREN DE 'const ThreeMFLoader = THREE.ThreeMFLoader;' REGEL.
+        // We gaan de constructor direct in de laadfunctie aanroepen.
+
         // Standaard materiaal voor STL-modellen
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0x007733, 
@@ -57,7 +57,7 @@
 
         initViewer();
         
-        // --- 2. INITIALISATIE ---
+        // --- 2. INITIALISATIE (ongewijzigd) ---
         function initViewer() {
             // Scene
             scene = new THREE.Scene();
@@ -100,7 +100,7 @@
             renderer.render(scene, camera);
         }
 
-        // --- 3. LAAD FUNCTIE ---
+        // --- 3. LAAD FUNCTIE (Aangepast) ---
         fileInput.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -132,13 +132,18 @@
                 let model;
                 
                 if (extension === 'stl') {
+                    // STL Loader werkt altijd via THREE.STLLoader
                     const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // Gebruik de gedeclareerde ThreeMFLoader
-                    const loader = new ThreeMFLoader(); 
+                    // ** FIX APPLICEREN:** De constructor heet correct 'THREE.ThreeMFLoader'
+                    // We roepen hem nu direct aan in de if-else block.
+                    if (typeof THREE.ThreeMFLoader === 'undefined') {
+                        throw new Error("ThreeMFLoader is niet correct geladen.");
+                    }
+                    const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
