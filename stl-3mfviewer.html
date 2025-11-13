@@ -4,80 +4,84 @@
     <meta charset="UTF-8">
     <title>3D Model Viewer (STL/3MF)</title>
     <style>
-        body { margin: 0; overflow: hidden; }
+        body { margin: 0; overflow: hidden; background-color: #eeeeee; }
         canvas { display: block; }
+        #file-input-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            font-family: sans-serif;
+        }
+        #fileInput {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
+    <div id="file-input-container">
+        <input type="file" id="fileInput" accept=".stl, .3mf">
+    </div>
+
     <script type="module">
         
-        // --- 1. IMPORTEER ALLES VAN THREE.JS VIA CDN (Module structuur) ---
-        // Dit is de meest stabiele manier om de modules te laden op GitHub Pages.
+        // --- 1. IMPORTEER ALLES VAN THREE.JS VIA CDN ---
         import * as THREE from 'https://cdn.jsdelivr.net/g/three@0.160.0(build/three.module.js)';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/controls/OrbitControls.js)';
         import { STLLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/STLLoader.js)';
         import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/g/three@0.160.0(examples/jsm/loaders/ThreeMFLoader.js)';
 
-        // Declaraties voor de 3D-scène
         let scene, camera, renderer, controls;
-        let model; 
+        let model;
+        const fileInput = document.getElementById('fileInput');
 
-        /**
-         * Initialiseert de 3D-scène.
-         */
+        init();
+
+        // --- Event Listener voor de Uploadknop ---
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
         function init() {
-            // --- SCÈNE INSTELLEN ---
+            // --- SCÈNE & CAMERA ---
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xeeeeee);
-
-            // --- CAMERA INSTELLEN ---
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 50;
 
-            // --- RENDERER INSTELLEN ---
+            // --- RENDERER ---
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // --- CONTROLS INSTELLEN (OrbitControls laat je roteren) ---
+            // --- CONTROLS ---
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
 
-            // --- LICHT INSTELLEN ---
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
+            // --- LICHT ---
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(1, 1, 1).normalize();
             scene.add(directionalLight);
 
-            // --- LAAD HET MODEL ---
-            // ************************************************************************************
-            // ** DIT IS DE ENIGE REGEL DIE JE MOET AANPASSEN! **
-            // ** ZORG DAT DE BESTANDSNAAM HIER EXACT OVEREENKOMT MET DE NAAM OP GITHUB (HOOFDLETTERS!) **
-            // ************************************************************************************
-            loadModel('jouw_model_naam.stl'); 
-
-            // --- WINDOW RESIZE LISTENER ---
             window.addEventListener('resize', onWindowResize, false);
-            
             animate();
         }
 
-        /**
-         * Functie om de grootte van de renderer aan te passen bij wijziging van venstergrootte.
-         */
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        /**
-         * De hoofdanimatielus.
-         */
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -85,48 +89,79 @@
         }
 
         /**
-         * Functie om een model te laden op basis van de extensie.
+         * Leest het geselecteerde lokale bestand in met de FileReader API.
+         * @param {File} file - Het bestandsobject van de uploadknop.
          */
-        function loadModel(url) {
-            const extension = url.split('.').pop().toLowerCase();
-            
-            console.log('Bezig met laden van model: ' + url);
+        function readFile(file) {
+            const reader = new FileReader();
+            const fileName = file.name;
+            const extension = fileName.split('.').pop().toLowerCase();
+
+            // Lees het bestand als een ArrayBuffer (ruwe binaire data)
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = function(event) {
+                const buffer = event.target.result;
+                loadModel(buffer, extension);
+            };
+
+            reader.onerror = function() {
+                console.error("Fout bij het lezen van het bestand.");
+            };
+        }
+
+        /**
+         * Laadt het model uit de ArrayBuffer in de 3D-scène.
+         */
+        function loadModel(buffer, extension) {
+            // Verwijder het vorige model, indien aanwezig
+            if (model) {
+                scene.remove(model);
+                model.geometry?.dispose();
+                model.material?.dispose();
+            }
+
+            let newModel = null;
 
             if (extension === 'stl') {
                 const stlLoader = new STLLoader(); 
-                stlLoader.load(url, function (geometry) {
-                    const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
-                    model = new THREE.Mesh(geometry, material);
-                    scene.add(model);
-                    controls.target.copy(model.position); 
-                    controls.update(); 
-                    console.log('STL model succesvol geladen!');
-                }, 
-                undefined, 
-                function (error) { 
-                    console.error('Fout bij laden van STL. 404 betekent dat het bestand niet is gevonden. Controleer het pad: ' + url, error);
-                });
+                const geometry = stlLoader.parse(buffer); // Gebruik parse() in plaats van load()
+                const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular: 0x111111, shininess: 200 });
+                newModel = new THREE.Mesh(geometry, material);
+                console.log('STL model geladen!');
+
             } else if (extension === '3mf') {
                 const threeMFLoader = new ThreeMFLoader(); 
-                threeMFLoader.load(url, function (object) {
-                    model = object;
-                    scene.add(model);
-                    controls.target.copy(model.position); 
-                    controls.update(); 
-                    console.log('3MF model succesvol geladen!');
-                }, 
-                undefined, 
-                function (error) { 
-                    console.error('Fout bij laden van 3MF. 404 betekent dat het bestand niet is gevonden. Controleer het pad: ' + url, error);
-                });
+                // 3MFLoader gebruikt de buffer in de parse functie
+                newModel = threeMFLoader.parse(buffer); 
+                console.log('3MF model geladen!');
+
             } else {
-                console.error('Bestandsformaat niet ondersteund:', extension);
+                console.error('Bestandsformaat niet ondersteund: ' + extension);
+                return;
+            }
+
+            if (newModel) {
+                model = newModel;
+                scene.add(model);
+                
+                // Centreer en zoom de camera
+                const boundingBox = new THREE.Box3().setFromObject(model);
+                const center = boundingBox.getCenter(new THREE.Vector3());
+                const size = boundingBox.getSize(new THREE.Vector3());
+                
+                controls.target.copy(center);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const fov = camera.fov * (Math.PI / 180);
+                let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
+                camera.position.z = center.z + cameraZ;
+                camera.position.x = center.x;
+                camera.position.y = center.y;
+                
+                camera.updateProjectionMatrix();
+                controls.update();
             }
         }
-
-        // Start de applicatie
-        init();
-
     </script>
 </body>
 </html>
