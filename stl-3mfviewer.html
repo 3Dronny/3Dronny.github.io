@@ -31,9 +31,12 @@
         {
           "imports": {
             "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-            "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js",
-            "three/examples/jsm/loaders/STLLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js",
-            "three/examples/jsm/loaders/ThreeMFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js",
+            
+            /* DEZE LINKS ZIJN GEFIXED OM DE 404-PROBLEMEN TE OMZEILEN */
+            "three/examples/jsm/controls/OrbitControls.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/controls/OrbitControls.js",
+            "three/examples/jsm/loaders/STLLoader.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/STLLoader.js",
+            "three/examples/jsm/loaders/ThreeMFLoader.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/ThreeMFLoader.js",
+            
             "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.7.3/lib/browser.js"
           }
         }
@@ -49,7 +52,7 @@
 
     <script type="module"> 
         
-        // --- 1. IMPORTEREN VAN MODULES ---
+        // --- 1. IMPORTEREN VAN MODULES (Gebruikt de keys uit de importmap) ---
         import * as THREE from 'three';
         import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
@@ -69,13 +72,13 @@
             roughness: 0.6,                     
         });
 
-        // Roep initViewer aan zodra alle imports succesvol zijn.
+        // Start de viewer
         initViewer(); 
         
         // --- 3. INITIALISATIE ---
         function initViewer() {
             // Controleer of de benodigde objecten bestaan, mocht er toch iets misgaan met imports
-            if (!THREE.Scene || !OrbitControls || !STLLoader || !ThreeMFLoader) {
+            if (!THREE.Scene || typeof OrbitControls === 'undefined' || typeof STLLoader === 'undefined' || typeof ThreeMFLoader === 'undefined') {
                 placeholder.textContent = "Kritieke modules (Three.js, loaders) zijn niet geladen.";
                 return;
             }
