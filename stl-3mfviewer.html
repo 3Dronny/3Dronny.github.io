@@ -26,6 +26,9 @@
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fflate/0.7.3/umd/index.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     
@@ -154,7 +157,7 @@
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader (Gebruikt de directere aanroep nu de link is gefixt)
+                    // ThreeMFLoader - ffate.js zou dit nu moeten oplossen
                     const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
