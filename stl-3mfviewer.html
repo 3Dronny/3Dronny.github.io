@@ -6,7 +6,17 @@
     <style>
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
         #viewer-container { width: 100vw; height: 100vh; position: relative; }
-        #file-input { position: absolute; top: 20px; left: 20px; z-index: 10; padding: 10px; }
+        #file-input { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            z-index: 10; 
+            padding: 10px; 
+            background-color: #333; 
+            border: 1px solid #555; 
+            border-radius: 5px;
+            color: white;
+        }
         #placeholder { 
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; 
             font-size: 1.2em; color: #aaa; pointer-events: none;
@@ -21,7 +31,7 @@
 <body>
 
     <div id="viewer-container">
-        <div id="placeholder">Upload een STL of 3MF bestand</div>
+        <div id="placeholder">Upload een STL of 3MF bestand om te starten.</div>
     </div>
     
     <input type="file" id="file-input" accept=".stl, .3mf">
@@ -33,6 +43,9 @@
         const container = document.getElementById('viewer-container');
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
+        
+        // ** FIX VOOR 3MF LOADER **: De ThreeMFLoader moet expliciet worden gedeclareerd
+        const ThreeMFLoader = THREE.ThreeMFLoader; 
         
         // Standaard materiaal voor STL-modellen
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
@@ -117,24 +130,20 @@
                 });
 
                 let model;
-                let loader;
-
+                
                 if (extension === 'stl') {
-                    loader = new THREE.STLLoader();
+                    const loader = new THREE.STLLoader();
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
-                    console.log('STL-model succesvol geladen.');
                     
                 } else if (extension === '3mf') {
-                    loader = new THREE.ThreeMFLoader();
+                    // Gebruik de gedeclareerde ThreeMFLoader
+                    const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
-                    // 3MF modellen bevatten vaak al kleur/materiaal, dus we gebruiken het standaard
-                    // materiaal uit de 3MF file (of de standaard Three.js MeshPhong indien geen kleur aanwezig)
-                    console.log('3MF-model succesvol geladen.');
                 }
                 
                 if (model) {
-                    // Centreren en op de vloer zetten (belangrijk!)
+                    // Centreren en op de vloer zetten
                     const box = new THREE.Box3().setFromObject(model);
                     const center = new THREE.Vector3();
                     const size = new THREE.Vector3();
@@ -151,13 +160,13 @@
                     const maxDim = Math.max(size.x, size.y, size.z);
                     const distance = maxDim * 2; 
                     
-                    controls.target.copy(model.position); // Richt op de basis van het model
+                    controls.target.copy(new THREE.Vector3(model.position.x, center.y - box.min.y, model.position.z));
                     camera.position.set(model.position.x + distance, model.position.y + distance, model.position.z + distance);
                     controls.update();
                 }
 
             } catch (error) {
-                console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL:", error);
+                console.error(`❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL: ${error.name}: ${error.message}`);
                 alert(`Fout bij het laden van ${extension}: ${error.message}.`); 
                 placeholder.style.display = 'flex';
             }
