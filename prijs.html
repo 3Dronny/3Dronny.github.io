@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professionele 3D Print Calculator | 3DRonny</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
@@ -206,7 +206,6 @@
                 if (!position || position.count === 0) return 0;
 
                 let volume = 0;
-                // STLLoader levert meestal een non-indexed BufferGeometry
                 const indices = geometry.index ? geometry.index.array : Array.from({ length: position.count }, (v, i) => i);
                 
                 const v0 = new THREE.Vector3();
@@ -251,6 +250,7 @@
 
                 document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
                 document.getElementById('resultaat-container').classList.remove('hidden');
+
             }
             document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
             // Zorg ervoor dat de prijs wordt geüpdatet als de parameters veranderen
@@ -282,7 +282,7 @@
                 }
                 viewerContainer.appendChild(renderer.domElement);
 
-                // Belichting (SUBTIEL)
+                // Belichting (NU SUBTIEL EN DONKER)
                 scene.add(new THREE.AmbientLight(0xffffff, **0.2**)); // Vrij zwak
                 
                 const mainLight = new THREE.DirectionalLight(0xffffff, **0.8**); // Verminderde intensiteit
@@ -404,10 +404,10 @@
                     
                     // Constanten
                     const PLA_DENSITY_G_PER_MM3 = 0.00124; // Dichtheid van PLA
-                    const vulling_pct = parseFloat(vullingInput.value) / 100;
+                    // Zorg ervoor dat de vulling 20% is als het veld leeg is, anders de ingevoerde waarde
+                    const vulling_pct = parseFloat(vullingInput.value || 20) / 100;
 
                     // Ruwe schatting van het gewicht
-                    // De factor (vulling * 0.8 + 0.2) compenseert ruw voor de omhulling (shells)
                     const geschat_gewicht_g = volume_mm3 * PLA_DENSITY_G_PER_MM3 * (vulling_pct * 0.8 + 0.2); 
 
                     // Update het invoerveld (minimaal 1 gram)
