@@ -1,451 +1,394 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professionele 3D Print Calculator | 3DRonny</title>
-    
-        <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
-    
-    <style>
-        /* CSS Variabelen voor de groene accentkleur */
-        :root {
-            --accent-color: #10b981; /* Emerald Green */
-            --accent-hover: #059669;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professionele 3D Print Calculator | 3DRonny</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    
+    <style>
+        /* CSS Variabelen voor de groene accentkleur */
+        :root {
+            --accent-color: #10b981; /* Emerald Green */
+            --accent-hover: #059669;
+        }
 
-        /* Basis Donker Thema */
-        body {
-            background-color: #121212; 
-            color: #e0e0e0; 
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-        }
-        
-        /* Viewer en input veld stijlen */
-        #viewer-container {
-            width: 100%;
-            height: 600px;
-            background-color: #1e1e1e; 
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-        }
+        /* Basis Donker Thema */
+        body {
+            background-color: #121212; 
+            color: #e0e0e0; 
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        }
+        
+        /* Viewer en input veld stijlen */
+        #viewer-container {
+            width: 100%;
+            height: 600px;
+            background-color: #1e1e1e; 
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
 
-        .accent-text {
-            color: var(--accent-color);
-        }
+        .accent-text {
+            color: var(--accent-color);
+        }
 
-        .card-bg {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
+        .card-bg {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
 
-        .input-field {
-            background-color: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-            transition: border-color 0.2s;
-        }
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
-        }
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+        }
 
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: #121212;
-            transition: background-color 0.2s;
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
-        }
-    </style>
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #121212;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+        }
+    </style>
 </head>
 <body class="p-8">
-    <div class="max-w-7xl mx-auto">
-        
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-extrabold text-white mb-3 tracking-tight">
-                3DRonny <span class="accent-text">Pricing Engine</span>
-            </h1>
-            <p class="text-gray-400 text-xl">Upload, Visualiseer en Bereken direct uw 3D Print Kosten.</p>
-        </header>
+    <div class="max-w-7xl mx-auto">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-white mb-3 tracking-tight">
+                3DRonny <span class="accent-text">Pricing Engine</span>
+            </h1>
+            <p class="text-gray-400 text-xl">Upload, Visualiseer en Bereken direct uw 3D Print Kosten.</p>
+        </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
-            
-            <div class="lg:col-span-3">
-                <h2 class="text-3xl font-semibold mb-4 text-white">
-                    <i class="fas fa-cube mr-3 accent-text"></i>3D Model Viewer
-                </h2>
-                
-                <div id="viewer-container">
-                    <p id="viewer-placeholder" class="absolute inset-0 flex items-center justify-center text-gray-500">
-                        Upload een STL-bestand om de 3D-viewer te starten.
-                    </p>
-                    <div id="loading-indicator" class="loading-overlay hidden">
-                        <i class="fas fa-spinner fa-spin mr-3"></i> Model laden...
-                    </div>
-                </div>
-                
-                <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                    <input type="file" id="file-upload" accept=".stl" class="input-field p-3 rounded-lg flex-grow cursor-pointer" aria-label="Upload 3D Model Bestand">
-                    <button id="reset-view-btn" class="btn-primary p-3 rounded-lg font-semibold whitespace-nowrap">
-                        <i class="fas fa-sync-alt mr-2"></i>Reset View
-                    </button>
-                </div>
-                <p class="text-sm text-gray-500 mt-2">Ondersteunde formaten: **STL**. Gewicht en volume worden automatisch berekend.</p>
-            </div>
-
-            <div class="lg:col-span-2">
-                <h2 class="text-3xl font-semibold mb-4 text-white">
-                    <i class="fas fa-calculator mr-3 accent-text"></i>Kostenberekening
-                </h2>
-                
-                <form id="price-calculator" class="space-y-6 card-bg p-8 rounded-xl">
-                    
-                    <div>
-                        <label for="printtijd" class="block mb-2 font-medium text-gray-300">
-                            <i class="fas fa-clock mr-2 accent-text"></i>Printduur (uren)
-                        </label>
-                        <input type="number" id="printtijd" step="0.1" min="0" value="5.0"
-                               class="w-full input-field p-3 rounded-lg" placeholder="5.0" required>
-                    </div>
-                    
-                    <div>
-                        <label for="gewicht" class="block mb-2 font-medium text-gray-300">
-                            <i class="fas fa-weight-hanging mr-2 accent-text"></i>Gewicht (gram)
-                        </label>
-                        <input type="number" id="gewicht" step="1" min="1" value="100"
-                               class="w-full input-field p-3 rounded-lg" placeholder="100" required>
-                    </div>
-
-                    <div>
-                        <label for="vulling" class="block mb-2 font-medium text-gray-300">
-                            <i class="fas fa-fill-drip mr-2 accent-text"></i>Vulling / Infill (%)
-                        </label>
-                        <input type="number" id="vulling" step="5" min="0" max="100" value="20"
-                               class="w-full input-field p-3 rounded-lg" placeholder="20" required>
-                    </div>
-                    
-                    <div>
-                        <label for="vaste-kosten" class="block mb-2 font-medium text-gray-300">
-                            <i class="fas fa-euro-sign mr-2 accent-text"></i>Opstart/Vaste kosten (€)
-                        </label>
-                        <input type="number" id="vaste-kosten" step="0.50" min="0" value="5.00"
-                               class="w-full input-field p-3 rounded-lg" placeholder="5.00" required>
-                        <p class="text-xs text-gray-500 mt-1">Vaste kosten voor opstarten en afschrijving.</p>
-                    </div>
-
-                    <button type="submit" class="btn-primary w-full p-4 rounded-lg font-bold text-lg">
-                        <i class="fas fa-cogs mr-2"></i>BEREKEN TOTALE PRIJS
-                    </button>
-                </form>
-
-                <div id="resultaat-container" class="mt-8 card-bg p-8 rounded-xl border-l-4 border-l-[var(--accent-color)] shadow-xl hidden" role="status">
-                    <h3 class="text-3xl font-bold mb-3 accent-text">Totale Geschatte Prijs:</h3>
-                    <p class="text-5xl text-white font-extrabold" id="totaal-prijs">€ 0.00</p>
-                    <p class="text-sm text-gray-500 mt-3">Gebaseerd op de ingevoerde parameters. De definitieve prijs kan variëren.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    
-    <script>
-        
-        // Final sanity check
-        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
-            console.error("KRITIEKE FOUT: Three.js of de OrbitControls zijn niet correct geladen. De 3D Viewer start niet.");
-            const container = document.getElementById('viewer-container');
-            if (container) {
-                container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>De viewer kan niet laden vanwege een probleem met externe bestanden.</div>';
-            }
-        } else {
-            console.log("Three.js, OrbitControls en STLLoader zijn succesvol geladen.");
-
-            // Donkerdere, diepere Groene Kleur
-            const MODEL_COLOR = 0x007733; 
-
-            // Standaard materiaal voor modellen
-            const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-                color: new THREE.Color(MODEL_COLOR), 
-                emissive: new THREE.Color(0x00331a),      
-                specular: new THREE.Color(0xffffff),      
-                shininess: 30,                            
-            });
-
-            // Elementen
-            const loadingIndicator = document.getElementById('loading-indicator');
-            const viewerContainer = document.getElementById('viewer-container');
-            const fileUpload = document.getElementById('file-upload');
-            const resetButton = document.getElementById('reset-view-btn'); 
-            const gewichtInput = document.getElementById('gewicht');
-            const vullingInput = document.getElementById('vulling');
-
-
-            // Viewer variabelen
-            let scene, camera, renderer, controls;
-            let object; // Dit is de cruciale variabele die het geladen 3D-object vasthoudt
-            let defaultCameraDistance = 100; 
-
-
-            // --- NIEUWE FUNCTIE: VOLUME BEREKENING (Gebaseerd op de tetraëdermethode) ---
-            function calculateVolume(geometry) {
-                if (!geometry.isBufferGeometry) return 0;
-
-                const position = geometry.attributes.position;
-                if (!position || position.count === 0) return 0;
-
-                let volume = 0;
-                const indices = geometry.index ? geometry.index.array : Array.from({ length: position.count }, (v, i) => i);
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+            
+            <div class="lg:col-span-3">
+                <h2 class="text-3xl font-semibold mb-4 text-white">
+                    <i class="fas fa-cube mr-3 accent-text"></i>3D Model Viewer
+                </h2>
                 
-                const v0 = new THREE.Vector3();
-                const v1 = new THREE.Vector3();
-                const v2 = new THREE.Vector3();
+                <div id="viewer-container">
+                    <p id="viewer-placeholder" class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        Upload een STL-bestand om de 3D-viewer te starten.
+                    </p>
+                    <div id="loading-indicator" class="loading-overlay hidden">
+                        <i class="fas fa-spinner fa-spin mr-3"></i> Model laden...
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                    <input type="file" id="file-upload" accept=".stl" class="input-field p-3 rounded-lg flex-grow cursor-pointer" aria-label="Upload 3D Model Bestand">
+                    <button id="reset-view-btn" class="btn-primary p-3 rounded-lg font-semibold whitespace-nowrap">
+                        <i class="fas fa-sync-alt mr-2"></i>Reset View
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">Ondersteunde formaten: **STL**. Gebruik de muis om te draaien, zoomen en pannen.</p>
+            </div>
 
-                // Loop over alle driehoeken
-                for (let i = 0; i < indices.length; i += 3) {
-                    v0.fromBufferAttribute(position, indices[i + 0]);
-                    v1.fromBufferAttribute(position, indices[i + 1]);
-                    v2.fromBufferAttribute(position, indices[i + 2]);
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-semibold mb-4 text-white">
+                    <i class="fas fa-calculator mr-3 accent-text"></i>Kostenberekening
+                </h2>
+                
+                <form id="price-calculator" class="space-y-6 card-bg p-8 rounded-xl">
+                    
+                    <div>
+                        <label for="printtijd" class="block mb-2 font-medium text-gray-300">
+                            <i class="fas fa-clock mr-2 accent-text"></i>Printduur (uren)
+                        </label>
+                        <input type="number" id="printtijd" step="0.1" min="0" value="5.0"
+                               class="w-full input-field p-3 rounded-lg" placeholder="5.0" required>
+                    </div>
+                    
+                    <div>
+                        <label for="gewicht" class="block mb-2 font-medium text-gray-300">
+                            <i class="fas fa-weight-hanging mr-2 accent-text"></i>Gewicht (gram)
+                        </label>
+                        <input type="number" id="gewicht" step="1" min="1" value="100"
+                               class="w-full input-field p-3 rounded-lg" placeholder="100" required>
+                    </div>
 
-                    // Tetraëder volume formule: (v0 . (v1 x v2)) / 6
-                    volume += v0.dot(v1.cross(v2));
+                    <div>
+                        <label for="vulling" class="block mb-2 font-medium text-gray-300">
+                            <i class="fas fa-fill-drip mr-2 accent-text"></i>Vulling / Infill (%)
+                        </label>
+                        <input type="number" id="vulling" step="5" min="0" max="100" value="20"
+                               class="w-full input-field p-3 rounded-lg" placeholder="20" required>
+                    </div>
+                    
+                    <div>
+                        <label for="vaste-kosten" class="block mb-2 font-medium text-gray-300">
+                            <i class="fas fa-euro-sign mr-2 accent-text"></i>Opstart/Vaste kosten (€)
+                        </label>
+                        <input type="number" id="vaste-kosten" step="0.50" min="0" value="5.00"
+                               class="w-full input-field p-3 rounded-lg" placeholder="5.00" required>
+                        <p class="text-xs text-gray-500 mt-1">Vaste kosten voor opstarten en afschrijving.</p>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full p-4 rounded-lg font-bold text-lg">
+                        <i class="fas fa-cogs mr-2"></i>BEREKEN TOTALE PRIJS
+                    </button>
+                </form>
+
+                <div id="resultaat-container" class="mt-8 card-bg p-8 rounded-xl border-l-4 border-l-[var(--accent-color)] shadow-xl hidden" role="status">
+                    <h3 class="text-3xl font-bold mb-3 accent-text">Totale Geschatte Prijs:</h3>
+                    <p class="text-5xl text-white font-extrabold" id="totaal-prijs">€ 0.00</p>
+                    <p class="text-sm text-gray-500 mt-3">Gebaseerd op de ingevoerde parameters. De definitieve prijs kan variëren.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    
+    <script>
+        
+        // Final sanity check
+        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
+            console.error("KRITIEKE FOUT: Three.js of de OrbitControls zijn niet correct geladen. De 3D Viewer start niet.");
+            const container = document.getElementById('viewer-container');
+            if (container) {
+                container.innerHTML = '<div class="absolute inset-0 flex flex-col items-center justify-center bg-red-900/50 text-white p-4 rounded-xl text-center"><i class="fas fa-exclamation-triangle mr-2 text-2xl mb-2"></i>3D Viewer Fout.<br>De viewer kan niet laden vanwege een probleem met externe bestanden.</div>';
+            }
+        } else {
+            console.log("Three.js, OrbitControls en STLLoader zijn succesvol geladen.");
+
+            // Donkerdere, diepere Groene Kleur
+            const MODEL_COLOR = 0x007733; 
+
+            // Standaard materiaal voor modellen
+            const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
+                color: new THREE.Color(MODEL_COLOR), 
+                emissive: new THREE.Color(0x00331a),      
+                specular: new THREE.Color(0xffffff),      
+                shininess: 30,                            
+            });
+
+            // Elementen
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const viewerContainer = document.getElementById('viewer-container');
+            const fileUpload = document.getElementById('file-upload');
+            const resetButton = document.getElementById('reset-view-btn'); 
+
+            // Viewer variabelen
+            let scene, camera, renderer, controls;
+            let object; // Dit is de cruciale variabele die het geladen 3D-object vasthoudt
+            let defaultCameraDistance = 100; 
+
+            // --- 1. Prijsberekening Logica (ongewijzigd) ---
+            function calculatePrice(e) {
+                e.preventDefault();
+                
+                const printtijd = parseFloat(document.getElementById('printtijd').value);
+                const gewicht = parseFloat(document.getElementById('gewicht').value);
+                const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
+                const vulling = parseFloat(document.getElementById('vulling').value);
+                
+                // CONSTANTES
+                const COST_PER_GRAM_FILAMENT = 0.10; 
+                const COST_PER_HOUR_PRINTER = 4.00; 
+
+                if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
+
+                const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
+                const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
+                const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
+
+                document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
+                document.getElementById('resultaat-container').classList.remove('hidden');
+            }
+            document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
+
+
+            // --- 2. 3D Viewer Logica ---
+
+            function initViewer() {
+                if (renderer) return;
+
+                // Scene 
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x121212); 
+
+                // Camera 
+                camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
+                camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
+                
+                // Renderer 
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                
+                // Plaats renderer in container
+                const placeholder = document.getElementById('viewer-placeholder');
+                if (placeholder) { 
+                    placeholder.remove();
+                }
+                viewerContainer.appendChild(renderer.domElement);
+
+                // Belichting 
+                scene.add(new THREE.AmbientLight(0xffffff, 0.4)); 
+                
+                const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); 
+                mainLight.position.set(200, 300, 200);
+                scene.add(mainLight);
+                
+                const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                fillLight.position.set(-200, -200, -200);
+                scene.add(fillLight);
+                
+                const rimLight = new THREE.DirectionalLight(0xffffff, 0.8); 
+                rimLight.position.set(0, 0, 300);
+                scene.add(rimLight);
+
+                // Camera Controls 
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true; 
+                controls.dampingFactor = 0.15;
+                controls.screenSpacePanning = true; 
+                controls.minDistance = 5;
+                controls.maxDistance = 5000; 
+
+                // Animate Loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+                
+                window.addEventListener('resize', onWindowResize, false);
+            }
+            
+            function onWindowResize() {
+                if (camera && renderer) {
+                    camera.aspect = viewerContainer.clientWidth / viewerContainer.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+                }
+            }
+            
+            // FUNCTIE MET DE FIX
+            function resetView() {
+                if (!controls) return;
+                
+                // Als er nog geen object geladen is (object === null of undefined)
+                if (!object) {
+                     controls.reset();
+                     camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
+                     controls.target.set(0, 0, 0);
+                     controls.update();
+                     return;
                 }
 
-                // Volume is in de eenheid van het STL-bestand (meestal mm³)
-                return Math.abs(volume / 6); 
+                // ALS object WEL geladen is:
+                const box = new THREE.Box3().setFromObject(object);
+                if (box.isEmpty()) return;
+
+                const size = new THREE.Vector3();
+                box.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = maxDim * 1.5; 
+                defaultCameraDistance = distance;
+
+                const center = new THREE.Vector3();
+                box.getCenter(center); // Haal het middelpunt van het model op
+
+                controls.reset();
+                controls.target.copy(center); // Richt de camera op het middelpunt
+                
+                // Verplaats de camera naar een geschikte afstand van het middelpunt
+                camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
+                controls.update();
+                console.log(`View gereset en gefocust op model.`);
             }
-            // --- EINDE VOLUME BEREKENING ---
+            
+            resetButton.addEventListener('click', resetView);
+            
+            // --- HOOFD LAAD FUNCTIE (ALLEEN STL) ---
+            
+            fileUpload.addEventListener('change', async function(event) {
+                const file = event.target.files[0];
+                if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
+                
+                if (!renderer) {
+                     alert("Fout: Initialiseer eerst de 3D-viewer.");
+                     return;
+                }
+                
+                loadingIndicator.classList.remove('hidden'); 
 
+                // Opruimen vorig model
+                if (object) {
+                    scene.remove(object);
+                    object.traverse(child => {
+                        if (child.isMesh) {
+                            if (child.geometry) child.geometry.dispose();
+                            if (child.material) child.material.dispose();
+                        }
+                    });
+                    object = null; 
+                }
 
-            // --- 1. Prijsberekening Logica (ongewijzigd) ---
-            function calculatePrice(e) {
-                // Voorkom dat de pagina herlaadt als het een formulier-submit is
-                if (e && e.preventDefault) e.preventDefault();
-                
-                const printtijd = parseFloat(document.getElementById('printtijd').value);
-                const gewicht = parseFloat(document.getElementById('gewicht').value);
-                const vasteKosten = parseFloat(document.getElementById('vaste-kosten').value);
-                // const vulling = parseFloat(document.getElementById('vulling').value); // Niet direct gebruikt in de prijsformule
+                try {
+                    const reader = new FileReader();
+                    const data = await new Promise((resolve, reject) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.onerror = reject;
+                        reader.readAsArrayBuffer(file);
+                    });
 
-                // CONSTANTES
-                const COST_PER_GRAM_FILAMENT = 0.10; 
-                const COST_PER_HOUR_PRINTER = 4.00; 
-
-                if (isNaN(printtijd) || isNaN(gewicht) || isNaN(vasteKosten)) return;
-
-                const materiaalKosten = gewicht * COST_PER_GRAM_FILAMENT;
-                const tijdKosten = printtijd * COST_PER_HOUR_PRINTER;
-                const totalePrijs = materiaalKosten + tijdKosten + vasteKosten;
-
-                document.getElementById('totaal-prijs').textContent = `€ ${totalePrijs.toFixed(2)}`;
-                document.getElementById('resultaat-container').classList.remove('hidden');
-
-            }
-            document.getElementById('price-calculator').addEventListener('submit', calculatePrice);
-            // Zorg ervoor dat de prijs wordt geüpdatet als de parameters veranderen
-            document.getElementById('price-calculator').addEventListener('change', calculatePrice);
-
-
-            // --- 2. 3D Viewer Logica ---
-
-            function initViewer() {
-                if (renderer) return;
-
-                // Scene 
-                scene = new THREE.Scene();
-                scene.background = new THREE.Color(0x121212); 
-
-                // Camera 
-                camera = new THREE.PerspectiveCamera(50, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 5000); 
-                camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5); 
-                
-                // Renderer 
-                renderer = new THREE.WebGLRenderer({ antialias: true });
-                renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-                renderer.setPixelRatio(window.devicePixelRatio);
-                
-                // Plaats renderer in container
-                const placeholder = document.getElementById('viewer-placeholder');
-                if (placeholder) { 
-                    placeholder.remove();
-                }
-                viewerContainer.appendChild(renderer.domElement);
-
-                // Belichting (NU SUBTIEL EN DONKER)
-                scene.add(new THREE.AmbientLight(0xffffff, **0.2**)); // Vrij zwak
-                
-                const mainLight = new THREE.DirectionalLight(0xffffff, **0.8**); // Verminderde intensiteit
-                mainLight.position.set(200, 300, 200);
-                scene.add(mainLight);
-                
-                const fillLight = new THREE.DirectionalLight(0xffffff, **0.5**); // Verminderde intensiteit
-                fillLight.position.set(-200, -200, -200);
-                scene.add(fillLight);
-                
-                const rimLight = new THREE.DirectionalLight(0xffffff, **0.3**); // Verminderde intensiteit
-                rimLight.position.set(0, 0, 300);
-                scene.add(rimLight);
-
-                // Camera Controls 
-                controls = new THREE.OrbitControls(camera, renderer.domElement);
-                controls.enableDamping = true; 
-                controls.dampingFactor = 0.15;
-                controls.screenSpacePanning = true; 
-                controls.minDistance = 5;
-                controls.maxDistance = 5000; 
-
-                // Animate Loop
-                function animate() {
-                    requestAnimationFrame(animate);
-                    controls.update();
-                    renderer.render(scene, camera);
-                }
-                animate();
-                
-                window.addEventListener('resize', onWindowResize, false);
-            }
-            
-            function onWindowResize() {
-                if (camera && renderer) {
-                    camera.aspect = viewerContainer.clientWidth / viewerContainer.clientHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-                }
-            }
-            
-            // FUNCTIE MET DE FIX
-            function resetView() {
-                if (!controls) return;
-                
-                // Als er nog geen object geladen is (object === null of undefined)
-                if (!object) {
-                    controls.reset();
-                    camera.position.set(defaultCameraDistance, defaultCameraDistance * 0.75, defaultCameraDistance * 1.5);
-                    controls.target.set(0, 0, 0);
-                    controls.update();
-                    return;
-                }
-
-                // ALS object WEL geladen is:
-                const box = new THREE.Box3().setFromObject(object);
-                if (box.isEmpty()) return;
-
-                const size = new THREE.Vector3();
-                box.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const distance = maxDim * 1.5; 
-                defaultCameraDistance = distance;
-
-                const center = new THREE.Vector3();
-                box.getCenter(center); // Haal het middelpunt van het model op
-
-                controls.reset();
-                controls.target.copy(center); // Richt de camera op het middelpunt
-                
-                // Verplaats de camera naar een geschikte afstand van het middelpunt
-                camera.position.set(center.x + distance, center.y + distance * 0.75, center.z + distance * 1.5); 
-                controls.update();
-                console.log(`View gereset en gefocust op model.`);
-            }
-            
-            resetButton.addEventListener('click', resetView);
-            
-            // --- HOOFD LAAD FUNCTIE (ALLEEN STL) ---
-            
-            fileUpload.addEventListener('change', async function(event) {
-                const file = event.target.files[0];
-                if (!file || !file.name.toLowerCase().endsWith('.stl')) return;
-                
-                if (!renderer) {
-                     alert("Fout: Initialiseer eerst de 3D-viewer.");
-                     return;
-                }
-                
-                loadingIndicator.classList.remove('hidden'); 
-
-                // Opruimen vorig model
-                if (object) {
-                    scene.remove(object);
-                    object.traverse(child => {
-                        if (child.isMesh) {
-                            if (child.geometry) child.geometry.dispose();
-                            if (child.material) child.material.dispose();
-                        }
-                    });
-                    object = null; 
-                }
-
-                try {
-                    const reader = new FileReader();
-                    const data = await new Promise((resolve, reject) => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.onerror = reject;
-                        reader.readAsArrayBuffer(file);
-                    });
-
-                    const loader = new THREE.STLLoader();
-                    const geometry = loader.parse(data);
-                    
-                    geometry.computeBoundingBox();
-                    
-                    // --- START: BEREKEN VOLUME EN GEWICHT ---
-                    const volume_mm3 = calculateVolume(geometry);
-                    
-                    // Constanten
-                    const PLA_DENSITY_G_PER_MM3 = 0.00124; // Dichtheid van PLA
-                    // Zorg ervoor dat de vulling 20% is als het veld leeg is, anders de ingevoerde waarde
-                    const vulling_pct = parseFloat(vullingInput.value || 20) / 100;
-
-                    // Ruwe schatting van het gewicht
-                    const geschat_gewicht_g = volume_mm3 * PLA_DENSITY_G_PER_MM3 * (vulling_pct * 0.8 + 0.2); 
-
-                    // Update het invoerveld (minimaal 1 gram)
-                    gewichtInput.value = Math.max(1, geschat_gewicht_g.toFixed(0));
-                    console.log(`Model geladen. Volume: ${volume_mm3.toFixed(2)} mm³. Geschat gewicht: ${gewichtInput.value} g`);
-
-                    // --- EINDE: BEREKEN VOLUME EN GEWICHT ---
-
-                    // Centreer de geometrie
-                    const center = new THREE.Vector3();
-                    geometry.boundingBox.getCenter(center);
-                    // Vertalen om het model rond 0,0,0 te zetten
-                    geometry.translate(-center.x, -center.y, -center.z); 
-
-                    // Maak de Mesh
-                    const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
-                    
-                    scene.add(model);
-                    object = model; // HET model is opgeslagen in de globale 'object' variabele
-                    resetView();
+                    const loader = new THREE.STLLoader();
+                    const geometry = loader.parse(data);
                     
-                    // Trigger de prijsberekening direct na het laden en updaten van het gewicht
-                    calculatePrice(new Event('submit')); 
+                    geometry.computeBoundingBox();
+                    
+                    // Centreer de geometrie
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    // BELANGRIJK: We vertalen de GEOMETRIE (geen object) zodat het model rond 0,0,0 staat.
+                    geometry.translate(-center.x, -center.y, -center.z); 
 
-                } catch (error) {
-                    console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
-                    alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
-                } finally {
-                    loadingIndicator.classList.add('hidden'); 
-                }
-            });
+                    // Maak de Mesh
+                    const model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
+                    
+                    scene.add(model);
+                    object = model; // HET model is opgeslagen in de globale 'object' variabele
+                    resetView(); 
 
-            // Start de viewer
-            document.addEventListener('DOMContentLoaded', () => {
-                 initViewer();
-                 resetView();
-            });
-        }
-    </script>
+                } catch (error) {
+                    console.error("❌ FOUT TIJDENS HET LADEN OF PARSEN VAN STL:", error);
+                    // De foutmelding is nu correcter en bevat de oorzaak van de crash
+                    alert(`Fout bij het laden van het model: ${error.message}. Controleer of het STL-bestand valide is.`); 
+                } finally {
+                    loadingIndicator.classList.add('hidden'); 
+                }
+            });
+
+            // Start de viewer
+            document.addEventListener('DOMContentLoaded', () => {
+                 initViewer();
+                 resetView();
+            });
+        }
+    </script>
 </body>
 </html>
