@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     
-    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/ThreeMFLoader.js"></script> 
+    <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -154,9 +154,7 @@
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader (Nu zouden de externe links het moeten doen)
-                    // We gebruiken hier de meest directe aanroep (THREE.ThreeMFLoader)
-                    // omdat de stabiele link dit moet ondersteunen.
+                    // ThreeMFLoader (Gebruikt de directere aanroep nu de link is gefixt)
                     const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
@@ -187,12 +185,7 @@
 
             } catch (error) {
                 console.error(`❌ FOUT TIJDENS HET LADEN OF PARSEN VAN 3D-MODEL: ${error.name}: ${error.message}`);
-                // Specifieke foutmelding voor de 3MF loader die niet werkt
-                if (extension === '3mf' && error.message.includes('constructor')) {
-                    alert('Fout bij het laden van 3mf: De ThreeMFLoader kon niet worden geïnitialiseerd. Probeer Ctrl+F5.');
-                } else {
-                    alert(`Fout bij het laden van ${extension}: ${error.message}. Controleer de console.`); 
-                }
+                alert(`Fout bij het laden van ${extension}: ${error.message}. Controleer de console.`); 
                 placeholder.style.display = 'flex';
             }
         });
