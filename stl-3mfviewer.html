@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF - JSM)</title>
+    <title>3D Model Viewer (STL & 3MF - Definitief)</title>
     <style>
         /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
@@ -24,10 +24,6 @@
             font-size: 1.2em; color: #aaa; pointer-events: none;
         }
     </style>
-
-    <script type="module">
-        // ffate.js is een module en wordt later in de hoofdsctipt geïmporteerd.
-    </script> 
 </head>
 <body>
 
@@ -37,16 +33,27 @@
     
     <input type="file" id="file-input" accept=".stl, .3mf">
 
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+            "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js",
+            "three/examples/jsm/loaders/STLLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js",
+            "three/examples/jsm/loaders/ThreeMFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js"
+          }
+        }
+    </script>
+
     <script type="module"> 
         
-        // --- 1. IMPORTEREN VAN LOADERS (Paden zijn NU de meest stabiele JSM-links) ---
-        // We gebruiken de nieuwste stabiele versie (r164) voor de beste module-ondersteuning
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js';
-        import { inflate } from 'https://cdn.jsdelivr.net/npm/fflate@0.7.3/esm/index.js'; // ffate.js als module
-
+        // Let op: De import-strings komen nu overeen met de importmap keys.
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+        import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+        import { ThreeMFLoader } from 'three/examples/jsm/loaders/ThreeMFLoader.js';
+        
         // --- 2. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
@@ -54,7 +61,7 @@
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal voor STL-modellen
+        // Standaard materiaal
         const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
             color: 0x10b981, 
             metalness: 0.2,
@@ -78,7 +85,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (Nodig voor MeshStandardMaterial)
+            // Belichting
             scene.add(new THREE.HemisphereLight(0xffffff, 0.4)); 
             const mainLight = new THREE.DirectionalLight(0xffffff, 1.2); 
             mainLight.position.set(100, 100, 100);
@@ -152,8 +159,7 @@
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader - ffate.js is nu als module geïmporteerd
-                    // De constructor is direct beschikbaar via import
+                    // ThreeMFLoader 
                     const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
