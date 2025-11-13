@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>3D Model Viewer (STL & 3MF)</title>
     <style>
+        /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
         #viewer-container { width: 100vw; height: 100vh; position: relative; }
         #file-input { 
@@ -46,18 +47,17 @@
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal voor STL-modellen
+        // Standaard materiaal voor STL-modellen (MeshPhongMaterial is stabiel voor r128)
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
-            color: 0x10b981, 
+            color: 0x10b981, // Groen
             emissive: 0x00331a,      
             specular: 0xffffff,      
             shininess: 30,                       
         });
 
-        // Controleer of de benodigde componenten zijn geladen
+        // Test of de loaders geladen zijn voordat we initViewer aanroepen
         if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-            // Laat dit hier staan voor debuggen, maar de console fout is duidelijk genoeg
-            placeholder.textContent = "Three.js Loaders ontbreken. Probeer Ctrl+F5.";
+            placeholder.textContent = "Three.js Loaders ontbreken. Probeer Ctrl+F5 om de cache te wissen.";
         } else {
              initViewer();
         }
@@ -78,7 +78,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting
+            // Belichting (MeshPhongMaterial vereist belichting)
             scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
             const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
             mainLight.position.set(100, 100, 100);
@@ -146,13 +146,13 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    // Gebruikt de r128 STLLoader
+                    // STLLoader
                     const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // Gebruikt de r128 ThreeMFLoader
+                    // ThreeMFLoader
                     const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
@@ -167,7 +167,8 @@
                     
                     model.position.set(-center.x, -box.min.y, -center.z);
 
-                    scene.add(model);
+                    // Voeg het model toe aan de scene (Dit is waar de 'add' fout optrad)
+                    scene.add(model); 
                     object = model; 
                     
                     // Zoom de camera in op het model
