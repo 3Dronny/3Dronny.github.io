@@ -2,9 +2,8 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF - Definitieve Klassieke Fix)</title>
+    <title>3D Model Viewer (STL & 3MF - Lokale Fix)</title>
     <style>
-        /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
         #viewer-container { width: 100vw; height: 100vh; position: relative; }
         #file-input { 
@@ -25,13 +24,11 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fflate/0.7.3/umd/index.js"></script>
-    
-    <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/ThreeMFLoader.js"></script> 
+    <script src="three.min.js"></script> 
+    <script src="OrbitControls.js"></script>
+    <script src="STLLoader.js"></script>
+    <script src="fflate.min.js"></script> 
+    <script src="ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -50,7 +47,7 @@
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal voor STL-modellen (MeshPhongMaterial is stabieler in r128)
+        // Standaard materiaal voor STL-modellen
         const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0x10b981, 
             emissive: 0x00331a,      
@@ -58,9 +55,9 @@
             shininess: 30,                       
         });
 
-        // Test op de aanwezigheid van de geladen scripts (voorkomt crashes)
+        // Test op de aanwezigheid van de geladen scripts
         if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
-             placeholder.textContent = "Kritieke 3D-bestanden ontbreken. Controleer console op 404-fouten.";
+             placeholder.textContent = "Kritieke 3D-bestanden zijn lokaal niet gevonden. Controleer de map.";
         } else {
              initViewer();
         }
@@ -126,7 +123,7 @@
             // Opruimen vorig model
             if (object) {
                 scene.remove(object);
-                object = null; // Vereenvoudigde cleanup in klassieke modus
+                object = null; 
             }
 
             try {
