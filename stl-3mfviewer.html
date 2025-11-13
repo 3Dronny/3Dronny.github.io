@@ -42,8 +42,6 @@
             "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js",
             "three/examples/jsm/loaders/STLLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/STLLoader.js",
             "three/examples/jsm/loaders/ThreeMFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/ThreeMFLoader.js",
-            
-            /* DEZE LINK IS DE OPLOSSING VOOR DE ffate 404 */
             "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.7.3/lib/browser.js"
           }
         }
@@ -51,14 +49,12 @@
 
     <script type="module"> 
         
-        // --- 1. IMPORTEREN VAN MODULES (Gebruikt de keys uit de importmap) ---
+        // --- 1. IMPORTEREN VAN MODULES ---
         import * as THREE from 'three';
         import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
         import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
         import { ThreeMFLoader } from 'three/examples/jsm/loaders/ThreeMFLoader.js';
         
-        // ffate.js hoeft niet apart geïmporteerd te worden; de ThreeMFLoader gebruikt deze impliciet via de importmap.
-
         // --- 2. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
@@ -69,11 +65,11 @@
         // Standaard materiaal
         const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
             color: 0x10b981, 
-            metalness: 0.2,
-            roughness: 0.7,                     
+            metalness: 0.3, // Iets glimmender
+            roughness: 0.6, // Iets zachter                       
         });
 
-        // Start de viewer direct, de imports zijn asynchroon
+        // Start de viewer
         initViewer();
         
         // --- 3. INITIALISATIE ---
@@ -91,10 +87,10 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting
-            scene.add(new THREE.HemisphereLight(0xffffff, 0.4)); 
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1.2); 
-            mainLight.position.set(100, 100, 100);
+            // Belichting (Aangepast voor betere zichtbaarheid met StandardMaterial)
+            scene.add(new THREE.HemisphereLight(0xeeeeee, 0x111111, 0.8)); // Zachte omgevingslicht
+            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); // Sterker direct licht
+            mainLight.position.set(200, 300, 200);
             scene.add(mainLight);
 
             // Controls
@@ -128,11 +124,6 @@
 
             const fileName = file.name.toLowerCase();
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-            if (extension !== 'stl' && extension !== '3mf') {
-                alert('Niet-ondersteund bestandstype. Selecteer een STL of 3MF.');
-                return;
-            }
             
             // Opruimen vorig model
             if (object) {
@@ -159,29 +150,35 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    // STLLoader (werkt stabiel)
                     const loader = new STLLoader(); 
                     const geometry = loader.parse(data);
+                    // Belangrijk: Sommige STL-bestanden bevatten meerdere geometrieën; we veronderstellen één mesh.
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ThreeMFLoader (werkt nu correct met de ffate fix in de importmap)
+                    // ThreeMFLoader
                     const loader = new ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
                 if (model) {
-                    // Centreren en op de vloer zetten
+                    // Centreren en zoomen op het geladen object
                     const box = new THREE.Box3().setFromObject(model);
                     const center = new THREE.Vector3();
                     const size = new THREE.Vector3();
                     box.getCenter(center);
                     box.getSize(size);
                     
+                    // Positie aanpassen zodat de onderkant van het model op y=0 ligt
                     model.position.set(-center.x, -box.min.y, -center.z);
 
-                    scene.add(model); 
-                    object = model; 
+                    // De volgende regel is cruciaal: controleer of het object geldig is voordat je het toevoegt
+                    if (model instanceof THREE.Mesh || model instanceof THREE.Group) {
+                        scene.add(model); 
+                        object = model; 
+                    } else {
+                        throw new Error("Het geladen model is geen geldige 3D-groep of mesh.");
+                    }
                     
                     // Zoom de camera in op het model
                     const maxDim = Math.max(size.x, size.y, size.z);
