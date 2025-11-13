@@ -31,13 +31,11 @@
         {
           "imports": {
             "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-            
-            /* DEZE LINKS ZIJN GEFIXED OM DE 404-PROBLEMEN TE OMZEILEN */
             "three/examples/jsm/controls/OrbitControls.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/controls/OrbitControls.js",
             "three/examples/jsm/loaders/STLLoader.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/STLLoader.js",
             "three/examples/jsm/loaders/ThreeMFLoader.js": "https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/ThreeMFLoader.js",
-            
             "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.7.3/lib/browser.js"
+            /* Cruciaal: Geen komma na de laatste "fflate" regel! */
           }
         }
     </script>
@@ -77,7 +75,7 @@
         
         // --- 3. INITIALISATIE ---
         function initViewer() {
-            // Controleer of de benodigde objecten bestaan, mocht er toch iets misgaan met imports
+            // Controleer of de benodigde objecten bestaan
             if (!THREE.Scene || typeof OrbitControls === 'undefined' || typeof STLLoader === 'undefined' || typeof ThreeMFLoader === 'undefined') {
                 placeholder.textContent = "Kritieke modules (Three.js, loaders) zijn niet geladen.";
                 return;
@@ -96,7 +94,7 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (Sterk genoeg voor StandardMaterial)
+            // Belichting
             scene.add(new THREE.HemisphereLight(0xeeeeee, 0x111111, 0.8)); 
             const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); 
             mainLight.position.set(200, 300, 200);
