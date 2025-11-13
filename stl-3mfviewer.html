@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>3D Model Viewer (STL & 3MF - Definitieve Fix)</title>
+    <title>3D Model Viewer (STL & 3MF - Definitieve Klassieke Fix)</title>
     <style>
         /* Basisstijlen voor de kijker */
         body { margin: 0; overflow: hidden; background-color: #1e1e1e; color: white; font-family: sans-serif; }
@@ -25,11 +25,13 @@
         }
     </style>
 
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     
-    <script type="importmap">
-        {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/examples/jsm/controls/OrbitControls.js":"https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/controls/OrbitControls.js","three/examples/jsm/loaders/STLLoader.js":"https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/STLLoader.js","three/examples/jsm/loaders/ThreeMFLoader.js":"https://raw.githack.com/mrdoob/three.js/r164/examples/jsm/loaders/ThreeMFLoader.js","fflate":"https://cdn.jsdelivr.net/npm/fflate@0.7.3/lib/browser.js"}}
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fflate/0.7.3/umd/index.js"></script>
+    
+    <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -39,39 +41,32 @@
     
     <input type="file" id="file-input" accept=".stl, .3mf">
 
-    <script type="module"> 
+    <script> 
         
-        // --- 1. IMPORTEREN VAN MODULES (Gebruikt de keys uit de importmap) ---
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
-        import { ThreeMFLoader } from 'three/examples/jsm/loaders/ThreeMFLoader.js';
-        
-        // --- 2. SETUP VARIABELEN ---
+        // --- 1. SETUP VARIABELEN ---
         let scene, camera, renderer, controls;
         let object; 
         const container = document.getElementById('viewer-container');
         const fileInput = document.getElementById('file-input');
         const placeholder = document.getElementById('placeholder');
         
-        // Standaard materiaal
-        const DEFAULT_MESH_MATERIAL = new THREE.MeshStandardMaterial({ 
+        // Standaard materiaal voor STL-modellen (MeshPhongMaterial is stabieler in r128)
+        const DEFAULT_MESH_MATERIAL = new THREE.MeshPhongMaterial({ 
             color: 0x10b981, 
-            metalness: 0.3, 
-            roughness: 0.6,                     
+            emissive: 0x00331a,      
+            specular: 0xffffff,      
+            shininess: 30,                       
         });
 
-        // Start de viewer
-        initViewer(); 
-        
-        // --- 3. INITIALISATIE ---
-        function initViewer() {
-            // Controleer of de benodigde objecten bestaan
-            if (!THREE.Scene || typeof OrbitControls === 'undefined' || typeof STLLoader === 'undefined' || typeof ThreeMFLoader === 'undefined') {
-                placeholder.textContent = "Kritieke modules (Three.js, loaders) zijn niet geladen.";
-                return;
-            }
+        // Test op de aanwezigheid van de geladen scripts (voorkomt crashes)
+        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
+             placeholder.textContent = "Kritieke 3D-bestanden ontbreken. Controleer console op 404-fouten.";
+        } else {
+             initViewer();
+        }
 
+        // --- 2. INITIALISATIE ---
+        function initViewer() {
             // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1e1e1e); 
@@ -85,14 +80,14 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Belichting (Sterk genoeg voor StandardMaterial)
-            scene.add(new THREE.HemisphereLight(0xeeeeee, 0x111111, 0.8)); 
-            const mainLight = new THREE.DirectionalLight(0xffffff, 2.5); 
-            mainLight.position.set(200, 300, 200);
+            // Belichting
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5)); 
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+            mainLight.position.set(100, 100, 100);
             scene.add(mainLight);
 
             // Controls
-            controls = new OrbitControls(camera, renderer.domElement); 
+            controls = new THREE.OrbitControls(camera, renderer.domElement); 
             controls.enableDamping = true; 
             controls.dampingFactor = 0.15;
             controls.minDistance = 1;
@@ -113,7 +108,7 @@
             renderer.render(scene, camera);
         }
 
-        // --- 4. LAAD FUNCTIE ---
+        // --- 3. LAAD FUNCTIE ---
         fileInput.addEventListener('change', async function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -122,19 +117,16 @@
 
             const fileName = file.name.toLowerCase();
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+            if (extension !== 'stl' && extension !== '3mf') {
+                alert('Niet-ondersteund bestandstype. Selecteer een STL of 3MF.');
+                return;
+            }
             
             // Opruimen vorig model
             if (object) {
                 scene.remove(object);
-                object.traverse(child => {
-                    if (child.isMesh) {
-                        if (child.geometry) child.geometry.dispose();
-                        if (child.material && child.material !== DEFAULT_MESH_MATERIAL) {
-                             child.material.dispose();
-                        }
-                    }
-                });
-                object = null; 
+                object = null; // Vereenvoudigde cleanup in klassieke modus
             }
 
             try {
@@ -148,12 +140,14 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    const loader = new STLLoader(); 
+                    // STLLoader
+                    const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    const loader = new ThreeMFLoader(); 
+                    // ThreeMFLoader
+                    const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
