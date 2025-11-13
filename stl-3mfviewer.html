@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/three@r128/examples/js/loaders/ThreeMFLoader.js"></script> 
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/ThreeMFLoader.js"></script> 
 </head>
 <body>
 
@@ -56,10 +56,10 @@
             shininess: 30,                       
         });
 
-        // Test of de loaders geladen zijn
-        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined') {
-             // We testen niet op ThreeMFLoader om de 3MF-fout te isoleren
-             placeholder.textContent = "Kritieke Three.js bestanden ontbreken.";
+        // Test of de basiscomponenten zijn geladen
+        if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.STLLoader === 'undefined' || typeof THREE.ThreeMFLoader === 'undefined') {
+             // Als een van de loaders ontbreekt, geven we een generieke melding.
+             placeholder.textContent = "Kritieke 3D-bestanden ontbreken. Probeer Ctrl+F5.";
         } else {
              initViewer();
         }
@@ -148,21 +148,16 @@
                 let model;
                 
                 if (extension === 'stl') {
-                    // STLLoader
+                    // STLLoader (werkt stabiel)
                     const loader = new THREE.STLLoader(); 
                     const geometry = loader.parse(data);
                     model = new THREE.Mesh(geometry, DEFAULT_MESH_MATERIAL);
                     
                 } else if (extension === '3mf') {
-                    // ** FIX VOOR THREE.ThreeMFLoader is not a constructor **
-                    // Probeer de constructor direct te gebruiken zoals hij geregistreerd is in het globale venster.
-                    const LoaderConstructor = window.THREE.ThreeMFLoader || THREE.ThreeMFLoader;
-                    
-                    if (typeof LoaderConstructor !== 'function') {
-                        throw new Error("De 3MF loader is niet correct geladen of geregistreerd.");
-                    }
-                    
-                    const loader = new LoaderConstructor(); 
+                    // ThreeMFLoader (Nu zouden de externe links het moeten doen)
+                    // We gebruiken hier de meest directe aanroep (THREE.ThreeMFLoader)
+                    // omdat de stabiele link dit moet ondersteunen.
+                    const loader = new THREE.ThreeMFLoader(); 
                     model = loader.parse(data); 
                 }
                 
