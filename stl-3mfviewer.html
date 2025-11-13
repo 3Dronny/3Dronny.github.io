@@ -54,7 +54,7 @@
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xeeeeee);
             
-            // ** CAMERA AANGEPAST VOOR EEN BREED BEREIK (Fix voor kleine modellen) **
+            // Camera breed bereik
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 50000); 
             camera.position.z = 50;
 
@@ -128,15 +128,25 @@
                 const stlLoader = new STLLoader(); 
                 const geometry = stlLoader.parse(buffer);
                 
-                // ** AANPASSING FIX: Forceer Wireframe om geometrie te visualiseren **
+                // ** DIAGNOSE STAP **
+                if (!geometry.attributes.position) {
+                    console.error("Geometrie is ongeldig! Er zijn geen positie-attributen gevonden.");
+                    return;
+                }
+                console.log('Model geladen. Aantal vertices:', geometry.attributes.position.count); 
+                if (geometry.attributes.position.count === 0) {
+                    console.error("Geometrie is leeg! Het STL-bestand bevat geen data.");
+                    return;
+                }
+                // ** EINDE DIAGNOSE **
+
                 const material = new THREE.MeshPhongMaterial({ 
                     color: 0xaaaaaa, 
                     specular: 0x111111, 
                     shininess: 200,
-                    wireframe: true // <-- ZELF HET MAKEN VAN EEN GEZICHT IS NU NIET NODIG
+                    wireframe: true 
                 });
                 newModel = new THREE.Mesh(geometry, material);
-                console.log('STL model succesvol geladen in wireframe modus!');
 
             } else if (extension === '3mf') {
                 const threeMFLoader = new ThreeMFLoader(); 
@@ -161,9 +171,16 @@
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const fov = camera.fov * (Math.PI / 180);
                 let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5; 
-                camera.position.z = center.z + cameraZ;
-                camera.position.x = center.x;
-                camera.position.y = center.y;
+                
+                // Agressieve schaal fix voor kleine/grote modellen
+                if (maxDim > 0) {
+                   camera.position.z = center.z + cameraZ;
+                   camera.position.x = center.x;
+                   camera.position.y = center.y;
+                } else {
+                   // Indien maxDim 0 is (plat object), stel handmatige afstand in
+                   camera.position.set(0, 0, 100);
+                }
                 
                 camera.updateProjectionMatrix();
                 controls.update();
